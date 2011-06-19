@@ -1,0 +1,8 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+PuzzlEdu é uma alusão e junção das palavras _Puzzle_ (quebra-cabeça) e _Educação_. Quebra-cabeça devido ao processo de se ir montado os programas desenvolvidos na ferramenta até se chegar a um modelo completo, tendo ao final um significado consistente. Educação pelo fato do intuito da ferramenta de apoiar o ensino e a aprendizagem do aluno.
+
+
+= Details =
