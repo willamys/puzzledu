@@ -20,9 +20,14 @@ public class ColecaoClasse {
 		Variavel varNome = new Variavel("nome");
 		raiz.addVariavel(varNome);
 		
-		Metodo metodoGetNome = new Metodo("getNome()");
+		Metodo metodoGetNome = new Metodo("getNome");
 		metodoGetNome.setRetorno("String");
 		raiz.addMetodo(metodoGetNome);
+		
+		Metodo setNome = new Metodo("setNome");
+		setNome.setRetorno("void");
+		setNome.adicionarParametro(new Parametro("nome", "String"));
+		raiz.addMetodo(setNome);
 	}
 
 	public void addClasseFilha(Classe filha, final String nomeRaiz) {
@@ -83,14 +88,6 @@ public class ColecaoClasse {
 			
 		return null;
 	}	
-
-	public void addInterface(Interface i) {
-		raiz.addInterface(i);
-	}
-
-	public void addMetodo(Metodo m) {
-		raiz.addMetodo(m);
-	}
 
 	public void removerClasse(String nome) {
 		

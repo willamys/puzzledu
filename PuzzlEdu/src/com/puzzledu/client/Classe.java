@@ -16,6 +16,10 @@ public class Classe {
 	
 	public Classe() {
 		
+		filhas = new ArrayList<Classe>();
+		interfaces = new ArrayList<Interface>();
+		metodos = new ArrayList<Metodo>();
+		variaveis = new ArrayList<Variavel>();
 	}
 
 	public Classe(String filha) {
@@ -63,7 +67,11 @@ public class Classe {
 		filhas.add(filha);
 	}
 	
-	public void addInterface(Interface i) {
+	public void addInterface(Interface i) throws IntefaceJaImplementadaException {
+		
+		for (Interface i2 : interfaces)
+			if (i2.getNome().equals(i.getNome()))
+				throw new IntefaceJaImplementadaException("Esta interface j&aacute; foi implementada na Classe: " + getNome());
 		
 		interfaces.add(i);
 	}
@@ -116,13 +124,13 @@ public class Classe {
 			interfaces.remove(removida);
 	}	
 	
-	public void removerMetodo(String assinatura) {
+	public void removerMetodo(String nome) {
 		
 		Metodo removido = null;
 		
 		for (Metodo m : metodos) {
 			
-			if (m.getNome().equals(assinatura)) {
+			if (m.getNome().equals(nome)) {
 				
 				removido = m;
 				break;
@@ -179,13 +187,61 @@ public class Classe {
 		variaveis.add(v);
 	}
 	
-	public void removerVariavel(Variavel v) {
+	public void addVariavelRecursivamente(Classe classe, Variavel v) {
+		
+		if (classe.getVariaveis()== null)
+			classe.setVariaveis(new ArrayList<Variavel>());
+		
+		for (Classe c : classe.getFilhas()) {
+
+			Variavel v1 = new Variavel(v.getNome(), v.getTipo(), v.getValorPadrao());
+			c.getVariaveis().add(v1);
+			
+			addVariavelRecursivamente(c, v);
+		}				
+	}
+	
+	public void addVariavelMetodosRecursivamente(Classe classe, Variavel var) {
+		
+		if (classe.getVariaveis()== null)
+			classe.setVariaveis(new ArrayList<Variavel>());
+		
+		for (Classe c : classe.getFilhas()) {
+
+			Variavel v1 = new Variavel(var.getNome(), var.getTipo(), var.getValorPadrao());
+			c.getVariaveis().add(v1);			
+
+			Metodo set = new Metodo("set" + var.getNome().toUpperCase().charAt(0) + var.getNome().substring(1, var.getNome().length()));
+			set.adicionarParametro(new Parametro(var.getNome(), var.getTipo()));
+			set.setRetorno("void");
+			
+			Metodo get = new Metodo("get" + var.getNome().toUpperCase().charAt(0) + var.getNome().substring(1, var.getNome().length()));
+			get.setRetorno(var.getTipo());					
+			
+			addVariavelRecursivamente(c, var);
+		}				
+	}	
+	
+	public void removerInterfaceFilhas(Classe classe, Interface i) {
+		
+		for (Classe c : classe.getFilhas()) {
+			
+			c.removerInterface(i.getNome());
+			
+			for (Variavel v : i.getVariaveis())
+				c.removerVariavel(v.getNome());
+			
+			removerInterfaceFilhas(c, i);
+		}
+	}
+	
+	public void removerVariavel(String nomeVariavel) {
 		
 		Variavel removida = null;
 		
 		for (Variavel var : variaveis) {
 			
-			if (var.getNome().equals(v.getNome())) {
+			if (var.getNome().equals(nomeVariavel)) {
 				
 				removida = var;
 				break;
@@ -193,8 +249,79 @@ public class Classe {
 				
 		}
 		
-		if (removida != null)
-			metodos.remove(removida);
+		if (removida != null) {
+		
+			variaveis.remove(removida);
+			
+			Metodo metodoSet = procurarMetodo("set" + nomeVariavel);
+			
+			if (metodoSet != null)
+				metodos.remove(metodoSet);
+
+			Metodo metodoGet = procurarMetodo("get" + nomeVariavel);
+			
+			if (metodoGet != null)
+				metodos.remove(metodoGet);
+			
+		}
+	}
+	
+	public void removerVariavelFilhas(Classe classe, String nomeVariavel) {
+		
+		for (Classe c : classe.getFilhas()) {
+			
+			c.removerVariavel(nomeVariavel);
+		}
+	}
+	
+	public Metodo procurarMetodo(String nomeMetodo) {
+		
+		for (Metodo m : metodos) {
+			
+			if (m.getNome().equalsIgnoreCase(nomeMetodo))			
+				return m;
+		}
+		
+		return null;
+	}
+	
+	public Variavel procurarVariavel(String nomeVariavel) {
+		
+		for (Variavel v : variaveis) {
+			
+			if (v.getNome().equals(nomeVariavel))			
+				return v;
+		}		
+		
+		return null;
+	}	
+	
+	public Variavel procurarVariavel(Classe c, String nomeVariavel) {
+		
+		if (c == null)
+			return null;
+
+		for (Variavel v : c.getVariaveis()) {
+			
+			if (v.getNome().equals(nomeVariavel))			
+				return v;
+		}		
+		
+		return procurarVariavel(c.getParent(), nomeVariavel);
+	}	
+	
+	public boolean procurarInterface(Classe c, String nome) {
+		
+		if (c == null)			
+			return false;
+		
+		for (Interface i : c.getInterfaces()) {
+			
+			if (i.getNome().equals(nome))
+				return true;
+		}
+		
+		return procurarInterface(c.getParent(), nome);
 	}
 
 	public Classe getParent() {
