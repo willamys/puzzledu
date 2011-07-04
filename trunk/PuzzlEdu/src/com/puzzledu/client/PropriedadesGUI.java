@@ -5,30 +5,29 @@ import java.util.List;
 
 import com.smartgwt.client.types.ListGridFieldType;
 import com.smartgwt.client.types.Side;
-import com.smartgwt.client.types.TreeModelType;
+import com.smartgwt.client.util.BooleanCallback;
+import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
-import com.smartgwt.client.widgets.grid.events.CellClickEvent;
-import com.smartgwt.client.widgets.grid.events.CellClickHandler;
 import com.smartgwt.client.widgets.grid.events.CellContextClickEvent;
 import com.smartgwt.client.widgets.grid.events.CellContextClickHandler;
+import com.smartgwt.client.widgets.menu.Menu;
+import com.smartgwt.client.widgets.menu.MenuItem;
+import com.smartgwt.client.widgets.menu.events.ClickHandler;
+import com.smartgwt.client.widgets.menu.events.MenuItemClickEvent;
 import com.smartgwt.client.widgets.tab.Tab;
 import com.smartgwt.client.widgets.tab.TabSet;
-import com.smartgwt.client.widgets.tree.Tree;
-import com.smartgwt.client.widgets.tree.TreeGrid;
-import com.smartgwt.client.widgets.tree.TreeGridField;
-import com.smartgwt.client.widgets.tree.TreeNode;
 
 public class PropriedadesGUI {
 
+	private RepositorioDados repositorioDados;
+	private ListGrid listaInterfaces;
 	private ListGrid listaPropriedades;
-	private ColecaoClasse colecaoClasse;
-	private Tree treeInterfaces;
 	
-	public PropriedadesGUI(ColecaoClasse colecaoClasse) {
+	public PropriedadesGUI(RepositorioDados repositorioDados) {
 
-		this.colecaoClasse = colecaoClasse;
+		this.repositorioDados = repositorioDados;
 	}
 
 	public TabSet createPainelPropriedades() {
@@ -38,15 +37,15 @@ public class PropriedadesGUI {
 		topTabSet.setWidth100();
 		topTabSet.setHeight(245);
 		
-		Tab tabMetodos = new Tab("Propriedades", "pieces/16/piece_yellow.png");
+		Tab tabMetodos = new Tab("M&eacute;todos", "pieces/16/piece_yellow.png");
 		Tab tabInterfaces = new Tab("Interfaces", "pieces/16/piece_blue.png");
 		
 		topTabSet.addTab(tabMetodos);  
         topTabSet.addTab(tabInterfaces); 
                         
         tabMetodos.setPane(createPropriedades());                
-        tabInterfaces.setPane(createArvoreInterfaces());
-                
+        tabInterfaces.setPane(createInterfaces());        
+        
         return topTabSet;
 	}
 	
@@ -62,7 +61,7 @@ public class PropriedadesGUI {
         listaPropriedades.setBodyStyleName("normal");        
         listaPropriedades.setAlternateRecordStyles(true);
         listaPropriedades.setShowHeader(false);
-        listaPropriedades.setEmptyMessage("Nenhuma Propriedade.");
+        listaPropriedades.setEmptyMessage("Nenhum M&eacute;todo ou Vari&aacute;vel.");
         
         ListGridField imageField = new ListGridField("imageField", 24);
         imageField.setType(ListGridFieldType.IMAGE);
@@ -72,106 +71,266 @@ public class PropriedadesGUI {
         
         listaPropriedades.setFields(imageField, nameField);
         
-        return listaPropriedades;
-	}
-
-	public TreeGrid createArvoreInterfaces() {
-    	
-        treeInterfaces = new Tree();  
-        treeInterfaces.setModelType(TreeModelType.CHILDREN);  
-        treeInterfaces.setShowRoot(false);
-        treeInterfaces.setNameProperty("Name");  
-        treeInterfaces.setIdField("Id");
-        treeInterfaces.setParentIdField("ParentId"); 
-        treeInterfaces.setData(getInterfaces("Object"));
-                  
-        TreeGrid treeGrid = new TreeGrid();  
-        treeGrid.setFields(new TreeGridField("Name", "Interfaces"));  
-        treeGrid.setData(treeInterfaces);            
-        treeGrid.getData().openAll();
-        treeGrid.setWidth100();
-        treeGrid.setHeight100();
-        treeGrid.setShowHeader(false);
-        treeGrid.setShowResizeBar(true);
-        treeGrid.setEmptyMessage("Nenhuma Interface.");
-        treeGrid.setAppImgDir("/icons/");
-        treeGrid.setShowResizeBar(false);
-                
-        treeGrid.addCellContextClickHandler(new CellContextClickHandler() {
+        listaPropriedades.addCellContextClickHandler(new CellContextClickHandler() {
 			
 			public void onCellContextClick(CellContextClickEvent event) {
 				
-				/*Menu menu = getMenuClasses(((ClasseTreeNode) event.getRecord()));
+				Menu menu = createMenuPropriedades(((ListGridRecord) event.getRecord()));
+				
 				menu.setTop(event.getY());
 				menu.setLeft(event.getX());
 				
 				menu.draw();
 				
-				event.cancel();*/  
+				event.cancel();				
 			}
-		});
-        
-        treeGrid.addCellClickHandler(new CellClickHandler() {
+
+			private Menu createMenuPropriedades(ListGridRecord listGridRecord) {
 			
-			public void onCellClick(CellClickEvent event) {
+				String m = listGridRecord.getAttribute("name").toString();
+				final String nome;
 				
-				//propriedadesGUI.getLista().setData(getListaPropriedades(((ClasseTreeNode) event.getRecord()).getAttribute("Name")));
+		    	Menu menuPropriedades = new Menu();
+		    	menuPropriedades.setWidth(130);
+		    	menuPropriedades.setCanSelectParentItems(true);
+		    	MenuItem removerMetodo = null, removerVariavel = null;
+
+				if (m.contains("(")) {
+					
+					m = m.substring(0, m.indexOf("("));
+
+					removerMetodo = new MenuItem("Remover M&eacute;todo", "/icons/plugin_delete.png");		    	
+					menuPropriedades.setItems(removerMetodo);
+					
+				} else {
+					
+					if (m.contains("=")) 
+						m = m.substring(0, m.indexOf("=")-1);						
+					
+					removerVariavel = new MenuItem("Remover Vari&aacute;vel", "/icons/plugin_delete.png");		    	
+					menuPropriedades.setItems(removerVariavel);
+				}
+				
+				nome = m;
+				
+				if (removerMetodo != null)
+		    	removerMetodo.addClickHandler(new ClickHandler() {
+		    	
+					public void onClick(MenuItemClickEvent event) {
+								
+						SC.ask("Confirma&ccedil;&atilde;o", "Deseja excluir o m&eacute;todo: <b>" + nome + "()</b>?", new BooleanCallback() {  
+		                    
+							public void execute(Boolean value) {  
+		                        
+								if (value != null && value) {  
+									
+									Classe c = ClassesGUI.classeSelecionada;
+									
+									if (c.procurarMetodo(nome) == null) {
+										
+										SC.say("Aten&ccedil;&atilde;o", "Este m&eacute;todo n&atilde;o pode ser exclu&iacute;do!");
+										
+										return;
+									}
+									
+		           					listaPropriedades.removeSelectedData();
+
+		           					c.removerMetodo(nome);
+		           					
+		           					getListaPropriedades().setData(getPropriedades(ClassesGUI.classeSelecionada.getNome()));
+		           					
+		           					getListaInterfaces().setData(getInterfaces(ClassesGUI.classeSelecionada.getNome()));
+		           					
+		                         }
+		                    }
+		                });  				
+					}
+				});
+				
+				if (removerVariavel != null)
+					removerVariavel.addClickHandler(new ClickHandler() {
+			    	
+						public void onClick(MenuItemClickEvent event) {
+									
+							SC.ask("Confirma&ccedil;&atilde;o", "Deseja excluir a vari&aacute;vel: " + nome + "?", new BooleanCallback() {  
+			                    
+								public void execute(Boolean value) {  
+			                        
+									if (value != null && value) {  
+										
+										Classe c = ClassesGUI.classeSelecionada;
+										
+										if (c.procurarVariavel(nome) == null) {
+											
+											SC.say("Aten&ccedil;&atilde;o", "Esta vari&aacute;vel n&atilde;o pode ser exclu&iacute;da!");
+											
+											return;
+										}
+										
+			           					listaPropriedades.removeSelectedData();
+
+			           					c.removerVariavel(nome);
+			           					
+			           					c.removerVariavelFilhas(c, nome);
+			           					
+			           					getListaPropriedades().setData(getPropriedades(ClassesGUI.classeSelecionada.getNome()));
+			           					
+			           					getListaInterfaces().setData(getInterfaces(ClassesGUI.classeSelecionada.getNome()));
+			           					
+			                         }
+			                    }
+			                });  				
+						}
+					});
+
+				return menuPropriedades;		    	
 			}
 		});
         
-        return treeGrid;
+        return listaPropriedades;
+	}
+
+	public ListGrid createInterfaces() {
+    	
+		listaInterfaces = new ListGrid();
+		listaInterfaces.setCellHeight(24);
+		listaInterfaces.setImageSize(16);
+		listaInterfaces.setWidth100();
+		listaInterfaces.setHeight100();
+		listaInterfaces.setTop(25);
+		listaInterfaces.setBorder("0px");
+		listaInterfaces.setBodyStyleName("normal");        
+		listaInterfaces.setAlternateRecordStyles(true);
+        listaInterfaces.setShowHeader(false);
+        listaInterfaces.setEmptyMessage("Nenhuma Interface.");
+        
+        ListGridField imageField = new ListGridField("imageField", 24);
+        imageField.setType(ListGridFieldType.IMAGE);
+        imageField.setImgDir("/icons/");
+
+        ListGridField nameField = new ListGridField("name");
+        
+        listaInterfaces.setFields(imageField, nameField);
+        
+        listaInterfaces.addCellContextClickHandler(new CellContextClickHandler() {
+			
+			public void onCellContextClick(CellContextClickEvent event) {
+
+				Menu menu = createMenuInterfaces(((ListGridRecord) event.getRecord()));
+				
+				menu.setTop(event.getY());
+				menu.setLeft(event.getX());
+				
+				menu.draw();
+				
+				event.cancel(); 				
+			}
+		});
+        
+        return listaInterfaces;
     }
+	
+	private Menu createMenuInterfaces(ListGridRecord record) {
+
+		final Interface interfaceSelecionada = repositorioDados.getColecaoInterface().procurarInterface(record.getAttribute("name").toString());
+		
+    	Menu menuInterfaces = new Menu();
+    	menuInterfaces.setWidth(130);
+    	menuInterfaces.setCanSelectParentItems(true);
+    	
+    	MenuItem removerInterface = new MenuItem("Remover Interface", "/icons/plugin_delete.png");
+    	
+    	removerInterface.addClickHandler(new ClickHandler() {
+			
+			public void onClick(MenuItemClickEvent event) {
+				
+				SC.ask("Confirma&ccedil;&atilde;o", "Deseja excluir a interface: " + interfaceSelecionada.getNome() + "?", new BooleanCallback() {  
+                    
+					public void execute(Boolean value) {  
+                        
+						if (value != null && value) {  
+							
+							Classe c = ClassesGUI.classeSelecionada;
+							
+           					listaInterfaces.removeSelectedData();
+           					
+        					c.removerInterface(interfaceSelecionada.getNome());
+           						
+           					for (Variavel v : interfaceSelecionada.getVariaveis())
+           						c.removerVariavel(v.getNome());
+           					
+           					c.removerInterfaceFilhas(c, interfaceSelecionada);
+           					
+           					getListaPropriedades().setData(getPropriedades(ClassesGUI.classeSelecionada.getNome()));
+           					
+           					getListaInterfaces().setData(getInterfaces(ClassesGUI.classeSelecionada.getNome()));
+           					
+                         }
+                    }
+                });  				
+			}
+		});    	
+    	
+    	menuInterfaces.setItems(removerInterface);
+		return menuInterfaces;
+	}	
    
-    public InterfaceTreeNode[] getInterfaces(String nomeClasse) {
+    public ListGridRecord[] getInterfaces(String nomeClasse) {
     	
-    	List<InterfaceTreeNode> listaNodes = new ArrayList<InterfaceTreeNode>();
+    	List<Interface> lista = new ArrayList<Interface>();
     	
-    	Classe classe = colecaoClasse.procurarClasse(colecaoClasse.getRaiz(), nomeClasse);
+    	Classe c = repositorioDados.getColecaoClasse().procurarClasse(repositorioDados.getColecaoClasse().getRaiz(), nomeClasse);
 
-    	if (classe.getInterfaces() == null)
-    		return null;
-    		
-    	for (Interface i : classe.getInterfaces()) {
-    		    	
-    		InterfaceTreeNode node = new InterfaceTreeNode(i.getNome(), i.getNome(), true);
-    		listaNodes.add(node);
-    	}
+		while (c != null) {
+			
+			if (c.getInterfaces() != null) {
+				
+				for (Interface i : c.getInterfaces()) {
+					
+					if (!lista.contains(i))
+						
+						lista.add(i);						
+				}
+			}
+			
+			c = c.getParent();
+		}    	
     	
-    	InterfaceTreeNode [] lst = new InterfaceTreeNode[listaNodes.size()];
-    	int i = 0;
-    	
-    	for (InterfaceTreeNode t : listaNodes){
-    		
-    		lst[i] = t;
-    		i++;
-    	}
-
-    	return lst;
+		if (lista.size() == 0)
+			return new ListGridRecord[0];
+		
+		ListGridRecord[] lst = new ListGridRecord[lista.size()];
+		
+		for (int i=0; i<lista.size(); i++) {
+			
+			ListGridRecord record = new ListGridRecord();
+			record.setAttribute("imageField", "/icons/puzzle_blue.png");
+			record.setAttribute("name", lista.get(i).getNome());
+			
+			lst[i] = record;
+		}
+		 	
+       	return lst;
     }
 
 	public ListGrid getListaPropriedades() {
 		return listaPropriedades;
 	}
-
-	public Tree getTreeInterfaces() {
-		return treeInterfaces;
-	}
 	
+	public ListGrid getListaInterfaces() {
+		return listaInterfaces;
+	}
+
 	public ListGridRecord[] getPropriedades(String nomeClasse) {
 
 		List<Variavel> variaveis = new ArrayList<Variavel>();
 		
-		Classe classe = colecaoClasse.procurarClasse(colecaoClasse.getRaiz(), nomeClasse);
+		Classe classe = repositorioDados.getColecaoClasse().procurarClasse(repositorioDados.getColecaoClasse().getRaiz(), nomeClasse);
 		
 		Classe c = classe;
 		
-		while (c != null) {
-			
-			if (c.getVariaveis() != null)
-				variaveis.addAll(c.getVariaveis());
-			
-			c = c.getParent();
-		}
+		for (Variavel v : c.getVariaveis()) 			
+			variaveis.add(v);
 		
 		List<Metodo> metodos = new ArrayList<Metodo>();
 		
@@ -179,12 +338,21 @@ public class PropriedadesGUI {
 		
 		while (c != null) {
 			
+			for (Interface i : c.getInterfaces()) {
+			
+				for (Metodo m : i.getMetodos()) {
+					
+					if (!metodos.contains(m))
+						metodos.add(m);
+				}
+			}
+			
 			if (c.getMetodos() != null)
 				metodos.addAll(c.getMetodos());
-			
+						
 			c = c.getParent();
 		}		
-		
+			
 		
 		if (variaveis.size() + metodos.size() == 0)
 			return new ListGridRecord[0];
@@ -197,7 +365,11 @@ public class PropriedadesGUI {
 			
 			ListGridRecord record = new ListGridRecord();
 			record.setAttribute("imageField", "/icons/bullet_green.png");
-			record.setAttribute("name", variaveis.get(i).getNome());
+			
+			if (variaveis.get(i).getValorPadrao() == null)
+				record.setAttribute("name", variaveis.get(i).getNome());
+			else
+				record.setAttribute("name", variaveis.get(i).getNome() + " = " + variaveis.get(i).getValorPadrao());
 			
 			lst[indice] = record;
 			indice++;
@@ -207,7 +379,7 @@ public class PropriedadesGUI {
 			
 			ListGridRecord record = new ListGridRecord();
 			record.setAttribute("imageField", "/icons/shape_square.png");
-			record.setAttribute("name", metodos.get(i).getNome() + " : " + metodos.get(i).getRetorno());
+			record.setAttribute("name", metodos.get(i).getNome() + "(" + metodos.get(i).getParametrosString() + ")" + " : " + metodos.get(i).getRetorno());
 			
 			lst[indice] = record;
 			indice++;
@@ -215,57 +387,5 @@ public class PropriedadesGUI {
 		
 		return lst;
 	}	
-}
 
-
-class InterfaceTreeNode extends TreeNode {  
-	  
-    public InterfaceTreeNode(String classeId, String name, boolean abstrata) {  
-        
-    	super(name);
-    	
-    	setClasseId(classeId);  
-        setName(name);  
-        
-        if (abstrata)
-        	setIcon("/icons/puzzle_white.png");
-        else
-        	setIcon("/icons/puzzle_green.png");                
-    }  
-    
-	public InterfaceTreeNode(String classeId, String name, String parentId, boolean abstrata) {  
-        
-    	setClasseId(classeId);  
-    	setParentId(parentId);  
-        setName(name);   
-        
-        if (abstrata)
-        	setIcon("/icons/puzzle_white.png");
-        else
-        	setIcon("/icons/puzzle_green.png");
-    }  
-
-    public void setClasseId(String value) {  
-        setAttribute("Id", value);  
-    }  
-
-    public void setParentId(String value) {  
-        setAttribute("ParentId", value);  
-    }  
-
-    public void setName(String name) {  
-        setAttribute("Name", name);  
-    }  
-    
-    public void setIcon(String icon) {
-        setAttribute("icon", icon);
-    } 
-    
-    public void setIcon(boolean abstrata) {
-    	
-        if (abstrata)
-        	setIcon("/icons/puzzle_white.png");
-        else
-        	setIcon("/icons/puzzle_green.png");    	
-    }
 }
