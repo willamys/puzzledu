@@ -1,6 +1,7 @@
 package com.puzzledu.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.ui.TextArea;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.Cursor;
 import com.smartgwt.client.types.DragAppearance;
@@ -9,7 +10,6 @@ import com.smartgwt.client.types.Side;
 import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.Img;
-import com.smartgwt.client.widgets.RichTextEditor;
 import com.smartgwt.client.widgets.Window;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
@@ -22,20 +22,27 @@ import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
 import com.smartgwt.client.widgets.tab.TabSet;
 import com.smartgwt.client.widgets.toolbar.ToolStrip;
+import com.smartgwt.client.types.ListGridFieldType;
+import com.smartgwt.client.widgets.ImgProperties;
+import com.smartgwt.client.widgets.grid.ListGrid;
+import com.smartgwt.client.widgets.grid.ListGridField;
 
 public class PuzzlEdu implements EntryPoint {
 	
 	private ClassesGUI classesGUI;
 	private PropriedadesGUI propriedadesGUI;	
-	private RepositorioDados repositorioDados;
+	private Gerenciador gerenciador;
 	private Canvas painel; 
+	private PartsListGrid scriptList;
+	private TextArea console;
 	
 	public PuzzlEdu() {
-				
+					
 		this.painel = createPainel();
-		repositorioDados = new RepositorioDados();
-		propriedadesGUI = new PropriedadesGUI(repositorioDados);
-		classesGUI = new ClassesGUI(repositorioDados, propriedadesGUI, this.painel);		
+		gerenciador = new Gerenciador();
+		propriedadesGUI = new PropriedadesGUI(gerenciador);
+		scriptList = new PartsListGrid();
+		classesGUI = new ClassesGUI(gerenciador, propriedadesGUI, this.painel, scriptList);
 	}
 	
     public void onModuleLoad() {
@@ -51,7 +58,7 @@ public class PuzzlEdu implements EntryPoint {
         mainLayout.setBottom(10);
                         
         mainLayout.addMember(getPainelEsquerdo());
-        mainLayout.addMember(getPainel());
+        mainLayout.addMember(getArea());
         mainLayout.addMember(getSourceCode());
         
         janela.addChild(getMenu());
@@ -80,10 +87,33 @@ public class PuzzlEdu implements EntryPoint {
         return window;  
    }    
    
-   private Canvas getPainel() {
+   private Canvas getArea() {
 	   
-	   return this.painel;
-   }
+   	final VLayout leftPanel = new VLayout();
+	leftPanel.setWidth100();
+	leftPanel.setHeight100();
+	leftPanel.setShowResizeBar(true);
+	
+	console = new TextArea();
+	console.setHeight("100px");
+	console.setWidth("660px");
+	console.setEnabled(false);
+	console.setStyleName("console");
+	
+	this.painel.setHeight("469px");
+	
+	leftPanel.addMember(this.painel);    	
+	leftPanel.addMember(console);
+	
+	leftPanel.addShowContextMenuHandler(new ShowContextMenuHandler() {
+        public void onShowContextMenu(ShowContextMenuEvent event) {
+            event.cancel();
+        }
+    });
+
+	return leftPanel;
+	   
+  }
     
    public Canvas createPainel() {
     	
@@ -154,6 +184,14 @@ public class PuzzlEdu implements EntryPoint {
          imgPlay.setTooltip("Executar");
          imgPlay.setCursor(Cursor.HAND); 
          
+         imgPlay.addClickHandler(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+
+				gerenciador.getPilha().executarAcoesDasInstancias(console);
+			}
+		});
+         
          Img imgPause = new Img("/icons/pause-icon.png");
          imgPause.setWidth("32px");
          imgPause.setHeight("32px");
@@ -164,7 +202,7 @@ public class PuzzlEdu implements EntryPoint {
          imgStop.setWidth("32px");
          imgStop.setHeight("32px");
          imgStop.setTooltip("Parar");
-         imgStop.setCursor(Cursor.HAND);          
+         imgStop.setCursor(Cursor.HAND);  
          
          toolStrip.addMember(imgNovo, 0);
          toolStrip.addMember(imgSave, 1);
@@ -201,8 +239,8 @@ public class PuzzlEdu implements EntryPoint {
         win.setTitle("Source");
         win.setHeaderIcon("pieces/16/cube_green.png", 16, 16);
         win.setKeepInParentRect(true);
-        win.setWidth("40%");
-        win.setHeight(300);
+        win.setWidth("30%");
+        win.setHeight("100%");
         
         win.setCanDragReposition(true);
         win.setCanDragResize(true);
@@ -212,44 +250,18 @@ public class PuzzlEdu implements EntryPoint {
         tabs.setWidth("40%");
         tabs.setTabBarPosition(Side.TOP);
         tabs.setHeight(300);
+
+        Tab tab1 = new Tab("Script", "silk/script_go.png");
+
+        scriptList.setCanAcceptDroppedRecords(true);  
+        scriptList.setCanReorderRecords(true);
         
-        tabs.addTab(buildSourceTab("Source", "silk/script_go.png"));
+        tab1.setPane(scriptList);        
+        tabs.addTab(tab1);
         win.addItem(tabs);
         
         return tabs;
-    }
-    
-    public Tab buildSourceTab(String title, String icon) {
-        
-    	String contents = "<span style='font-size:22px;'>Ajax</span> " +
-        "<b>A</b>synchronous <b>J</b>avaScript <b>A</b>nd <b>X</b>ML (AJAX) is a " +
-        "Web development technique for creating interactive <b>web applications</b>. " +
-        "The intent is to make web pages feel more responsive by exchanging small " +
-        "amounts of data with the server behind the scenes, so that the entire Web " +
-        "page does not have to be reloaded each time the user makes a change. " +
-        "This is meant to increase the Web page's <b>interactivity</b>, <b>speed</b>, " +
-        "and <b>usability</b>.<br>" +
-        "(Source: <a href='http://www.wikipedia.org' title='Wikipedia' target='_blank'>Wikipedia</a>)";
-
-    	final Canvas htmlCanvas = new Canvas();
-        htmlCanvas.setHeight(130);
-        htmlCanvas.setPadding(2);
-        htmlCanvas.setOverflow(Overflow.HIDDEN);
-        htmlCanvas.setCanDragResize(true);
-        htmlCanvas.setContents(contents);
-        
-        final RichTextEditor richTextEditor = new RichTextEditor();
-        richTextEditor.setHeight100();
-        richTextEditor.setWidth100();
-        richTextEditor.setOverflow(Overflow.HIDDEN);
-        richTextEditor.setValue(contents);
-        
-        Tab tab = new Tab(title, icon);
-        tab.setPane(richTextEditor);
-        
-        return tab;
     }    
-
 }
 
 class DroppedPiece extends Img {
@@ -272,5 +284,35 @@ class DroppedPiece extends Img {
                 event.cancel();
             }
         });
+    }
+}
+
+class PartsListGrid extends ListGrid {
+
+    PartsListGrid() {
+    	
+        setWidth100();
+        setHeight100();
+        setCellHeight(30);
+        setImageSize(16);
+        setWrapCells(true);
+        setShowEdges(false);
+        setBorder("0px");
+        setBodyStyleName("normal");
+        setShowHeader(false);
+        setLeaveScrollbarGap(false);
+        setEmptyMessage("<br><br>Lista Vazia...");
+
+        ListGridField partSrcField = new ListGridField("imageField", 24);
+        partSrcField.setType(ListGridFieldType.IMAGE);
+        partSrcField.setImgDir("pieces/16/");
+
+        ListGridField partNameField = new ListGridField("name");
+        
+        ListGridField valueField = new ListGridField("value");
+
+        setFields(partSrcField, partNameField, valueField);
+
+        setTrackerImage(new ImgProperties("pieces/24/cubes_all.png", 24, 24));
     }
 }

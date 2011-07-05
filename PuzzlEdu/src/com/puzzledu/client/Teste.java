@@ -1,17 +1,19 @@
 package com.puzzledu.client;
 
 import com.google.gwt.user.client.ui.Composite;
-import com.smartgwt.client.widgets.tree.TreeGrid;
-import com.smartgwt.client.widgets.layout.HStack;
-import com.smartgwt.client.widgets.Img;
-import com.smartgwt.client.widgets.tile.TileGrid;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Label;
 
 public class Teste extends Composite {
 
 	public Teste() {
 		
-		TileGrid tileGrid = new TileGrid();
-		initWidget(tileGrid);
+		FlowPanel flowPanel = new FlowPanel();
+		initWidget(flowPanel);
+		
+		Label lblSilas = new Label("Silas");
+		lblSilas.setStyleName("logo");
+		flowPanel.add(lblSilas);
 	}
 
 }
