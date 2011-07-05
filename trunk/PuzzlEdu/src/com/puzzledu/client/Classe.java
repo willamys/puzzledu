@@ -21,7 +21,7 @@ public class Classe {
 		metodos = new ArrayList<Metodo>();
 		variaveis = new ArrayList<Variavel>();
 	}
-
+	
 	public Classe(String filha) {
 
 		setNome(filha);
@@ -67,13 +67,23 @@ public class Classe {
 		filhas.add(filha);
 	}
 	
-	public void addInterface(Interface i) throws IntefaceJaImplementadaException {
-		
-		for (Interface i2 : interfaces)
-			if (i2.getNome().equals(i.getNome()))
-				throw new IntefaceJaImplementadaException("Esta interface j&aacute; foi implementada na Classe: " + getNome());
+	public void addInterface(Interface i) {
 		
 		interfaces.add(i);
+	}
+	
+	public String implementaInterface(Classe classe, Interface iface) {
+		
+		if (classe == null)
+			return "";
+		
+		for (Interface i : classe.getInterfaces()) {
+			
+			if (i.getNome().equals(iface.getNome()))
+				return classe.getNome();
+		}
+		
+		return implementaInterface(classe.getParent(), iface);
 	}
 	
 	public void addMetodo(Metodo m) {
@@ -87,6 +97,29 @@ public class Classe {
 	public List<Metodo> getMetodos() {
 		return metodos;
 	}
+	
+	public List<Metodo> getAllMetodos(Classe classe) {
+		
+		List<Metodo> metodos = new ArrayList<Metodo>();
+		
+		while (classe != null) {
+			
+			metodos.addAll(classe.getMetodos());
+			
+			for (Interface i : classe.getInterfaces()) {
+				
+				for (Metodo m : i.getMetodos())
+					if (!metodos.contains(m))
+						metodos.add(m);
+			}
+			
+			classe = classe.getParent();
+		}	
+		
+		return metodos;
+	}
+	
+	
 
 	public void setMetodos(List<Metodo> metodos) {
 		this.metodos = metodos;
@@ -144,37 +177,8 @@ public class Classe {
 
 	public List<Variavel> getVariaveis() {
 		return variaveis;
-	}
+	}	
 	
-	public boolean coletarVariaveis(List<Variavel> variaveis, Classe raiz, String nomeClasse) {
-				
-		System.out.println("Classe: " + raiz.getNome());
-		if (raiz.getNome().equals(nomeClasse)) {
-			
-			System.out.println("Classe encontrada, adicionados suas var: " + raiz.getVariaveis().toString());
-			variaveis.addAll(raiz.getVariaveis());		
-			
-			return true;
-		}
-		
-		boolean entrou = false;
-		
-		if (raiz.getFilhas() != null) {
-			System.out.println("Procurando filhas");
-			for (Classe c : raiz.getFilhas()) {
-				System.out.println("\t" + c.getNome());
-				if (coletarVariaveis(variaveis, c, nomeClasse)) {
-					System.out.println("\t\tAdicionando Variaveis de " + c.getNome());
-					variaveis.addAll(c.getVariaveis());
-					
-					entrou = true;
-				}
-			}
-		}
-		
-		return entrou;
-	}
-
 	public void setVariaveis(List<Variavel> variaveis) {
 		this.variaveis = variaveis;
 	}
@@ -310,6 +314,21 @@ public class Classe {
 		return procurarVariavel(c.getParent(), nomeVariavel);
 	}	
 	
+	public void atribuirValorVariaveisRecursivamente(Classe c, String nomeVariavel, String valor) {
+		
+		for (Variavel v : c.getVariaveis()) {
+			
+			if (v.getNome().equals(nomeVariavel))
+				if (v.getValorPadrao() == null)
+					v.setValorPadrao(valor);
+		}
+		
+		for (Classe c1 : c.getFilhas()) {
+		
+			atribuirValorVariaveisRecursivamente(c1, nomeVariavel, valor);
+		}		
+	}
+	
 	public boolean procurarInterface(Classe c, String nome) {
 		
 		if (c == null)			
@@ -330,6 +349,17 @@ public class Classe {
 
 	public void setParent(Classe parent) {
 		this.parent = parent;
+	}
+
+	public boolean pertenceArvore(Classe classe, String classeExcluida) {
+		
+		if (classe == null)
+			return false;
+		
+		if (classe.getNome().equals(classeExcluida))
+			return true;
+		
+		return pertenceArvore(classe.getParent(), classeExcluida);		
 	}
 }
 

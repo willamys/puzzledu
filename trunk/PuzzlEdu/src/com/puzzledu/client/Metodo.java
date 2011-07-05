@@ -41,6 +41,17 @@ public class Metodo {
 		return parametros;
 	}
 	
+	public String getPrimeiroParametro() {
+	
+		if (parametros == null)
+			return "";
+		
+		if (parametros.size() > 0)
+			return parametros.get(0).getNome();
+		else
+			return "";
+	}
+	
 	public String getParametrosString() {
 		
 		String params = "";
@@ -71,5 +82,5 @@ public class Metodo {
 	public void removerParametro(Parametro param) {
 		
 		this.parametros.remove(param);
-	}	
+	}
 }

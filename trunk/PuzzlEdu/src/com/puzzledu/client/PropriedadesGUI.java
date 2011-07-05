@@ -21,13 +21,13 @@ import com.smartgwt.client.widgets.tab.TabSet;
 
 public class PropriedadesGUI {
 
-	private RepositorioDados repositorioDados;
+	private Gerenciador gerenciador;
 	private ListGrid listaInterfaces;
 	private ListGrid listaPropriedades;
 	
-	public PropriedadesGUI(RepositorioDados repositorioDados) {
+	public PropriedadesGUI(Gerenciador gerenciador) {
 
-		this.repositorioDados = repositorioDados;
+		this.gerenciador = gerenciador;
 	}
 
 	public TabSet createPainelPropriedades() {
@@ -232,34 +232,36 @@ public class PropriedadesGUI {
 	
 	private Menu createMenuInterfaces(ListGridRecord record) {
 
-		final Interface interfaceSelecionada = repositorioDados.getColecaoInterface().procurarInterface(record.getAttribute("name").toString());
+		final Interface interfaceSelecionada = gerenciador.getRepositorioDados().getColecaoInterface().procurarInterface(record.getAttribute("name").toString());
 		
     	Menu menuInterfaces = new Menu();
     	menuInterfaces.setWidth(130);
     	menuInterfaces.setCanSelectParentItems(true);
     	
-    	MenuItem removerInterface = new MenuItem("Remover Interface", "/icons/plugin_delete.png");
+    	MenuItem excluirInterface = new MenuItem("Excluir Interface", "/icons/plugin_delete.png");
     	
-    	removerInterface.addClickHandler(new ClickHandler() {
+    	excluirInterface.addClickHandler(new ClickHandler() {
 			
 			public void onClick(MenuItemClickEvent event) {
 				
-				SC.ask("Confirma&ccedil;&atilde;o", "Deseja excluir a interface: " + interfaceSelecionada.getNome() + "?", new BooleanCallback() {  
+				final String ci = ClassesGUI.classeSelecionada.implementaInterface(ClassesGUI.classeSelecionada, interfaceSelecionada);
+
+				SC.ask("Confirma&ccedil;&atilde;o", "Deseja excluir a interface <b>" + interfaceSelecionada.getNome() + "</b>, da classe <b>" + ci + "</b> e de todas as suas subclasses?", new BooleanCallback() {  
                     
 					public void execute(Boolean value) {  
                         
 						if (value != null && value) {  
 							
-							Classe c = ClassesGUI.classeSelecionada;
+							Classe classeImplementada =  gerenciador.getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getRepositorioDados().getColecaoClasse().getRaiz(), ci);
 							
            					listaInterfaces.removeSelectedData();
            					
-        					c.removerInterface(interfaceSelecionada.getNome());
+           					classeImplementada.removerInterface(interfaceSelecionada.getNome());
            						
            					for (Variavel v : interfaceSelecionada.getVariaveis())
-           						c.removerVariavel(v.getNome());
+           						classeImplementada.removerVariavel(v.getNome());
            					
-           					c.removerInterfaceFilhas(c, interfaceSelecionada);
+           					classeImplementada.removerInterfaceFilhas(classeImplementada, interfaceSelecionada);
            					
            					getListaPropriedades().setData(getPropriedades(ClassesGUI.classeSelecionada.getNome()));
            					
@@ -271,7 +273,7 @@ public class PropriedadesGUI {
 			}
 		});    	
     	
-    	menuInterfaces.setItems(removerInterface);
+    	menuInterfaces.setItems(excluirInterface);
 		return menuInterfaces;
 	}	
    
@@ -279,7 +281,7 @@ public class PropriedadesGUI {
     	
     	List<Interface> lista = new ArrayList<Interface>();
     	
-    	Classe c = repositorioDados.getColecaoClasse().procurarClasse(repositorioDados.getColecaoClasse().getRaiz(), nomeClasse);
+    	Classe c =  gerenciador.getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getRepositorioDados().getColecaoClasse().getRaiz(), nomeClasse);
 
 		while (c != null) {
 			
@@ -325,7 +327,7 @@ public class PropriedadesGUI {
 
 		List<Variavel> variaveis = new ArrayList<Variavel>();
 		
-		Classe classe = repositorioDados.getColecaoClasse().procurarClasse(repositorioDados.getColecaoClasse().getRaiz(), nomeClasse);
+		Classe classe =  gerenciador.getRepositorioDados().getColecaoClasse().procurarClasse( gerenciador.getRepositorioDados().getColecaoClasse().getRaiz(), nomeClasse);
 		
 		Classe c = classe;
 		
