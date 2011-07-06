@@ -10,8 +10,11 @@ public class Gerenciador {
 		
 		pilha = new Pilha();
 		repositorioDados = new RepositorioDados();
-		projetoAtual     = repositorioDados.getColecaoProjeto().buscarPorNome("Projeto Exemplo");
-		
+		/*Recupera um projeto existente*/
+	    setProjetoAtual(repositorioDados.getColecaoProjeto().buscarPorNome("Projeto Exemplo"));
+	    
+	    /*Para iniciar o projeto atual zerado*/
+	    //novoProjeto();
 	}
 
 	public Pilha getPilha() {
@@ -42,6 +45,16 @@ public class Gerenciador {
 	 */
 	public void setProjetoAtual(Projeto projetoAtual) {
 		this.projetoAtual = projetoAtual;
+	}
+	
+	public void salvarProjeto(){
+		if(this.projetoAtual !=null){
+			repositorioDados.getColecaoProjeto().addProjeto(this.projetoAtual);
+		}
+	}
+	
+	public void novoProjeto(){
+	 	setProjetoAtual(new Projeto(1L, "New Project"));
 	}
 	
 	
