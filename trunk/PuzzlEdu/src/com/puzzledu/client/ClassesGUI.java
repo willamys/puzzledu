@@ -110,7 +110,7 @@ public class ClassesGUI {
 			
 			public void onCellClick(CellClickEvent event) {
 				
-				classeSelecionada = gerenciador.getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getRepositorioDados().getColecaoClasse().getRaiz(), ((TreeNode) event.getRecord()).getAttribute("Name").toString());
+				classeSelecionada = gerenciador.getProjetoAtual().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getColecaoClasse().getRaiz(), ((TreeNode) event.getRecord()).getAttribute("Name").toString());
 				
 				propriedadesGUI.getListaPropriedades().setData(propriedadesGUI.getPropriedades(((TreeNode) event.getRecord()).getAttribute("Name")));
 				
@@ -126,7 +126,7 @@ public class ClassesGUI {
     	
     	List<TreeNode> listaNodes = new ArrayList<TreeNode>();
     	
-    	Classe raiz = gerenciador.getRepositorioDados().getColecaoClasse().getRaiz();
+    	Classe raiz = gerenciador.getProjetoAtual().getColecaoClasse().getRaiz();
     	
     	ClasseTreeNode raizNode = new ClasseTreeNode(raiz.getNome(), raiz.getNome(), true);
     	
@@ -150,7 +150,7 @@ public class ClassesGUI {
     	
     	List<TreeNode> listaNodes = new ArrayList<TreeNode>();
     	
-    	for (Interface i : gerenciador.getRepositorioDados().getColecaoInterface().getListaInterfaces()) {
+    	for (Interface i : gerenciador.getProjetoAtual().getColecaoInterface().getListaInterfaces()) {
     	
     		InterfaceTreeNode interfaceNode = new InterfaceTreeNode(i.getNome());
    	
@@ -200,7 +200,7 @@ public class ClassesGUI {
                     
     private Menu createMenuClasses(final ClasseTreeNode raiz) {
 		
-    	classeSelecionada = gerenciador.getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getRepositorioDados().getColecaoClasse().getRaiz(), raiz.getAttribute("Name"));
+    	classeSelecionada = gerenciador.getProjetoAtual().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getColecaoClasse().getRaiz(), raiz.getAttribute("Name"));
     	
     	Menu menuClasses = new Menu();
     	menuClasses.setWidth(130);
@@ -248,7 +248,7 @@ public class ClassesGUI {
 					
 					public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
 
-						if (gerenciador.getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getRepositorioDados().getColecaoClasse().getRaiz(), textItem.getValue().toString()) != null) {
+						if (gerenciador.getProjetoAtual().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getColecaoClasse().getRaiz(), textItem.getValue().toString()) != null) {
 						
 							SC.say("Aten&ccedil;&atilde;o", "J&aacute; existe uma classe com este nome!");
 							textItem.focusInItem();
@@ -263,7 +263,7 @@ public class ClassesGUI {
 						else
 							classeFilha.setAbstrata(false);
 
-						Classe classePai = gerenciador.getRepositorioDados().getColecaoClasse().procurarClasse(classeSelecionada, raiz.getAttribute("Name"));
+						Classe classePai = gerenciador.getProjetoAtual().getColecaoClasse().procurarClasse(classeSelecionada, raiz.getAttribute("Name"));
 						
 						for (Variavel v : classePai.getVariaveis()) {
 									
@@ -271,7 +271,7 @@ public class ClassesGUI {
 							classeFilha.addVariavel(v1);
 						}
 						
-						gerenciador.getRepositorioDados().getColecaoClasse().addClasseFilha(classeFilha, raiz.getAttribute("Name"));
+						gerenciador.getProjetoAtual().getColecaoClasse().addClasseFilha(classeFilha, raiz.getAttribute("Name"));
 
 						ClasseTreeNode node = new ClasseTreeNode(
 							textItem.getValue().toString(), textItem.getValue().toString(), raiz.getAttribute("Name"), classeFilha.isAbstrata());
@@ -301,7 +301,7 @@ public class ClassesGUI {
 			
 			public void onClick(MenuItemClickEvent event) {
 				
-				final Classe classe = gerenciador.getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getRepositorioDados().getColecaoClasse().getRaiz(), raiz.getAttribute("Name")); 
+				final Classe classe = gerenciador.getProjetoAtual().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getColecaoClasse().getRaiz(), raiz.getAttribute("Name")); 
 				
 				final Window winModal = new Window();  
                 winModal.setWidth(360);  
@@ -395,7 +395,7 @@ public class ClassesGUI {
             				
                         	if (!raiz.getAttribute("Name").equals("Object")) {
             					
-                        		gerenciador.getRepositorioDados().getColecaoClasse().removerClasse(raiz.getAttribute("Name"));
+                        		gerenciador.getProjetoAtual().getColecaoClasse().removerClasse(raiz.getAttribute("Name"));
                         		
                         		gerenciador.getPilha().removerInstanciaPilhaDaClasse(raiz.getAttribute("Name"));
                         		
@@ -403,7 +403,7 @@ public class ClassesGUI {
             				
             					tree.reloadChildren(raiz);
 
-            					classeSelecionada = gerenciador.getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getRepositorioDados().getColecaoClasse().getRaiz(), tree.getRootValue());
+            					classeSelecionada = gerenciador.getProjetoAtual().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getColecaoClasse().getRaiz(), tree.getRootValue());
             					
             				}
                         }
@@ -468,14 +468,14 @@ public class ClassesGUI {
 					
 					public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
 					
-						Classe classe = gerenciador.getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getRepositorioDados().getColecaoClasse().getRaiz(), raiz.getAttribute("Name").toString());												
+						Classe classe = gerenciador.getProjetoAtual().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getColecaoClasse().getRaiz(), raiz.getAttribute("Name").toString());												
 						
 						String nomeInterface = treeGrid.getSelectedRecord().getAttribute("ParentId");
 						
 						if (nomeInterface == null)
 							nomeInterface = treeGrid.getSelectedRecord().getAttribute("Name");
 						
-						Interface i = gerenciador.getRepositorioDados().getColecaoInterface().procurarInterface(nomeInterface);
+						Interface i = gerenciador.getProjetoAtual().getColecaoInterface().procurarInterface(nomeInterface);
 						
 						if (classe == null) {
 							
@@ -777,7 +777,7 @@ public class ClassesGUI {
 					getJanelaSelecionarImagem();
 				else {
 
-					Interface i = gerenciador.getRepositorioDados().getColecaoInterface().procurarInterface("Desenh&aacute;vel");
+					Interface i = gerenciador.getProjetoAtual().getColecaoInterface().procurarInterface("Desenh&aacute;vel");
 								
 					for (Variavel v : i.getVariaveis()) {
 
