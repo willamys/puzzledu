@@ -13,11 +13,13 @@ public class ColecaoProjeto {
 		projetos = new ArrayList<Projeto>();
 		addProjetoExemplo();
 	}
-
+	
+	public void addProjeto(Projeto p){
+		projetos.add(p);
+	}
 	public void addProjetoExemplo() {
-		Projeto projeto = new Projeto();
-		projeto.setId(1L);
-		projeto.setNome("Projeto Exemplo");
+		Projeto projeto = new Projeto(1L, "Projeto Exemplo");
+
 		Classe hello = new Classe();
 		hello.setNome("Hello");
 		hello.setAbstrata(false);
