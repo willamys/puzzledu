@@ -71,7 +71,8 @@ public class PuzzlEdu implements EntryPoint {
   
         Window window = new Window();  
         window.setAutoSize(false);  
-        window.setTitle("PuzzlEdu 1.0");  
+        /**Alteração temporaria com o conceito de projeto*/
+        window.setTitle("PuzzlEdu 1.0: " + gerenciador.getProjetoAtual().getNome());  
         window.setWidth100();  
         window.setHeight100(); 
         
