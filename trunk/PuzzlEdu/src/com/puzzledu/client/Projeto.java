@@ -7,10 +7,28 @@ public class Projeto {
 	private ColecaoClasse colecaoClasse;
 	private ColecaoInterface colecaoInterface;
 	
-	public Projeto() {
-		colecaoClasse = new ColecaoClasse();
-		colecaoInterface = new ColecaoInterface();
+	/**
+	 * @param id
+	 * @param nome
+	 * @param colecaoClasse
+	 * @param colecaoInterface
+	 */
+	public Projeto(Long id, String nome, ColecaoClasse colecaoClasse,
+			ColecaoInterface colecaoInterface) {
+		this.id = id;
+		this.nome = nome;
+		this.colecaoClasse = colecaoClasse;
+		this.colecaoInterface = colecaoInterface;
 	}
+	
+	/**
+	 * @param id
+	 * @param nome
+	 */
+	public Projeto(Long id, String nome) {
+		this(id, nome, new ColecaoClasse(), new ColecaoInterface());
+	}
+
 	/**
 	 * @return the id
 	 */
