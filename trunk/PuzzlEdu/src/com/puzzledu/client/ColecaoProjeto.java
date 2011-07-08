@@ -23,10 +23,7 @@ public class ColecaoProjeto {
 		Classe hello = new Classe();
 		hello.setNome("Hello");
 		hello.setAbstrata(false);
-		
-		Variavel varNome = new Variavel("nome");
-		hello.addVariavel(varNome);
-		
+		hello.addVariavel(new Variavel("imagem", "Image", "/galery/bat1-a.png"));	
 		Metodo showMessage = new Metodo("showMessage");
 		showMessage.setRetorno("void");
 		showMessage.adicionarParametro(new Parametro("message", "String"));
