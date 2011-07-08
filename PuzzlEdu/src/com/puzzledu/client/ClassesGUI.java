@@ -63,14 +63,16 @@ public class ClassesGUI {
 	}
 
 	public TreeGrid createArvoreClasses() {
-    	
+		TreeNode[] root = getRootClasses();
         tree = new Tree();  
         tree.setModelType(TreeModelType.CHILDREN);  
         tree.setShowRoot(true);
         tree.setNameProperty("Name");  
         tree.setIdField("Id");
         tree.setParentIdField("ParentId"); 
-        tree.setData(getClasses());
+        tree.setData(root);
+        
+        
                   
         TreeGrid treeGrid = new TreeGrid();  
         treeGrid.setFields(new TreeGridField("Name", "Classes"));  
@@ -119,31 +121,18 @@ public class ClassesGUI {
 			}
 		});
         
+        
+        Classe raiz = gerenciador.getProjetoAtual().getColecaoClasse().getRaiz();
+        fillTree(raiz, (ClasseTreeNode)root[0]);
+    	
+    	tree.openAll(root[0]);
+        
         return treeGrid;
     }
    
-    public TreeNode[] getClasses() {
-    	
-    	List<TreeNode> listaNodes = new ArrayList<TreeNode>();
-    	
+    public TreeNode[] getRootClasses() {
     	Classe raiz = gerenciador.getProjetoAtual().getColecaoClasse().getRaiz();
-    	
-    	ClasseTreeNode raizNode = new ClasseTreeNode(raiz.getNome(), raiz.getNome(), true);
-    	
-    	listaNodes.add(raizNode);
-    	
-    	getClassesFilhas(listaNodes, raiz);
-    	
-    	TreeNode [] lst = new TreeNode[listaNodes.size()+1];
-    	int i = 0;
-    	
-    	for (TreeNode t : listaNodes){
-
-    		lst[i] = t;
-    		i++;
-    	}
-    	
-    	return lst;
+    	return  new TreeNode[]{new ClasseTreeNode(raiz.getNome(), raiz.getNome(), true)};
     }
     
     public TreeNode[] getInterfaces() {
@@ -183,7 +172,7 @@ public class ClassesGUI {
     }
     
     
-    public void getClassesFilhas(List<TreeNode> listaNodes, Classe raiz) {
+    public void fillTree(Classe raiz, ClasseTreeNode nodeRaiz) {
     	
     	if (raiz.getFilhas() == null)
     		return;
@@ -191,10 +180,8 @@ public class ClassesGUI {
     	for (Classe c : raiz.getFilhas()) {
     		
         	ClasseTreeNode node = new ClasseTreeNode(c.getNome(), c.getNome(), raiz.getNome(), c.isAbstrata());
-    	
-        	listaNodes.add(node);
-        	
-        	getClassesFilhas(listaNodes, c);
+        	 tree.add(node, nodeRaiz);
+        	 fillTree(c, nodeRaiz);
     	}    	
     }
                     
@@ -267,7 +254,7 @@ public class ClassesGUI {
 						
 						for (Variavel v : classePai.getVariaveis()) {
 									
-							Variavel v1 = new Variavel(v.getNome(), v.getTipo());
+							Variavel v1 = new Variavel(v.getNome(), v.getTipo(), v.getValorPadrao());
 							classeFilha.addVariavel(v1);
 						}
 						
