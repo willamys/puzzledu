@@ -529,24 +529,13 @@ public class ClassesGUI {
 			public void onClick(MenuItemClickEvent event) {
 				
 				Variavel varImg = classeSelecionada.procurarVariavel(classeSelecionada, "imagem");
-				Img img = null;
 				
-				if (varImg != null)					
-					img = new Img(varImg.getValorPadrao());
-				
-				else {
-					
-					SC.say("Aten&ccedil;&atilde;o", "Atribua uma imagem para a Classe!");
-					
-					return;
+				if(varImg == null){
+				  varImg = new Variavel("imagem", "Image", "/galery/bat1-a.png");
+			      classeSelecionada.addVariavel(varImg);
 				}
 				
-				if ((varImg.getValorPadrao() == null) | (varImg.getValorPadrao().equals(""))) {
-					
-					SC.say("Aten&ccedil;&atilde;o", "Atribua uma imagem para a Classe!");
-					
-					return;
-				}
+				Img img = new Img(varImg.getValorPadrao());
 				
 				img.setCanDrag(true);
 				img.setCanDrop(true);
@@ -768,8 +757,8 @@ public class ClassesGUI {
 			}
 		});      	
 
-      	MenuItem itemAtribuirImagem = new MenuItem("Atribuir Imagem", "/icons/picture_edit.png");      	
-      	itemAtribuirImagem.addClickHandler(new ClickHandler() {
+      	MenuItem itemAlterarImagem = new MenuItem("Alterar Imagem", "/icons/picture_edit.png");      	
+      	itemAlterarImagem.addClickHandler(new ClickHandler() {
 			
 			public void onClick(MenuItemClickEvent event) {
 				
@@ -799,7 +788,7 @@ public class ClassesGUI {
       	
       	MenuItem itemCriarMetodo = new MenuItem("Criar M&eacute;todo", "/icons/shape_square.png");
     	
-      	menuClasses.setItems(itemCriarClasse, itemAlterarClasse, itemExcluirClasse, new MenuItemSeparator(), itemCriarMetodo, itemCriarVariavel, new MenuItemSeparator(), itemImplementarInterface, itemAtribuirImagem, itemCriarInstancia);
+      	menuClasses.setItems(itemCriarClasse, itemAlterarClasse, itemExcluirClasse, new MenuItemSeparator(), itemCriarMetodo, itemCriarVariavel, new MenuItemSeparator(), itemImplementarInterface, itemAlterarImagem, itemCriarInstancia);
     	
     	return menuClasses;
     }
