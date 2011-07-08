@@ -16,18 +16,6 @@ public class ColecaoClasse {
 		raiz = new Classe();
 		raiz.setNome("Object");	
 		raiz.setAbstrata(true);
-		
-		Variavel varNome = new Variavel("nome");
-		raiz.addVariavel(varNome);
-		
-		Metodo metodoGetNome = new Metodo("getNome");
-		metodoGetNome.setRetorno("String");
-		raiz.addMetodo(metodoGetNome);
-		
-		Metodo setNome = new Metodo("setNome");
-		setNome.setRetorno("void");
-		setNome.adicionarParametro(new Parametro("nome", "String"));
-		raiz.addMetodo(setNome);
 	}
 
 	public void addClasseFilha(Classe filha, final String nomeRaiz) {
