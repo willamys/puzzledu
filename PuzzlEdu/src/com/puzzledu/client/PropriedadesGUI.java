@@ -61,7 +61,7 @@ public class PropriedadesGUI {
         listaPropriedades.setBodyStyleName("normal");        
         listaPropriedades.setAlternateRecordStyles(true);
         listaPropriedades.setShowHeader(false);
-        listaPropriedades.setEmptyMessage("Nenhum M&eacute;todo ou Vari&aacute;vel.");
+        listaPropriedades.setEmptyMessage("Nenhum M&eacute;todo ou Atributo.");
         
         ListGridField imageField = new ListGridField("imageField", 24);
         imageField.setType(ListGridFieldType.IMAGE);
@@ -107,7 +107,7 @@ public class PropriedadesGUI {
 					if (m.contains("=")) 
 						m = m.substring(0, m.indexOf("=")-1);						
 					
-					removerVariavel = new MenuItem("Remover Vari&aacute;vel", "/icons/plugin_delete.png");		    	
+					removerVariavel = new MenuItem("Remover Atributo", "/icons/plugin_delete.png");		    	
 					menuPropriedades.setItems(removerVariavel);
 				}
 				
@@ -152,7 +152,7 @@ public class PropriedadesGUI {
 			    	
 						public void onClick(MenuItemClickEvent event) {
 									
-							SC.ask("Confirma&ccedil;&atilde;o", "Deseja excluir a vari&aacute;vel: " + nome + "?", new BooleanCallback() {  
+							SC.ask("Confirma&ccedil;&atilde;o", "Deseja excluir o Atributo: " + nome + "?", new BooleanCallback() {  
 			                    
 								public void execute(Boolean value) {  
 			                        
@@ -162,7 +162,7 @@ public class PropriedadesGUI {
 										
 										if (c.procurarVariavel(nome) == null) {
 											
-											SC.say("Aten&ccedil;&atilde;o", "Esta vari&aacute;vel n&atilde;o pode ser exclu&iacute;da!");
+											SC.say("Aten&ccedil;&atilde;o", "Este Atributo n&atilde;o pode ser exclu&iacute;da!");
 											
 											return;
 										}
