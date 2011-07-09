@@ -652,7 +652,7 @@ public class ClassesGUI {
 			}
 		});
     	
-      	MenuItem itemCriarVariavel = new MenuItem("Criar Vari&aacute;vel", "/icons/bullet_green.png");
+      	MenuItem itemCriarVariavel = new MenuItem("Criar Atributo", "/icons/bullet_green.png");
     	
       	itemCriarVariavel.addClickHandler(new ClickHandler() {
 			
@@ -661,7 +661,7 @@ public class ClassesGUI {
 				final Window winModal = new Window();  
                 winModal.setWidth(360);  
                 winModal.setHeight(150);  
-                winModal.setTitle("Digite os dados da vari&aacute;vel");  
+                winModal.setTitle("Digite os dados do Atributo");  
                 winModal.setShowMinimizeButton(false);  
                 winModal.setIsModal(true);  
                 winModal.centerInPage(); 
@@ -692,7 +692,7 @@ public class ClassesGUI {
                 textValorPadrao.setWrapTitle(true);                
                 
                 ButtonItem btnAdicionar = new ButtonItem(); 
-                btnAdicionar.setTitle("Criar Vari&aacute;vel");
+                btnAdicionar.setTitle("Criar Atributo");
                 
                 ButtonItem btnCancelar = new ButtonItem();
                 btnCancelar.setTitle("Cancelar");                                
@@ -700,40 +700,43 @@ public class ClassesGUI {
                 btnAdicionar.addClickHandler(new com.smartgwt.client.widgets.form.fields.events.ClickHandler() {
 					
 					public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
-
-						if (textNome.getValue().toString().equals("")) {
-							
-							SC.say("Aten&ccedil;&atilde;o", "Digite o nome da Vari&acute;vel!");
-							
+						String varName = textNome.getValue().toString();
+						if (varName.equals("")) {
+							SC.say("Aten&ccedil;&atilde;o", "Informe o nome do Atributo!");
 							return;
 						}
-	
-						Variavel var = new Variavel();
-						var.setNome(textNome.getValue().toString());
-						var.setTipo(comboTipo.getValue().toString());
-						
-						if (textValorPadrao.getValue() != null)
-							var.setValorPadrao(textValorPadrao.getValue().toString());
-						
-						Metodo set = new Metodo("set" + var.getNome().toUpperCase().charAt(0) + var.getNome().substring(1, var.getNome().length()));
-						set.adicionarParametro(new Parametro(var.getNome(), var.getTipo()));
-						set.setRetorno("void");
-						
-						Metodo get = new Metodo("get" + var.getNome().toUpperCase().charAt(0) + var.getNome().substring(1, var.getNome().length()));
-						get.setRetorno(var.getTipo());						
-
-						ClassesGUI.classeSelecionada.addVariavel(var);
-						ClassesGUI.classeSelecionada.addMetodo(get);
-						ClassesGUI.classeSelecionada.addMetodo(set);						
-						
-						ClassesGUI.classeSelecionada.addVariavelMetodosRecursivamente(ClassesGUI.classeSelecionada, var);
-						
-						propriedadesGUI.getListaPropriedades().setData(propriedadesGUI.getPropriedades(ClassesGUI.classeSelecionada.getNome()));
-						
-						propriedadesGUI.getListaInterfaces().setData(propriedadesGUI.getInterfaces(ClassesGUI.classeSelecionada.getNome()));
-						
-						winModal.destroy();
-						winModal.redraw();						
+					   
+						if (ClassesGUI.classeSelecionada.procurarVariavel(varName) == null){
+						  
+						  Variavel var = new Variavel();
+						  var.setNome(varName);
+						  var.setTipo(comboTipo.getValue().toString());
+						  
+						  if (textValorPadrao.getValue() != null)
+							  var.setValorPadrao(textValorPadrao.getValue().toString());
+						  
+						  Metodo set = new Metodo("set" + var.getNome().toUpperCase().charAt(0) + var.getNome().substring(1, var.getNome().length()));
+						  set.adicionarParametro(new Parametro(var.getNome(), var.getTipo()));
+						  set.setRetorno("void");
+						  
+						  Metodo get = new Metodo("get" + var.getNome().toUpperCase().charAt(0) + var.getNome().substring(1, var.getNome().length()));
+						  get.setRetorno(var.getTipo());						
+						  
+						  ClassesGUI.classeSelecionada.addVariavel(var);
+						  ClassesGUI.classeSelecionada.addMetodo(get);
+						  ClassesGUI.classeSelecionada.addMetodo(set);						
+						  
+						  ClassesGUI.classeSelecionada.addVariavelMetodosRecursivamente(ClassesGUI.classeSelecionada, var);
+						  
+						  propriedadesGUI.getListaPropriedades().setData(propriedadesGUI.getPropriedades(ClassesGUI.classeSelecionada.getNome()));
+						  
+						  propriedadesGUI.getListaInterfaces().setData(propriedadesGUI.getInterfaces(ClassesGUI.classeSelecionada.getNome()));
+						  
+						  winModal.destroy();
+						  winModal.redraw();						
+					  }else{
+						  SC.say("Aten&ccedil;&atilde;o", "J&aacute; existe um Atributo com este nome!!"); 
+					  }
 						
 					}
 				});
