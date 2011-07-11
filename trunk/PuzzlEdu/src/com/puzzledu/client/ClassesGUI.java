@@ -518,7 +518,7 @@ public class ClassesGUI {
 				Variavel varImg = classeSelecionada.procurarVariavel(classeSelecionada, "imagem");
 				
 				if(varImg == null){
-				  varImg = new Variavel("imagem", "Image", "/galery/bat1-a.png");
+				  varImg = new Variavel("imagem", "Image", "/galery/alomundo.png");
 			      classeSelecionada.addVariavel(varImg);
 				}
 				
@@ -777,7 +777,59 @@ public class ClassesGUI {
 		});
       	
       	MenuItem itemCriarMetodo = new MenuItem("Criar M&eacute;todo", "/icons/shape_square.png");
-    	
+      	itemCriarMetodo.addClickHandler(new ClickHandler() {
+			
+			public void onClick(MenuItemClickEvent event) {
+				final Window winModal = new Window();  
+                winModal.setWidth(400);  
+                winModal.setHeight(250);  
+                winModal.setTitle("Digite os dados do M&eacute;todo");  
+                winModal.setShowMinimizeButton(false);  
+                winModal.setIsModal(true);  
+                winModal.centerInPage(); 
+                
+                DynamicForm form = new DynamicForm();
+                form.setAutoFocus(true);
+                form.setNumCols(2);
+                form.setHeight100();  
+                form.setWidth100();  
+                form.setPadding(10);  
+                form.setLayoutAlign(VerticalAlignment.CENTER);  
+                form.setAlign(Alignment.CENTER);	
+                
+                final TextItem textNome = new TextItem();
+                textNome.setWidth(200);
+                textNome.setTop(20);
+                textNome.setTitle("Nome");                
+                textNome.setWrapTitle(true);
+                
+                ButtonItem btnCriarMetodo = new ButtonItem(); 
+                btnCriarMetodo.setTitle("Criar M&eacute;todo");
+                
+                ButtonItem btnAdicionar = new ButtonItem(); 
+                btnAdicionar.setTitle("Adicionar Parametro");
+                
+                final CheckboxItem checkAbstract = new CheckboxItem();
+                checkAbstract.setTitle("abstract");
+                
+                final SelectItem comboRetorno = new SelectItem();
+                comboRetorno.setTitle("Retorno");
+                comboRetorno.setType("comboBox");
+                comboRetorno.setValueMap("void", "String", "int", "float");
+                
+                final SelectItem comboAcesso = new SelectItem();
+                comboAcesso.setTitle("Acesso");
+                comboAcesso.setType("comboBox");
+                comboAcesso.setValueMap("public", "protected", "private");
+                
+                
+                form.setFields(textNome, comboAcesso, checkAbstract , comboRetorno, btnCriarMetodo, btnAdicionar);
+                //form.setFields(textNome, comboTipo, textValorPadrao, btnAdicionar);	
+                winModal.addItem(form); 
+                
+                winModal.show();   
+			}
+		});
       	menuClasses.setItems(itemCriarClasse, itemAlterarClasse, itemExcluirClasse, new MenuItemSeparator(), itemCriarMetodo, itemCriarVariavel, new MenuItemSeparator(), itemImplementarInterface, itemAlterarImagem, itemCriarInstancia);
     	
     	return menuClasses;
