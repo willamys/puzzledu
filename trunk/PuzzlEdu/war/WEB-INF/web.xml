@@ -4,6 +4,8 @@
     "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app>
+
+   <!-- SmartGWT static resources servlet -->
   
   <welcome-file-list>
     <welcome-file>PuzzlEdu.html</welcome-file>
