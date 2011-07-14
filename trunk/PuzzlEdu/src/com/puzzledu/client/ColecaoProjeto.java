@@ -17,6 +17,7 @@ public class ColecaoProjeto {
 	public void addProjeto(Projeto p){
 		projetos.add(p);
 	}
+	
 	public void addProjetoExemplo() {
 		Projeto projeto = new Projeto(1L, "Projeto Exemplo");
 
@@ -28,7 +29,7 @@ public class ColecaoProjeto {
 		showMessage.setRetorno("void");
 		showMessage.adicionarParametro(new Parametro("message", "String"));
 		hello.addMetodo(showMessage);
-		projeto.getColecaoClasse().addClasseFilha(hello, "Object");
+		projeto.getRepositorioDados().getColecaoClasse().addClasseFilha(hello, "Object");
 		projetos.add(projeto);
 	}
 

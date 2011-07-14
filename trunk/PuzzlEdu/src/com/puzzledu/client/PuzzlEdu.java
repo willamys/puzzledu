@@ -189,7 +189,7 @@ public class PuzzlEdu implements EntryPoint {
 			
 			public void onClick(ClickEvent event) {
 
-				gerenciador.getPilha().executarAcoesDasInstancias(console);
+				gerenciador.getProjetoAtual().getPilha().executarAcoesDasInstancias(console);
 			}
 		});
          

@@ -4,13 +4,15 @@ public class RepositorioDados {
 
 	private ColecaoClasse colecaoClasse;
 	private ColecaoInterface colecaoInterface;
-	private ColecaoProjeto colecaoProjeto;
 
+	/* Repositório responsável por persistir os dados do projeto, e não os projetos. 
+	 * A persistência dos projetos vão ser feitas diretamente pelo GAE, através
+	 * da classe Gerenciador */
+	
 	public RepositorioDados() {
 		
 		colecaoInterface = new ColecaoInterface();
 		colecaoClasse   = new ColecaoClasse();
-		colecaoProjeto = new ColecaoProjeto();
 	}
 
 	public ColecaoClasse getColecaoClasse() {
@@ -27,19 +29,5 @@ public class RepositorioDados {
 
 	public void setColecaoInterface(ColecaoInterface colecaoInterface) {
 		this.colecaoInterface = colecaoInterface;
-	}
-
-	/**
-	 * @return the colecaoProjeto
-	 */
-	public ColecaoProjeto getColecaoProjeto() {
-		return colecaoProjeto;
-	}
-
-	/**
-	 * @param colecaoProjeto the colecaoProjeto to set
-	 */
-	public void setColecaoProjeto(ColecaoProjeto colecaoProjeto) {
-		this.colecaoProjeto = colecaoProjeto;
 	}
 }

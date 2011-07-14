@@ -9,10 +9,10 @@ public class ColecaoInterface {
 	
 	public ColecaoInterface() {
 		
-		cadastrarInterfacesPadroes();
+		cadastrarInterfacesPadrao();
 	}
 	
-	private void cadastrarInterfacesPadroes() {
+	private void cadastrarInterfacesPadrao() {
 
 		listaInterfaces = new ArrayList<Interface>();
 		
@@ -91,7 +91,7 @@ public class ColecaoInterface {
 		return null;
 	}
 	
-	public void alterarNome(String nomeAntigo, String nomeNovo) {
+	public void alterarNomeInterface(String nomeAntigo, String nomeNovo) {
 		
 		Interface i = procurarInterface(nomeAntigo);
 		
