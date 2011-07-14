@@ -1,37 +1,54 @@
 package com.puzzledu.client;
 
+import java.util.List;
+
 public class Gerenciador {
 
-	private Pilha pilha;
-	private RepositorioDados repositorioDados;
 	private Projeto projetoAtual;
 	
 	public Gerenciador() {
 		
-		pilha = new Pilha();
-		repositorioDados = new RepositorioDados();
-		/*Recupera um projeto existente*/
-	    setProjetoAtual(repositorioDados.getColecaoProjeto().buscarPorNome("Projeto Exemplo"));
-	    
-	    /*Para iniciar o projeto atual zerado*/
-	    //novoProjeto();
+		novoProjetoExemplo();
+		
+		//novoProjeto("New Project");
 	}
+	
+	public void novoProjeto(String nomeProjeto){
+		
+	 	setProjetoAtual(new Projeto(1L, nomeProjeto));
+	}	
+	
+	public void salvarProjeto(){
 
-	public Pilha getPilha() {
-		return pilha;
+		//Usar API do GAE para salvar projeto na nuvem
 	}
+	
+	public void novoProjetoExemplo() {
+		
+		projetoAtual = new Projeto(1L, "Projeto Exemplo");
 
-	public void setPilha(Pilha pilha) {
-		this.pilha = pilha;
+		Classe hello = new Classe();
+		hello.setNome("Hello");
+		hello.setAbstrata(false);
+		hello.addVariavel(new Variavel("imagem", "Image", "/galery/alomundo.png"));	
+		Metodo showMessage = new Metodo("showMessage");
+		showMessage.setRetorno("void");
+		showMessage.adicionarParametro(new Parametro("message", "String"));
+		hello.addMetodo(showMessage);
+		projetoAtual.getRepositorioDados().getColecaoClasse().addClasseFilha(hello, "Object");
+	}	
+	
+	public List<Projeto> listarProjetos() {
+		
+		//Usar API do GAE para retornar os projetos do usuário logado
+		
+		return null;
 	}
-
-	/*public RepositorioDados getRepositorioDados() {
-		return repositorioDados;
+	
+	public List<Projeto> buscarProjetoNome(String nomeProjeto) {
+		
+		return null;
 	}
-
-	public void setRepositorioDados(RepositorioDados repositorioDados) {
-		this.repositorioDados = repositorioDados;
-	}*/
 
 	/**
 	 * @return the projetoAtual
@@ -45,17 +62,5 @@ public class Gerenciador {
 	 */
 	public void setProjetoAtual(Projeto projetoAtual) {
 		this.projetoAtual = projetoAtual;
-	}
-	
-	public void salvarProjeto(){
-		if(this.projetoAtual !=null){
-			repositorioDados.getColecaoProjeto().addProjeto(this.projetoAtual);
-		}
-	}
-	
-	public void novoProjeto(){
-	 	setProjetoAtual(new Projeto(1L, "New Project"));
-	}
-	
-	
+	}	
 }

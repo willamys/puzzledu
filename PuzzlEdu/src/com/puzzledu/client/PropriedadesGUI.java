@@ -232,7 +232,7 @@ public class PropriedadesGUI {
 	
 	private Menu createMenuInterfaces(ListGridRecord record) {
 
-		final Interface interfaceSelecionada = gerenciador.getProjetoAtual().getColecaoInterface().procurarInterface(record.getAttribute("name").toString());
+		final Interface interfaceSelecionada = gerenciador.getProjetoAtual().getRepositorioDados().getColecaoInterface().procurarInterface(record.getAttribute("name").toString());
 		
     	Menu menuInterfaces = new Menu();
     	menuInterfaces.setWidth(130);
@@ -252,7 +252,7 @@ public class PropriedadesGUI {
                         
 						if (value != null && value) {  
 							
-							Classe classeImplementada =  gerenciador.getProjetoAtual().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getColecaoClasse().getRaiz(), ci);
+							Classe classeImplementada =  gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz(), ci);
 							
            					listaInterfaces.removeSelectedData();
            					
@@ -281,7 +281,7 @@ public class PropriedadesGUI {
     	
     	List<Interface> lista = new ArrayList<Interface>();
     	
-    	Classe c =  gerenciador.getProjetoAtual().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getColecaoClasse().getRaiz(), nomeClasse);
+    	Classe c =  gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz(), nomeClasse);
 
 		while (c != null) {
 			
@@ -327,7 +327,7 @@ public class PropriedadesGUI {
 
 		List<Variavel> variaveis = new ArrayList<Variavel>();
 		
-		Classe classe =  gerenciador.getProjetoAtual().getColecaoClasse().procurarClasse( gerenciador.getProjetoAtual().getColecaoClasse().getRaiz(), nomeClasse);
+		Classe classe =  gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().procurarClasse( gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz(), nomeClasse);
 		
 		Classe c = classe;
 		

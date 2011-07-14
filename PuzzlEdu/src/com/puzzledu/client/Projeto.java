@@ -4,89 +4,50 @@ public class Projeto {
 	
 	private Long id;
 	private String nome;
-	private ColecaoClasse colecaoClasse;
-	private ColecaoInterface colecaoInterface;
+	private Pilha pilha; 
+	private RepositorioDados repositorioDados;
 	
-	/**
-	 * @param id
-	 * @param nome
-	 * @param colecaoClasse
-	 * @param colecaoInterface
-	 */
-	public Projeto(Long id, String nome, ColecaoClasse colecaoClasse,
-			ColecaoInterface colecaoInterface) {
+	/* Cada projeto tem sua pilha de execução individual, e seu repositório de dados 
+	 * (classes, interfaces) */
+
+	public Projeto(Long id, String nome) {
+		
 		this.id = id;
 		this.nome = nome;
-		this.colecaoClasse = colecaoClasse;
-		this.colecaoInterface = colecaoInterface;
-	}
-	
-	/**
-	 * @param id
-	 * @param nome
-	 */
-	public Projeto(Long id, String nome) {
-		this(id, nome, new ColecaoClasse(), new ColecaoInterface());
+		
+		repositorioDados = new RepositorioDados();
+		pilha = new Pilha();
 	}
 
-	/**
-	 * @return the id
-	 */
 	public Long getId() {
 		return id;
 	}
 
-	/**
-	 * @param id
-	 *            the id to set
-	 */
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-	/**
-	 * @return the nome
-	 */
 	public String getNome() {
 		return nome;
 	}
 
-	/**
-	 * @param nome
-	 *            the nome to set
-	 */
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
 
-	/**
-	 * @return the colecaoClasse
-	 */
-	public ColecaoClasse getColecaoClasse() {
-		return colecaoClasse;
+	public RepositorioDados getRepositorioDados() {
+		return repositorioDados;
 	}
 
-	/**
-	 * @param colecaoClasse
-	 *            the colecaoClasse to set
-	 */
-	public void setColecaoClasse(ColecaoClasse colecaoClasse) {
-		this.colecaoClasse = colecaoClasse;
+	public void setRepositorioDados(RepositorioDados repositorioDados) {
+		this.repositorioDados = repositorioDados;
 	}
 
-	/**
-	 * @return the colecaoInterface
-	 */
-	public ColecaoInterface getColecaoInterface() {
-		return colecaoInterface;
+	public Pilha getPilha() {
+		return pilha;
 	}
 
-	/**
-	 * @param colecaoInterface
-	 *            the colecaoInterface to set
-	 */
-	public void setColecaoInterface(ColecaoInterface colecaoInterface) {
-		this.colecaoInterface = colecaoInterface;
+	public void setPilha(Pilha pilha) {
+		this.pilha = pilha;
 	}
-
 }

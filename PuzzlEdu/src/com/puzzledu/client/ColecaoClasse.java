@@ -52,7 +52,7 @@ public class ColecaoClasse {
 		return null;
 	}
 	
-	public Classe procurarPai(Classe raiz, String nomeClasse) {
+	public Classe procurarClassePai(Classe raiz, String nomeClasse) {
 		
 		if (raiz == null)
 			return null;
@@ -68,7 +68,7 @@ public class ColecaoClasse {
 			if (c.getNome().equals(nomeClasse))	
 				return raiz; 
 				
-			Classe classeEncontrada = procurarPai(c, nomeClasse);
+			Classe classeEncontrada = procurarClassePai(c, nomeClasse);
 				
 			if (classeEncontrada != null)
 				return classeEncontrada;
@@ -81,7 +81,7 @@ public class ColecaoClasse {
 		
 		Classe classeEncontrada = procurarClasse(raiz, nome);
 		
-		Classe paiEncontrado = procurarPai(raiz, nome);
+		Classe paiEncontrado = procurarClassePai(raiz, nome);
 		
 		if (paiEncontrado != null && classeEncontrada != null) {
 			
@@ -91,11 +91,11 @@ public class ColecaoClasse {
 		}
 	}
 
-	public void removerInterface(String nome) {
+	public void removerInterfaceDaClasse(String nome) {
 		raiz.removerInterface(nome);
 	}
 
-	public void removerMetodo(String assinatura) {
+	public void removerMetodoDaClasse(String assinatura) {
 		raiz.removerMetodo(assinatura);
 	}
 
