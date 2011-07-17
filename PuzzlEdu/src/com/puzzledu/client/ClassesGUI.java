@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import com.google.gwt.user.client.ui.ListBox;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.Cursor;
 import com.smartgwt.client.types.DragAppearance;
@@ -1000,8 +1001,8 @@ public class ClassesGUI {
         comboInicializacao.setValueMap("1", "2", "3", "4", "5", "10", "20", "50");
         comboInicializacao.setDefaultValue("10");
         comboInicializacao.setTitle("Repeti&ccedil;&otilde;es");
-        comboInicializacao.setRequired(true);
-        comboInicializacao.setType("comboBox");
+        //comboInicializacao.setRequired(true);
+        //comboInicializacao.setType("comboBox");
         
         final SelectItem comboAcao = new SelectItem();
         comboAcao.setWidth(150);

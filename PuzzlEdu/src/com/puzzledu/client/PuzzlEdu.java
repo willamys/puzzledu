@@ -55,7 +55,7 @@ public class PuzzlEdu implements EntryPoint {
         mainLayout.setHeight100();
         mainLayout.setPadding(15);
         mainLayout.setTop(60);
-        mainLayout.setBottom(10);
+        //mainLayout.setBottom(10);
                         
         mainLayout.addMember(getPainelEsquerdo());
         mainLayout.addMember(getArea());
