@@ -104,7 +104,11 @@ public class Classe {
 		
 		while (classe != null) {
 			
-			metodos.addAll(classe.getMetodos());
+			for (Metodo m : classe.getMetodos()) {
+				
+				if (!metodos.contains(m))
+					metodos.add(m);
+			}
 			
 			for (Interface i : classe.getInterfaces()) {
 				
@@ -117,9 +121,7 @@ public class Classe {
 		}	
 		
 		return metodos;
-	}
-	
-	
+	}	
 
 	public void setMetodos(List<Metodo> metodos) {
 		this.metodos = metodos;
@@ -280,12 +282,39 @@ public class Classe {
 	
 	public Metodo procurarMetodo(String nomeMetodo) {
 		
-		for (Metodo m : metodos) {
+		for (Metodo m : getMetodos()) {
 			
-			if (m.getNome().equalsIgnoreCase(nomeMetodo))			
+			if (m.getNome().equals(nomeMetodo))
 				return m;
 		}
 		
+		return null;
+	}
+	
+	public Metodo procurarMetodoRecursivamente(Classe classe, String nomeMetodo) {
+	
+		while (classe != null) {
+				
+			for (Metodo m : classe.getMetodos()) {
+				
+				if (m.getNome().equalsIgnoreCase(nomeMetodo))
+					return m;				
+			}	
+			
+			for (Interface i : classe.getInterfaces()) {
+				
+				for (Metodo m : i.getMetodos()) {
+					
+					if (m.getNome().equals(nomeMetodo)) {
+						
+						return m;
+					}
+				}
+			}
+
+			return procurarMetodoRecursivamente(classe.getParent(), nomeMetodo);
+		}
+	
 		return null;
 	}
 	

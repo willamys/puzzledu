@@ -24,6 +24,8 @@ import com.smartgwt.client.widgets.form.fields.ButtonItem;
 import com.smartgwt.client.widgets.form.fields.CheckboxItem;
 import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
+import com.smartgwt.client.widgets.form.fields.events.ChangedEvent;
+import com.smartgwt.client.widgets.form.fields.events.ChangedHandler;
 import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.grid.events.CellClickEvent;
@@ -205,7 +207,13 @@ public class ClassesGUI {
                 winModal.setTitle("Digite os dados da classe");  
                 winModal.setShowMinimizeButton(false);  
                 winModal.setIsModal(true);  
-                winModal.centerInPage(); 
+                winModal.centerInPage();
+                
+                winModal.addShowContextMenuHandler(new ShowContextMenuHandler() {
+                    public void onShowContextMenu(ShowContextMenuEvent event) {
+                        event.cancel();
+                    }
+                });
                 
                 DynamicForm form = new DynamicForm();
                 form.setAutoFocus(true);
@@ -297,6 +305,12 @@ public class ClassesGUI {
                 winModal.setShowMinimizeButton(false);  
                 winModal.setIsModal(true);  
                 winModal.centerInPage(); 
+                
+                winModal.addShowContextMenuHandler(new ShowContextMenuHandler() {
+                    public void onShowContextMenu(ShowContextMenuEvent event) {
+                        event.cancel();
+                    }
+                });
                 
                 DynamicForm form = new DynamicForm();
                 form.setAutoFocus(true);
@@ -413,6 +427,12 @@ public class ClassesGUI {
                 winModal.setIsModal(true);  
                 winModal.centerInPage(); 
                 winModal.setAlign(Alignment.CENTER);
+                
+                winModal.addShowContextMenuHandler(new ShowContextMenuHandler() {
+                    public void onShowContextMenu(ShowContextMenuEvent event) {
+                        event.cancel();
+                    }
+                });                
                 
                 Tree treeInter = new Tree();  
                 treeInter.setModelType(TreeModelType.PARENT);  
@@ -666,6 +686,12 @@ public class ClassesGUI {
                 winModal.setIsModal(true);  
                 winModal.centerInPage(); 
                 
+                winModal.addShowContextMenuHandler(new ShowContextMenuHandler() {
+                    public void onShowContextMenu(ShowContextMenuEvent event) {
+                        event.cancel();
+                    }
+                });
+                
                 DynamicForm form = new DynamicForm();
                 form.setAutoFocus(true);
                 form.setNumCols(2);
@@ -780,6 +806,7 @@ public class ClassesGUI {
       	itemCriarMetodo.addClickHandler(new ClickHandler() {
 			
 			public void onClick(MenuItemClickEvent event) {
+				
 				final Window winModal = new Window();  
                 winModal.setWidth(400);  
                 winModal.setHeight(250);  
@@ -787,6 +814,12 @@ public class ClassesGUI {
                 winModal.setShowMinimizeButton(false);  
                 winModal.setIsModal(true);  
                 winModal.centerInPage(); 
+                
+                winModal.addShowContextMenuHandler(new ShowContextMenuHandler() {
+                    public void onShowContextMenu(ShowContextMenuEvent event) {
+                        event.cancel();
+                    }
+                });                
                 
                 DynamicForm form = new DynamicForm();
                 form.setAutoFocus(true);
@@ -822,7 +855,6 @@ public class ClassesGUI {
                 comboAcesso.setType("comboBox");
                 comboAcesso.setValueMap("public", "protected", "private");
                 
-                
                 form.setFields(textNome, comboAcesso, checkAbstract , comboRetorno, btnCriarMetodo, btnAdicionar);
                 //form.setFields(textNome, comboTipo, textValorPadrao, btnAdicionar);	
                 winModal.addItem(form); 
@@ -830,6 +862,7 @@ public class ClassesGUI {
                 winModal.show();   
 			}
 		});
+
       	menuClasses.setItems(itemCriarClasse, itemAlterarClasse, itemExcluirClasse, new MenuItemSeparator(), itemCriarMetodo, itemCriarVariavel, new MenuItemSeparator(), itemImplementarInterface, itemAlterarImagem, itemCriarInstancia);
     	
     	return menuClasses;
@@ -857,7 +890,7 @@ public class ClassesGUI {
 				AcaoFor acaoFor = (AcaoFor) i.getAcoes().get(j);
 				record.setAttribute("imageField", "/icons/arrow_rotate_clockwise.png");
 				record.setAttribute("name", "repetir <b>" + acaoFor.getQtdRepeticoes() + "</b> vezes");
-				record.setAttribute("value", acaoFor.getMetodo().getNome() + "(1)");
+				record.setAttribute("value", acaoFor.getMetodo().getNome() + "(" + acaoFor.getValor() + ")");
 			}
 			
 			lst[j] = record;
@@ -928,11 +961,17 @@ public class ClassesGUI {
     	
     	final Window winModal = new Window();  
         winModal.setWidth(360);  
-        winModal.setHeight(200);  
+        winModal.setHeight(220);  
         winModal.setTitle("Estrutura de Repeti&ccedil;&atilde;o");
         winModal.setShowMinimizeButton(false);  
         winModal.setIsModal(true);  
-        winModal.centerInPage(); 
+        winModal.centerInPage();
+        
+        winModal.addShowContextMenuHandler(new ShowContextMenuHandler() {
+            public void onShowContextMenu(ShowContextMenuEvent event) {
+                event.cancel();
+            }
+        });
         
         DynamicForm form = new DynamicForm();
         form.setAutoFocus(true);
@@ -950,21 +989,47 @@ public class ClassesGUI {
         
         Img img1 = new Img("/icons/shape_square.png", 16, 16);
         img1.setTop(0);
-        img1.setLeft(40);
+        img1.setLeft(40);        
         
-        final SelectItem comboInicializacao = new SelectItem();
+        final SelectItem  comboInicializacao = new SelectItem();
         comboInicializacao.setWidth(100);
         comboInicializacao.setTop(40);        
         comboInicializacao.setValueMap("1", "2", "3", "4", "5", "10", "20", "50");
         comboInicializacao.setDefaultValue("10");
         comboInicializacao.setTitle("Repeti&ccedil;&otilde;es");
+        comboInicializacao.setRequired(true);
         comboInicializacao.setType("comboBox");
+        
         
         final SelectItem comboAcao = new SelectItem();
         comboAcao.setWidth(150);
         comboAcao.setTop(40);
         comboAcao.setTitle("M&eacute;todo");
         comboAcao.setType("comboBox");
+        comboAcao.setRequired(true);
+        
+        final SelectItem comboParametro1 = new SelectItem();
+        comboParametro1.setWidth(150);
+        comboParametro1.setTop(40);
+        comboParametro1.setTitle(" ");
+        comboParametro1.setType("comboBox");
+        comboParametro1.setDisabled(true);
+        comboParametro1.setRequired(true);
+        //comboParametro1.setImageURLPrefix("/galery/");  
+        
+        LinkedHashMap<String, String> mapIcons = new LinkedHashMap<String, String>();
+        
+        for (ImagemRecord ir : ImagemData.getNewRecords()) {
+        	
+        	mapIcons.put(ir.getPicture(), ir.getPicture());
+        }
+        
+        //mapIcons.put("/galery/dog2-c.png", "/galery/dog2-c.png");
+        //mapIcons.put("/galery/bat1-a.png", "/galery/bat1-a.png");
+        //mapIcons.put("/galery/elephant1-a.png", "/galery/elephant1-a.png");
+		//mapIcons.put("/galery/chiwawa.png", "/galery/chiwawa.png");        
+        
+        comboParametro1.setValueIcons(mapIcons);
         
         final Instancia inst = gerenciador.getProjetoAtual().getPilha().procurarInstancia(nomeInstancia);
         
@@ -974,11 +1039,59 @@ public class ClassesGUI {
         LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
         
         for (Metodo m : inst.getClasse().getAllMetodos(inst.getClasse())) {
-        	
-        	map.put(m.getNome(), m.getNome());
+
+       		if (m.getRetorno().equals("void"))
+       			if (!map.containsKey(m.getNome()))
+       				map.put(m.getNome(), m.getNome());
         }
-          
+
         comboAcao.setValueMap(map);
+        
+        comboAcao.addChangedHandler(new ChangedHandler() {
+			
+			public void onChanged(ChangedEvent event) {
+
+				Metodo m = inst.getClasse().procurarMetodoRecursivamente(inst.getClasse(), comboAcao.getValue().toString());
+				
+				if (m != null) {
+					
+					comboParametro1.setDisabled(false);
+					comboParametro1.setTitle(m.getPrimeiroParametro().getNome());
+					comboParametro1.setValue(" ");
+					
+					if (m.getParametros().size() > 0) {
+						
+						String tipo = m.getParametros().get(0).getTipo();
+						
+						if (tipo.equals("int") || tipo.equals("float"))							
+							comboParametro1.setValueMap("1", "2", "3", "4", "5", "10", "20", "50");						
+						
+						else if (tipo.equals("Image")) {
+							
+							LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
+							
+							for (ImagemRecord ir : ImagemData.getNewRecords()) {
+						        						
+								map.put(ir.getPicture(), ir.getName());
+						   }
+							
+							//map.put("/galery/dog2-c.png", "Cachorro");
+						//	map.put("/galery/bat1-a.png", "Morcego");
+							//map.put("/galery/elephant1-a.png", "Elefante");
+							//map.put("/galery/chiwawa.png", "Chiwawa");
+							 
+							comboParametro1.setValueMap(map);
+							
+						} else							
+							comboParametro1.setValueMap("Hello");
+						
+						comboParametro1.updateState();						
+					}
+						
+				}
+			}
+		});
+                
         
         ButtonItem btnAdicionar = new ButtonItem(); 
         btnAdicionar.setTitle("Confirmar");
@@ -987,11 +1100,74 @@ public class ClassesGUI {
 			
 			public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {	
 				
-				AcaoFor acao1 = null;
-				for (Metodo m : inst.getClasse().getAllMetodos(inst.getClasse())) 
-					if (m.getNome().equals(comboAcao.getValue().toString()))
-						acao1 = new AcaoFor(Long.parseLong(comboInicializacao.getValue().toString()), m);
-									
+				try {
+					
+					Integer.parseInt(comboInicializacao.getValue().toString().trim());
+					
+				} catch (Exception e) {
+				
+					SC.say("Aten&ccedil;&atilde;o", "Digite um n&uacute;mero de repeti&ccedil;&otilde;es v&aacute;lido!");
+					
+					comboInicializacao.focusInItem();
+					
+					return;				
+				}		
+				
+				Metodo m1 = null;				
+
+				if (comboAcao.getValue() != null)
+					m1 = (inst.getClasse().procurarMetodoRecursivamente(inst.getClasse(), comboAcao.getValue().toString()));
+				
+				if (m1 == null) {
+					
+					SC.say("Aten&ccedil;&atilde;o", "Selecione um <b>m&eacute;todo</b> v&aacute;lido!");
+					
+					comboAcao.focusInItem();
+					
+					return;							
+				}
+				
+				if (comboParametro1 == null | comboParametro1.getValue().equals("")) {
+					
+					SC.say("Aten&ccedil;&atilde;o", "Selecione um <b>" + m1.getPrimeiroParametro().getNome() + "</b> v&aacute;lido!");
+					
+					comboAcao.focusInItem();
+					
+					return;							
+				}
+				
+				if (m1.getPrimeiroParametro().getTipo().equals("int")) {
+					
+					try {
+						
+						Integer.parseInt(comboParametro1.getValue().toString().trim());
+						
+					} catch (Exception e) {
+					
+						SC.say("Aten&ccedil;&atilde;o", "Digite um valor do tipo <b>" + m1.getPrimeiroParametro().getTipo() + "</b> !");
+						
+						comboInicializacao.focusInItem();
+						
+						return;				
+					}
+					
+				} else if (m1.getPrimeiroParametro().getTipo().equals("float")) {
+					
+					try {
+						
+						Float.parseFloat(comboParametro1.getValue().toString().trim());
+						
+					} catch (Exception e) {
+					
+						SC.say("Aten&ccedil;&atilde;o", "Digite um valor do tipo <b>" + m1.getPrimeiroParametro().getTipo() + "</b> !");
+						
+						comboInicializacao.focusInItem();
+						
+						return;				
+					}						
+				}
+			
+				AcaoFor acao1 = new AcaoFor(m1, Long.parseLong(comboInicializacao.getValue().toString().trim()), comboParametro1.getValue().toString().trim());
 				inst.adicionarAcao(acao1);	
 				
 				carregarScript(nomeInstancia);
@@ -1002,7 +1178,7 @@ public class ClassesGUI {
 			}
 		});
 
-        form.setFields(comboInicializacao, comboAcao, btnAdicionar);
+        form.setFields(comboInicializacao, comboAcao, comboParametro1, btnAdicionar);
         
         winModal.addItem(form);  
         winModal.show();              	
@@ -1018,6 +1194,12 @@ public class ClassesGUI {
         winModal.setIsModal(true);  
         winModal.centerInPage(); 
         winModal.show();
+        
+        winModal.addShowContextMenuHandler(new ShowContextMenuHandler() {
+            public void onShowContextMenu(ShowContextMenuEvent event) {
+                event.cancel();
+            }
+        });
         
         TileGrid tileGrid = new TileGrid();
         tileGrid.setWidth100();

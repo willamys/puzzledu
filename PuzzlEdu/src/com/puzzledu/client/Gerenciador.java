@@ -30,12 +30,17 @@ public class Gerenciador {
 		Classe hello = new Classe();
 		hello.setNome("Hello");
 		hello.setAbstrata(false);
-		hello.addVariavel(new Variavel("imagem", "Image", "/galery/alomundo.png"));	
+		hello.addVariavel(new Variavel("imagem", "Image", "/galery/alomundo.png"));
+		
 		Metodo showMessage = new Metodo("showMessage");
 		showMessage.setRetorno("void");
 		showMessage.adicionarParametro(new Parametro("message", "String"));
 		hello.addMetodo(showMessage);
+		
 		projetoAtual.getRepositorioDados().getColecaoClasse().addClasseFilha(hello, "Object");
+		
+		hello.addInterface(projetoAtual.getRepositorioDados().getColecaoInterface().procurarInterface("Desenh&aacute;vel"));
+		hello.addInterface(projetoAtual.getRepositorioDados().getColecaoInterface().procurarInterface("Anim&aacute;vel"));		
 	}	
 	
 	public List<Projeto> listarProjetos() {
@@ -50,16 +55,10 @@ public class Gerenciador {
 		return null;
 	}
 
-	/**
-	 * @return the projetoAtual
-	 */
 	public Projeto getProjetoAtual() {
 		return projetoAtual;
 	}
 
-	/**
-	 * @param projetoAtual the projetoAtual to set
-	 */
 	public void setProjetoAtual(Projeto projetoAtual) {
 		this.projetoAtual = projetoAtual;
 	}	

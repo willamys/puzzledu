@@ -17,9 +17,10 @@ public class ImagemData {
       
     	return new ImagemRecord[]{
     			
-            new ImagemRecord("Morcego 1", "/galery/chiwawa.png"),
-            new ImagemRecord("Morcego 1", "/galery/dog2-c.png"),
-            new ImagemRecord("Morcego 1", "/galery/dog2-c.png"),            
+            new ImagemRecord("Chiwawa", "/galery/chiwawa.png"),
+            new ImagemRecord("Cachorro", "/galery/dog2-c.png"),
+            new ImagemRecord("Morcego", "/galery/bat1-a.png"),            
+            new ImagemRecord("Elefante", "/galery/elephant1-a.png"),
         };
     }
 }
