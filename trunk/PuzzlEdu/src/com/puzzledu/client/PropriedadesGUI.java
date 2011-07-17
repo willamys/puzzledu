@@ -3,10 +3,19 @@ package com.puzzledu.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.ListGridFieldType;
 import com.smartgwt.client.types.Side;
+import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.util.BooleanCallback;
 import com.smartgwt.client.util.SC;
+import com.smartgwt.client.widgets.Window;
+import com.smartgwt.client.widgets.events.ShowContextMenuEvent;
+import com.smartgwt.client.widgets.events.ShowContextMenuHandler;
+import com.smartgwt.client.widgets.form.DynamicForm;
+import com.smartgwt.client.widgets.form.fields.ButtonItem;
+import com.smartgwt.client.widgets.form.fields.SelectItem;
+import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
@@ -93,14 +102,17 @@ public class PropriedadesGUI {
 		    	Menu menuPropriedades = new Menu();
 		    	menuPropriedades.setWidth(130);
 		    	menuPropriedades.setCanSelectParentItems(true);
-		    	MenuItem removerMetodo = null, removerVariavel = null;
+		    	MenuItem removerMetodo    = null, removerVariavel = null;
+		    	MenuItem inserirParametro = null;
+		    	
 
 				if (m.contains("(")) {
 					
 					m = m.substring(0, m.indexOf("("));
 
-					removerMetodo = new MenuItem("Remover M&eacute;todo", "/icons/plugin_delete.png");		    	
-					menuPropriedades.setItems(removerMetodo);
+					inserirParametro = new MenuItem("Inserir Par&acirc;metro", "/icons/plugin_add.png");		    	
+					removerMetodo    = new MenuItem("Remover M&eacute;todo", "/icons/plugin_delete.png");		    	
+					menuPropriedades.setItems(inserirParametro, removerMetodo);
 					
 				} else {
 					
@@ -146,6 +158,80 @@ public class PropriedadesGUI {
 		                });  				
 					}
 				});
+				
+				if (inserirParametro != null)
+					inserirParametro.addClickHandler(new ClickHandler() {
+						
+						public void onClick(MenuItemClickEvent event) {
+
+							final Window winModal = new Window();  
+			                winModal.setWidth(360);  
+			                winModal.setHeight(150);  
+			                winModal.setTitle("Digite os dados do Par&acirc;metro");  
+			                winModal.setShowMinimizeButton(false);  
+			                winModal.setIsModal(true);  
+			                winModal.centerInPage(); 
+			                
+			                winModal.addShowContextMenuHandler(new ShowContextMenuHandler() {
+			                    public void onShowContextMenu(ShowContextMenuEvent event) {
+			                        event.cancel();
+			                    }
+			                });
+			                
+			                DynamicForm form = new DynamicForm();
+			                form.setAutoFocus(true);
+			                form.setNumCols(2);
+			                form.setHeight100();  
+			                form.setWidth100();  
+			                form.setPadding(10);  
+			                form.setLayoutAlign(VerticalAlignment.CENTER);  
+			                form.setAlign(Alignment.CENTER);
+			                
+			                final TextItem textNome = new TextItem();
+			                textNome.setWidth(200);
+			                textNome.setTop(20);
+			                textNome.setTitle("Nome");                
+			                textNome.setWrapTitle(true);
+			                
+			                final SelectItem comboTipo = new SelectItem();
+			                comboTipo.setTitle("Tipo");
+			                comboTipo.setType("comboBox");
+			                comboTipo.setValueMap("String", "int", "float");
+			                
+			                ButtonItem btnAdicionar = new ButtonItem(); 
+			                btnAdicionar.setTitle("Criar Par&acirc;metro");
+			                
+			                btnAdicionar.addClickHandler(new com.smartgwt.client.widgets.form.fields.events.ClickHandler() {
+								
+								public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
+									String varName = textNome.getValue().toString();
+									if (varName.equals("")) {
+										SC.say("Aten&ccedil;&atilde;o", "Informe o nome do Par&acirc;metro.");
+										return;
+									}
+								   
+									Metodo metodo = ClassesGUI.classeSelecionada.procurarMetodo(nome);
+									if (metodo != null){
+										if (metodo.procurarParametro(varName) == null){
+											metodo.adicionarParametro(new Parametro(varName, comboTipo.getValue().toString()));
+											
+											getListaPropriedades().setData(getPropriedades(ClassesGUI.classeSelecionada.getNome()));
+											getListaInterfaces().setData(getInterfaces(ClassesGUI.classeSelecionada.getNome()));
+											
+											winModal.destroy();
+											winModal.redraw();						
+										}else
+									     SC.say("Aten&ccedil;&atilde;o", "Par&acirc;metro j&aacute; existe.");
+									}
+								}
+							});
+			                
+			                form.setFields(textNome, comboTipo, btnAdicionar);
+			                winModal.addItem(form);  
+			                winModal.show();                
+						}
+							
+					});
 				
 				if (removerVariavel != null)
 					removerVariavel.addClickHandler(new ClickHandler() {
@@ -377,11 +463,10 @@ public class PropriedadesGUI {
 			indice++;
 		}
 		
-		for (int i=0; i<metodos.size(); i++) {
-			
+		for (int i = 0; i < metodos.size(); i++) {
 			ListGridRecord record = new ListGridRecord();
 			record.setAttribute("imageField", "/icons/shape_square.png");
-			record.setAttribute("name", metodos.get(i).getNome() + "(" + metodos.get(i).getParametrosString() + ")" + " : " + metodos.get(i).getRetorno());
+			record.setAttribute("name",  metodos.get(i).getNome() + "(" + metodos.get(i).getParametrosString() + ")" + " : " + metodos.get(i).getRetorno());
 			
 			lst[indice] = record;
 			indice++;
