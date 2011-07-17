@@ -906,7 +906,7 @@ public class ClassesGUI {
 							  }
 							}
 						} catch (Exception e) {
-							SC.warn("Aten&ccedil;&atilde;o", e.getMessage(), null); 
+							SC.say("Aten&ccedil;&atilde;o", e.getMessage()); 
 						}
 						
 					}
