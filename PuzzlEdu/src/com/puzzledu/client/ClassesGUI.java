@@ -22,6 +22,7 @@ import com.smartgwt.client.widgets.events.ShowContextMenuHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.ButtonItem;
 import com.smartgwt.client.widgets.form.fields.CheckboxItem;
+import com.smartgwt.client.widgets.form.fields.ComboBoxItem;
 import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.form.fields.events.ChangedEvent;
@@ -65,16 +66,16 @@ public class ClassesGUI {
 	}
 
 	public TreeGrid createArvoreClasses() {
+		
 		TreeNode[] root = getRootClasses();
+		
         tree = new Tree();  
         tree.setModelType(TreeModelType.CHILDREN);  
-        tree.setShowRoot(true);
+        tree.setShowRoot(false);
         tree.setNameProperty("Name");  
         tree.setIdField("Id");
         tree.setParentIdField("ParentId"); 
         tree.setData(root);
-        
-        
                   
         TreeGrid treeGrid = new TreeGrid();  
         treeGrid.setFields(new TreeGridField("Name", "Classes"));  
@@ -133,7 +134,9 @@ public class ClassesGUI {
     }
    
     public TreeNode[] getRootClasses() {
+    	
     	Classe raiz = gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz();
+
     	return  new TreeNode[]{new ClasseTreeNode(raiz.getNome(), raiz.getNome(), true)};
     }
     
@@ -991,7 +994,7 @@ public class ClassesGUI {
         img1.setTop(0);
         img1.setLeft(40);        
         
-        final SelectItem  comboInicializacao = new SelectItem();
+        final SelectItem comboInicializacao = new SelectItem();
         comboInicializacao.setWidth(100);
         comboInicializacao.setTop(40);        
         comboInicializacao.setValueMap("1", "2", "3", "4", "5", "10", "20", "50");
@@ -999,7 +1002,6 @@ public class ClassesGUI {
         comboInicializacao.setTitle("Repeti&ccedil;&otilde;es");
         comboInicializacao.setRequired(true);
         comboInicializacao.setType("comboBox");
-        
         
         final SelectItem comboAcao = new SelectItem();
         comboAcao.setWidth(150);
