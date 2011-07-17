@@ -41,15 +41,15 @@ public class Metodo {
 		return parametros;
 	}
 	
-	public String getPrimeiroParametro() {
+	public Parametro getPrimeiroParametro() {
 	
 		if (parametros == null)
-			return "";
+			return null;
 		
 		if (parametros.size() > 0)
-			return parametros.get(0).getNome();
+			return parametros.get(0);
 		else
-			return "";
+			return null;
 	}
 	
 	public String getParametrosString() {

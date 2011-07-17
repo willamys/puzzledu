@@ -5,15 +5,16 @@ public abstract class Acao implements Comparable<Acao>{
 	private long ordem;
 	private String tipo;
 	private Metodo metodo;
+	private String valor;
 	
-	public Acao(Metodo m) {
-	
+	public Acao(Metodo m, String valor) {
+		
 		metodo = new Metodo();
 		metodo.setNome(m.getNome());
 		metodo.setParametros(m.getParametros());
 		metodo.setRetorno(m.getRetorno());
-
-	}
+		this.valor = valor;
+	}	
 
 	public long getOrdem() {
 		return ordem;
@@ -48,15 +49,23 @@ public abstract class Acao implements Comparable<Acao>{
 	public void setMetodo(Metodo metodo) {
 		this.metodo = metodo;
 	}
+
+	public String getValor() {
+		return valor;
+	}
+
+	public void setValor(String valor) {
+		this.valor = valor;
+	}
 }
 
 class AcaoFor extends Acao {
 
 	private long qtdRepeticoes;
 	
-	public AcaoFor(long qtdRepeticoes, Metodo m) {
+	public AcaoFor(Metodo m, long qtdRepeticoes, String valor) {
 		
-		super(m);
+		super(m, valor);
 		setTipo("for");
 		this.qtdRepeticoes = qtdRepeticoes;		
 	}
@@ -72,21 +81,9 @@ class AcaoFor extends Acao {
 
 class AcaoIO extends Acao {
 
-	private String valor;
-	
 	public AcaoIO(String valor, Metodo m) {
 		
-		super(m);
+		super(m, valor);
 		setTipo("io");
-		setValor(valor);
-	
-	}
-
-	public String getValor() {
-		return valor;
-	}
-
-	public void setValor(String valor) {
-		this.valor = valor;
 	}
 }

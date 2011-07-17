@@ -119,20 +119,21 @@ public class Pilha {
 							
 							final AcaoFor acaoFor = (AcaoFor) a;
 							
-							for(int i=0; i<acaoFor.getQtdRepeticoes(); i++) {
+							Timer timer = new Timer(){
+						
+								public void run(){
+						
+									for(int i=0; i<acaoFor.getQtdRepeticoes(); i++) {
 																
-								//Timer timer = new Timer(){ 
-									//public void run(){ 
-										
-										AcaoIO acaoIO = new AcaoIO("1", acaoFor.getMetodo());
-										executarAcaoIO(acaoIO); 
-									//} 
-								//}; 
+										AcaoIO acaoIO = new AcaoIO(acaoFor.getValor(), acaoFor.getMetodo());
+										executarAcaoIO(acaoIO);
+									}
+								}
+							};
 
-								//timer.schedule(1000); 
-							}
+							timer.schedule(1000); 
 							
-							console.setText(console.getText() + "repetir " + acaoFor.getQtdRepeticoes() + " vezes: " + inst.getNome() + "."  + a.getMetodo().getNome() + "(1)\n");
+							console.setText(console.getText() + "repetir " + acaoFor.getQtdRepeticoes() + " vezes: " + inst.getNome() + "."  + a.getMetodo().getNome() + "("+ a.getValor() +")\n");
 						}
 					}					
 				}
@@ -141,7 +142,7 @@ public class Pilha {
 				
 					Timer timer = new Timer(){ 
 						public void run(){ 
-					
+							
 							if (a.getMetodo().getNome().equals("avancar"))
 								inst.getImage().setLeft(inst.getImage().getLeft() + (Integer.valueOf(a.getValor())*3 ));
 							else if (a.getMetodo().getNome().equals("voltar"))
