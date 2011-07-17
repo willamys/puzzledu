@@ -24,6 +24,7 @@ import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.ButtonItem;
 import com.smartgwt.client.widgets.form.fields.CheckboxItem;
 import com.smartgwt.client.widgets.form.fields.ComboBoxItem;
+import com.smartgwt.client.widgets.form.fields.RadioGroupItem;
 import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.form.fields.events.ChangedEvent;
@@ -806,11 +807,10 @@ public class ClassesGUI {
 			}
 		});
       	
-      	MenuItem itemCriarMetodo = new MenuItem("Criar M&eacute;todo", "/icons/shape_square.png");
+     	MenuItem itemCriarMetodo = new MenuItem("Criar M&eacute;todo", "/icons/shape_square.png");
       	itemCriarMetodo.addClickHandler(new ClickHandler() {
 			
 			public void onClick(MenuItemClickEvent event) {
-				
 				final Window winModal = new Window();  
                 winModal.setWidth(400);  
                 winModal.setHeight(250);  
@@ -846,21 +846,73 @@ public class ClassesGUI {
                 ButtonItem btnAdicionar = new ButtonItem(); 
                 btnAdicionar.setTitle("Adicionar Parametro");
                 
+                final RadioGroupItem radioAcesso = new RadioGroupItem("Acesso");
+                radioAcesso.setValueMap("public", "protected", "default", "private");
+                radioAcesso.setVertical(false);
+                
                 final CheckboxItem checkAbstract = new CheckboxItem();
                 checkAbstract.setTitle("abstract");
+                
+                final CheckboxItem checkFinal = new CheckboxItem();
+                checkFinal.setTitle("final");
+                
+                final CheckboxItem checkSynchronized = new CheckboxItem();
+                checkSynchronized.setTitle("synchronized");
                 
                 final SelectItem comboRetorno = new SelectItem();
                 comboRetorno.setTitle("Retorno");
                 comboRetorno.setType("comboBox");
                 comboRetorno.setValueMap("void", "String", "int", "float");
+                comboRetorno.setDefaultToFirstOption(true);
                 
-                final SelectItem comboAcesso = new SelectItem();
-                comboAcesso.setTitle("Acesso");
-                comboAcesso.setType("comboBox");
-                comboAcesso.setValueMap("public", "protected", "private");
+                btnCriarMetodo.addClickHandler(new com.smartgwt.client.widgets.form.fields.events.ClickHandler() {
+					
+					public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
+						String name   = textNome.getValue().toString().trim();
+						String acesso = radioAcesso.getValue().toString();
+						
+						if (name.equals("")) {
+							SC.say("Aten&ccedil;&atilde;o", "Informe o nome do M&eacute;todo");
+							return;
+						}
+						if(acesso.equals("")){
+							SC.say("Aten&ccedil;&atilde;o", "Escolha o modificador de acesso.");
+						}
+
+						try {
+							if (LanguageUtils.getInstance()
+									.isValidMethod(name)) {
+
+								Metodo m      = ClassesGUI.classeSelecionada.procurarMetodo(name);
+								Metodo method = new Metodo(name);
+								method.setRetorno(comboRetorno.getValue().toString());
+								method.setAcesso(acesso);
+								method.setAbstract((checkAbstract.getValue() != null));
+								method.setFinal((checkFinal.getValue() != null));
+								method.setSync((checkSynchronized.getValue() != null));
+								
+								/**TODO, adicionar validação e tratamento baseado nos parametros do método antes
+								 * de inserir um novo método na classe */
+								if (m == null){
+								  
+								  ClassesGUI.classeSelecionada.addMetodo(method);
+								  propriedadesGUI.getListaPropriedades().setData(propriedadesGUI.getPropriedades(ClassesGUI.classeSelecionada.getNome()));
+								  propriedadesGUI.getListaInterfaces().setData(propriedadesGUI.getInterfaces(ClassesGUI.classeSelecionada.getNome()));
+								  
+								  winModal.destroy();
+								  winModal.redraw();						
+							  }else{
+								  SC.say("Aten&ccedil;&atilde;o", "J&aacute; existe um M&eacute;todo com este nome"); 
+							  }
+							}
+						} catch (Exception e) {
+							SC.warn("Aten&ccedil;&atilde;o", e.getMessage(), null); 
+						}
+						
+					}
+				});
                 
-                form.setFields(textNome, comboAcesso, checkAbstract , comboRetorno, btnCriarMetodo, btnAdicionar);
-                //form.setFields(textNome, comboTipo, textValorPadrao, btnAdicionar);	
+                form.setFields(textNome, radioAcesso, checkAbstract, checkFinal, checkSynchronized, comboRetorno, btnCriarMetodo);
                 winModal.addItem(form); 
                 
                 winModal.show();   
