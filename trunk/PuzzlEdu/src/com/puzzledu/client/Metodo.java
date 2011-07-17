@@ -87,6 +87,19 @@ public class Metodo {
 		
 		this.parametros.remove(param);
 	}
+	
+	public Parametro procurarParametro(String name){
+		Parametro result = null;
+		if (name != null){
+			for(Parametro p : parametros) {
+				if (p.getNome().equals(name)){
+					result = p;
+					break;
+				}
+			}
+		}
+		return result;
+	}
 
 	/**
 	 * @return the acesso
