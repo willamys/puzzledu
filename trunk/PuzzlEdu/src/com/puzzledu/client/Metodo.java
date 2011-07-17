@@ -8,6 +8,10 @@ public class Metodo {
 	private String nome;
 	private String retorno;
 	private List<Parametro> parametros;
+	private String acesso;
+	private boolean isAbstract;
+	private boolean isFinal;
+	private boolean sync;
 	
 	public Metodo() {
 		
@@ -83,4 +87,63 @@ public class Metodo {
 		
 		this.parametros.remove(param);
 	}
+
+	/**
+	 * @return the acesso
+	 */
+	public String getAcesso() {
+		return acesso;
+	}
+
+	/**
+	 * @param acesso the acesso to set
+	 */
+	public void setAcesso(String acesso) {
+		this.acesso = acesso;
+	}
+
+	/**
+	 * @return the isAbstract
+	 */
+	public boolean isAbstract() {
+		return isAbstract;
+	}
+
+	/**
+	 * @param isAbstract the isAbstract to set
+	 */
+	public void setAbstract(boolean isAbstract) {
+		this.isAbstract = isAbstract;
+	}
+ 
+	/**
+	 * @return the isFinal
+	 */
+	public boolean isFinal() {
+		return isFinal;
+	}
+
+	/**
+	 * @param isFinal the isFinal to set
+	 */
+	public void setFinal(boolean isFinal) {
+		this.isFinal = isFinal;
+	}
+
+	/**
+	 * @return the sync
+	 */
+	public boolean isSync() {
+		return sync;
+	}
+
+	/**
+	 * @param sync the sync to set
+	 */
+	public void setSync(boolean sync) {
+		this.sync = sync;
+	}
+	
+	
+
 }
