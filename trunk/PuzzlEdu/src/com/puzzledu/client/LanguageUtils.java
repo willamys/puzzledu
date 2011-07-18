@@ -87,6 +87,10 @@ public final class LanguageUtils {
 		return validate(name);
 	}
 	
+	public boolean isValidClass(String name) throws Exception{
+		return validate(name);
+	}
+	
 	
 	private boolean validate(String name) throws Exception{
 		boolean result = false;
@@ -95,7 +99,7 @@ public final class LanguageUtils {
 			result = (len > 0);
 			if (result) {
 				if (keyWords.containsKey(name))
-					throw new KeyWordsException("Palavra Resevada ( " + name + " ).");
+					throw new KeyWordsException("Palavra resevada ( " + name + " ).");
 				
 				String tmp = name.toUpperCase();
 				char c     = tmp.charAt(0);
