@@ -714,6 +714,7 @@ public class ClassesGUI {
                 comboTipo.setTitle("Tipo");
                 comboTipo.setType("comboBox");
                 comboTipo.setValueMap("String", "int", "float");
+                comboTipo.setDefaultToFirstOption(true);
                 
                 final TextItem textValorPadrao = new TextItem();
                 textValorPadrao.setWidth(200);
@@ -810,8 +811,8 @@ public class ClassesGUI {
 			
 			public void onClick(MenuItemClickEvent event) {
 				final Window winModal = new Window();  
-                winModal.setWidth(400);  
-                winModal.setHeight(250);  
+                winModal.setWidth(380);  
+                winModal.setHeight(230);  
                 winModal.setTitle("Digite os dados do M&eacute;todo");  
                 winModal.setShowMinimizeButton(false);  
                 winModal.setIsModal(true);  

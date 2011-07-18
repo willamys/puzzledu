@@ -197,6 +197,7 @@ public class PropriedadesGUI {
 			                comboTipo.setTitle("Tipo");
 			                comboTipo.setType("comboBox");
 			                comboTipo.setValueMap("String", "int", "float");
+			                comboTipo.setDefaultToFirstOption(true);
 			                
 			                ButtonItem btnAdicionar = new ButtonItem(); 
 			                btnAdicionar.setTitle("Criar Par&acirc;metro");
