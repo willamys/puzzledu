@@ -246,41 +246,47 @@ public class ClassesGUI {
 					
 					public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
 
-						if (gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz(), textItem.getValue().toString()) != null) {
-						
-							SC.say("Aten&ccedil;&atilde;o", "J&aacute; existe uma classe com este nome!");
-							textItem.focusInItem();
-							return;
-						}
-						
-						Classe classeFilha = new Classe();
-						classeFilha.setNome(textItem.getValue().toString());
-
-						if (checkAbstract.getValue() != null)
-							classeFilha.setAbstrata(true);
-						else
-							classeFilha.setAbstrata(false);
-
-						Classe classePai = gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().procurarClasse(classeSelecionada, raiz.getAttribute("Name"));
-						
-						for (Variavel v : classePai.getVariaveis()) {
+						try {
+							if (LanguageUtils.getInstance().isValidClass(textItem.getValue().toString())){
+								if (gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz(), textItem.getValue().toString()) != null) {
 									
-							Variavel v1 = new Variavel(v.getNome(), v.getTipo(), v.getValorPadrao());
-							classeFilha.addVariavel(v1);
+									SC.say("Aten&ccedil;&atilde;o", "J&aacute; existe uma classe com este nome!");
+									textItem.focusInItem();
+									return;
+								}
+								
+								Classe classeFilha = new Classe();
+								classeFilha.setNome(textItem.getValue().toString());
+								
+								if (checkAbstract.getValue() != null)
+									classeFilha.setAbstrata(true);
+								else
+									classeFilha.setAbstrata(false);
+								
+								Classe classePai = gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().procurarClasse(classeSelecionada, raiz.getAttribute("Name"));
+								
+								for (Variavel v : classePai.getVariaveis()) {
+									
+									Variavel v1 = new Variavel(v.getNome(), v.getTipo(), v.getValorPadrao());
+									classeFilha.addVariavel(v1);
+								}
+								
+								gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().addClasseFilha(classeFilha, raiz.getAttribute("Name"));
+								
+								ClasseTreeNode node = new ClasseTreeNode(
+										textItem.getValue().toString(), textItem.getValue().toString(), raiz.getAttribute("Name"), classeFilha.isAbstrata());
+								
+								tree.add(node, raiz);
+								
+								tree.openAll(raiz);
+								
+								winModal.destroy();
+								winModal.redraw();						
+								
+							}
+						} catch (Exception e) {
+							SC.say("Aten&ccedil;&atilde;o", e.getMessage());
 						}
-						
-						gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().addClasseFilha(classeFilha, raiz.getAttribute("Name"));
-
-						ClasseTreeNode node = new ClasseTreeNode(
-							textItem.getValue().toString(), textItem.getValue().toString(), raiz.getAttribute("Name"), classeFilha.isAbstrata());
-
-						tree.add(node, raiz);
-
-						tree.openAll(raiz);
-						
-						winModal.destroy();
-						winModal.redraw();						
-						
 					}
 				});
 
@@ -732,42 +738,47 @@ public class ClassesGUI {
 					public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
 						String varName = textNome.getValue().toString();
 						if (varName.equals("")) {
-							SC.say("Aten&ccedil;&atilde;o", "Informe o nome do Atributo!");
+							SC.say("Aten&ccedil;&atilde;o", "Informe o nome do atributo!");
 							return;
 						}
-					   
-						if (ClassesGUI.classeSelecionada.procurarVariavel(varName) == null){
-						  
-						  Variavel var = new Variavel();
-						  var.setNome(varName);
-						  var.setTipo(comboTipo.getValue().toString());
-						  
-						  if (textValorPadrao.getValue() != null)
-							  var.setValorPadrao(textValorPadrao.getValue().toString());
-						  
-						  Metodo set = new Metodo("set" + var.getNome().toUpperCase().charAt(0) + var.getNome().substring(1, var.getNome().length()));
-						  set.adicionarParametro(new Parametro(var.getNome(), var.getTipo()));
-						  set.setRetorno("void");
-						  
-						  Metodo get = new Metodo("get" + var.getNome().toUpperCase().charAt(0) + var.getNome().substring(1, var.getNome().length()));
-						  get.setRetorno(var.getTipo());						
-						  
-						  ClassesGUI.classeSelecionada.addVariavel(var);
-						  ClassesGUI.classeSelecionada.addMetodo(get);
-						  ClassesGUI.classeSelecionada.addMetodo(set);						
-						  
-						  ClassesGUI.classeSelecionada.addVariavelMetodosRecursivamente(ClassesGUI.classeSelecionada, var);
-						  
-						  propriedadesGUI.getListaPropriedades().setData(propriedadesGUI.getPropriedades(ClassesGUI.classeSelecionada.getNome()));
-						  
-						  propriedadesGUI.getListaInterfaces().setData(propriedadesGUI.getInterfaces(ClassesGUI.classeSelecionada.getNome()));
-						  
-						  winModal.destroy();
-						  winModal.redraw();						
-					  }else{
-						  SC.say("Aten&ccedil;&atilde;o", "J&aacute; existe um Atributo com este nome!!"); 
-					  }
-						
+					    try {
+							if(LanguageUtils.getInstance().isValidAttribute(varName)){
+							  if (ClassesGUI.classeSelecionada.procurarVariavel(varName) == null){
+									
+									Variavel var = new Variavel();
+									var.setNome(varName);
+									var.setTipo(comboTipo.getValue().toString());
+									
+									if (textValorPadrao.getValue() != null)
+										var.setValorPadrao(textValorPadrao.getValue().toString());
+									
+									Metodo set = new Metodo("set" + var.getNome().toUpperCase().charAt(0) + var.getNome().substring(1, var.getNome().length()));
+									set.adicionarParametro(new Parametro(var.getNome(), var.getTipo()));
+									set.setRetorno("void");
+									
+									Metodo get = new Metodo("get" + var.getNome().toUpperCase().charAt(0) + var.getNome().substring(1, var.getNome().length()));
+									get.setRetorno(var.getTipo());						
+									
+									ClassesGUI.classeSelecionada.addVariavel(var);
+									ClassesGUI.classeSelecionada.addMetodo(get);
+									ClassesGUI.classeSelecionada.addMetodo(set);						
+									
+									ClassesGUI.classeSelecionada.addVariavelMetodosRecursivamente(ClassesGUI.classeSelecionada, var);
+									
+									propriedadesGUI.getListaPropriedades().setData(propriedadesGUI.getPropriedades(ClassesGUI.classeSelecionada.getNome()));
+									
+									propriedadesGUI.getListaInterfaces().setData(propriedadesGUI.getInterfaces(ClassesGUI.classeSelecionada.getNome()));
+									
+									winModal.destroy();
+									winModal.redraw();						
+								}else{
+									SC.say("Aten&ccedil;&atilde;o", "J&aacute; existe um atributo com este nome."); 
+								}
+								
+							}
+						} catch (Exception e) {
+							SC.say("Aten&ccedil;&atilde;o", e.getMessage()); 
+						}
 					}
 				});
                 
