@@ -205,11 +205,19 @@ public class PuzzlEdu implements EntryPoint {
          imgStop.setTooltip("Parar");
          imgStop.setCursor(Cursor.HAND);  
          
-         toolStrip.addMember(imgNovo, 0);
-         toolStrip.addMember(imgSave, 1);
-         toolStrip.addMember(imgPlay, 2);
+         Img imgHelp = new Img("/icons/help-icon.png");
+         imgHelp.setWidth("32px");
+         imgHelp.setHeight("32px");
+         imgHelp.setTooltip("Documenta&ccedil;&atilde;o");
+         imgHelp.setCursor(Cursor.HAND);
+
+
+         toolStrip.addMember(imgNovo,  0);
+         toolStrip.addMember(imgSave,  1);
+         toolStrip.addMember(imgPlay,  2);
          toolStrip.addMember(imgPause, 3);
-         toolStrip.addMember(imgStop, 4);
+         toolStrip.addMember(imgStop,  4);
+         toolStrip.addMember(imgHelp);
                  
          return toolStrip;    	
     }   
