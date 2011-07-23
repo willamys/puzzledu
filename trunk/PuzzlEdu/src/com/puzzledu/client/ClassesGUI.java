@@ -445,7 +445,7 @@ public class ClassesGUI {
                 
                 Tree treeInter = new Tree();  
                 treeInter.setModelType(TreeModelType.PARENT);  
-                treeInter.setShowRoot(true);
+                treeInter.setShowRoot(false);
                 treeInter.setNameProperty("Name");  
                 treeInter.setIdField("Id");
                 treeInter.setParentIdField("ParentId"); 
@@ -990,11 +990,39 @@ public class ClassesGUI {
         img1.setTop(0);
         img1.setLeft(40);
         
-        final TextItem textItem = new TextItem();
-        textItem.setWidth(150);
-        textItem.setTop(40);
-        textItem.setTitle(nomeInstancia + "." + metodo.getNome());                
-        textItem.setWrapTitle(true);
+        final SelectItem comboValor = new SelectItem();
+        comboValor.setWidth(150);
+        comboValor.setTop(40);
+        comboValor.setTitle(nomeInstancia + "." + metodo.getNome());                
+        comboValor.setWrapTitle(true);
+        
+        LinkedHashMap<String, String> mapIcons = new LinkedHashMap<String, String>();
+        
+        for (ImagemRecord ir : ImagemData.getNewRecords()) {
+        	
+        	mapIcons.put(ir.getPicture(), ir.getPicture());
+        }
+
+        String tipo = metodo.getPrimeiroParametro().getTipo();
+        
+        if (tipo.equals("int") || tipo.equals("float"))							
+			comboValor.setValueMap("1", "2", "3", "4", "5", "10", "20", "50");						
+		
+		else if (tipo.equals("Image")) {
+			
+			LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
+			
+			for (ImagemRecord ir : ImagemData.getNewRecords()) {
+		        						
+				map.put(ir.getPicture(), ir.getName());
+		   }
+			 
+			comboValor.setValueMap(map);
+			
+		} else							
+			comboValor.setValueMap("Hello");
+        
+        comboValor.setValueIcons(mapIcons);
         
         ButtonItem btnAdicionar = new ButtonItem(); 
         btnAdicionar.setTitle("Confirmar");
@@ -1003,7 +1031,7 @@ public class ClassesGUI {
 			
 			public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
 
-				AcaoIO acao1 = new AcaoIO(textItem.getValue().toString(), metodo);
+				AcaoIO acao1 = new AcaoIO(comboValor.getValue().toString(), metodo);
 
 				Instancia i = gerenciador.getProjetoAtual().getPilha().procurarInstancia(nomeInstancia);
 
@@ -1017,7 +1045,7 @@ public class ClassesGUI {
 			}
 		});
 
-        form.setFields(textItem, btnAdicionar);
+        form.setFields(comboValor, btnAdicionar);
         
         winModal.addItem(form);  
         winModal.show();              	

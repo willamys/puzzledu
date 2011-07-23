@@ -7,7 +7,6 @@ import com.smartgwt.client.types.Cursor;
 import com.smartgwt.client.types.DragAppearance;
 import com.smartgwt.client.types.Overflow;
 import com.smartgwt.client.types.Side;
-import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.Img;
 import com.smartgwt.client.widgets.Window;
@@ -71,7 +70,7 @@ public class PuzzlEdu implements EntryPoint {
   
         Window window = new Window();  
         window.setAutoSize(false);  
-        /**Alteração temporaria com o conceito de projeto*/
+        
         window.setTitle("PuzzlEdu 1.0: " + gerenciador.getProjetoAtual().getNome());  
         window.setWidth100();  
         window.setHeight100(); 
@@ -151,11 +150,6 @@ public class PuzzlEdu implements EntryPoint {
          toolStrip.setTop(28);
          toolStrip.setLeft(15);
          toolStrip.setAlign(Alignment.LEFT);
-   
-         Button iconButton = new Button();  
-         iconButton.setIcon("/images/icons/32/arrow_down.png");  
-         iconButton.setTitle("Print");  
-         toolStrip.addMember(iconButton);
         
          Img imgNovo = new Img("/icons/page_white_add.png");
          imgNovo.setWidth("32px");
@@ -204,8 +198,14 @@ public class PuzzlEdu implements EntryPoint {
          imgStop.setHeight("32px");
          imgStop.setTooltip("Parar");
          imgStop.setCursor(Cursor.HAND);  
+   
+         Img imgPrinter = new Img("/icons/printer-icon.png");
+         imgPrinter.setWidth("32px");
+         imgPrinter.setHeight("32px");
+         imgPrinter.setTooltip("Imprimir C&oacute;digo-Fonte");
+         imgPrinter.setCursor(Cursor.HAND);
          
-         Img imgHelp = new Img("/icons/help-icon.png");
+         Img imgHelp = new Img("/icons/system-help.png");
          imgHelp.setWidth("32px");
          imgHelp.setHeight("32px");
          imgHelp.setTooltip("Documenta&ccedil;&atilde;o");
@@ -217,7 +217,8 @@ public class PuzzlEdu implements EntryPoint {
          toolStrip.addMember(imgPlay,  2);
          toolStrip.addMember(imgPause, 3);
          toolStrip.addMember(imgStop,  4);
-         toolStrip.addMember(imgHelp);
+         toolStrip.addMember(imgPrinter, 5);
+         toolStrip.addMember(imgHelp, 6);
                  
          return toolStrip;    	
     }   
