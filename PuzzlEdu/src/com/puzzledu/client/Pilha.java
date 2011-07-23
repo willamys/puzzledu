@@ -148,7 +148,12 @@ public class Pilha {
 							else if (a.getMetodo().getNome().equals("voltar"))
 								inst.getImage().setLeft(inst.getImage().getLeft() - (Integer.valueOf(a.getValor())*3));
 							else if (a.getMetodo().getNome().equals("setNome"))	
-								inst.setNome(a.getValor());					
+								inst.setNome(a.getValor());	
+							else if (a.getMetodo().getNome().equals("setImagem")) {	
+								
+								inst.getImage().setSrc(a.getValor());
+								inst.getImage().redraw();
+							}
 						} 
 					}; 
 
