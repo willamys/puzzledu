@@ -380,15 +380,15 @@ public class Classe {
 		this.parent = parent;
 	}
 
-	public boolean pertenceArvore(Classe classe, String classeExcluida) {
+	public boolean pertenceArvore(Classe classe, String classeProcurada) {
 		
 		if (classe == null)
 			return false;
 		
-		if (classe.getNome().equals(classeExcluida))
+		if (classe.getNome().equals(classeProcurada))
 			return true;
 		
-		return pertenceArvore(classe.getParent(), classeExcluida);		
+		return pertenceArvore(classe.getParent(), classeProcurada);		
 	}
 	
 	public String construirCodigoFonte() {

@@ -45,7 +45,6 @@ public class ColecaoInterface {
 		Metodo destruir = new Metodo("destruir");
 		destruir.setRetorno("void");	
 		destruir.setAcesso("public");
-		destruir.adicionarParametro(new Parametro("objeto", "Object"));
 		interfaceAnimavel.adicionarMetodo(destruir);	
 		
 		Interface interfaceDesenhavel = new Interface("Desenh&aacute;vel");

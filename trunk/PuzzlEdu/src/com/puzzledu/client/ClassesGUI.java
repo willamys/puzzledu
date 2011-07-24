@@ -996,33 +996,45 @@ public class ClassesGUI {
         comboValor.setTitle(nomeInstancia + "." + metodo.getNome());                
         comboValor.setWrapTitle(true);
         
-        LinkedHashMap<String, String> mapIcons = new LinkedHashMap<String, String>();
-        
-        for (ImagemRecord ir : ImagemData.getNewRecords()) {
+        if (metodo.getParametros() != null)
+        if (metodo.getParametros().size() > 0) {
         	
-        	mapIcons.put(ir.getPicture(), ir.getPicture());
-        }
+        	LinkedHashMap<String, String> mapIcons = new LinkedHashMap<String, String>();
+        
+        	for (ImagemRecord ir : ImagemData.getNewRecords()) {
+        	
+        		mapIcons.put(ir.getPicture(), ir.getPicture());
+        	}
 
-        String tipo = metodo.getPrimeiroParametro().getTipo();
+        	String tipo = metodo.getPrimeiroParametro().getTipo();
         
-        if (tipo.equals("int") || tipo.equals("float"))							
-			comboValor.setValueMap("1", "2", "3", "4", "5", "10", "20", "50");						
+        	if (tipo.equals("int") || tipo.equals("float"))							
+        		comboValor.setValueMap("1", "2", "3", "4", "5", "10", "20", "50");						
 		
-		else if (tipo.equals("Image")) {
+        	else if (tipo.equals("Image")) {
 			
-			LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
+        		LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
 			
-			for (ImagemRecord ir : ImagemData.getNewRecords()) {
-		        						
-				map.put(ir.getPicture(), ir.getName());
-		   }
+        		for (ImagemRecord ir : ImagemData.getNewRecords()) {
+			        						
+        			map.put(ir.getPicture(), ir.getName());
+        		}
 			 
-			comboValor.setValueMap(map);
+        		comboValor.setValueMap(map);
+        		comboValor.setValueIcons(mapIcons);
 			
-		} else							
-			comboValor.setValueMap("Hello");
+        	} else if (tipo.equals("String")) {	
+        		
+        		comboValor.setValueMap("Hello");   
+        	
+        	} else {	
+        		
+        		comboValor.setValueMap(gerenciador.getProjetoAtual().getPilha().listarInstanciasDisponiveis(nomeInstancia, tipo));   
+        	}
+        }
         
-        comboValor.setValueIcons(mapIcons);
+        if (metodo.getParametros().size() == 0)
+        	comboValor.setDisabled(true);
         
         ButtonItem btnAdicionar = new ButtonItem(); 
         btnAdicionar.setTitle("Confirmar");
@@ -1031,10 +1043,20 @@ public class ClassesGUI {
 			
 			public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
 
-				AcaoIO acao1 = new AcaoIO(comboValor.getValue().toString(), metodo);
-
+				String valor = "";
+				if (comboValor.getValue() != null)
+					valor = comboValor.getValue().toString();
+				
+				if (metodo.getParametros().size() > 0 && valor.equals("")) {
+					
+					SC.say("Aten&ccedil;&atilde;o", "Selecione um valor para o m&eacute;todo!");
+					comboValor.focusInItem();
+					return;
+				}
+				
 				Instancia i = gerenciador.getProjetoAtual().getPilha().procurarInstancia(nomeInstancia);
-
+				
+				AcaoIO acao1 = new AcaoIO(valor, metodo);
 				i.adicionarAcao(acao1);	
 				
 				carregarScript(nomeInstancia);
@@ -1045,7 +1067,7 @@ public class ClassesGUI {
 			}
 		});
 
-        form.setFields(comboValor, btnAdicionar);
+       	form.setFields(comboValor, btnAdicionar);
         
         winModal.addItem(form);  
         winModal.show();              	
@@ -1091,8 +1113,8 @@ public class ClassesGUI {
         comboInicializacao.setValueMap("1", "2", "3", "4", "5", "10", "20", "50");
         comboInicializacao.setDefaultValue("10");
         comboInicializacao.setTitle("Repeti&ccedil;&otilde;es");
-        //comboInicializacao.setRequired(true);
-        //comboInicializacao.setType("comboBox");
+        comboInicializacao.setRequired(true);
+        comboInicializacao.setType("comboBox");
         
         final SelectItem comboAcao = new SelectItem();
         comboAcao.setWidth(150);
@@ -1108,7 +1130,6 @@ public class ClassesGUI {
         comboParametro1.setType("comboBox");
         comboParametro1.setDisabled(true);
         comboParametro1.setRequired(true);
-        //comboParametro1.setImageURLPrefix("/galery/");  
         
         LinkedHashMap<String, String> mapIcons = new LinkedHashMap<String, String>();
         
@@ -1116,11 +1137,6 @@ public class ClassesGUI {
         	
         	mapIcons.put(ir.getPicture(), ir.getPicture());
         }
-        
-        //mapIcons.put("/galery/dog2-c.png", "/galery/dog2-c.png");
-        //mapIcons.put("/galery/bat1-a.png", "/galery/bat1-a.png");
-        //mapIcons.put("/galery/elephant1-a.png", "/galery/elephant1-a.png");
-		//mapIcons.put("/galery/chiwawa.png", "/galery/chiwawa.png");        
         
         comboParametro1.setValueIcons(mapIcons);
         
@@ -1148,6 +1164,14 @@ public class ClassesGUI {
 				
 				if (m != null) {
 					
+					if (m.getParametros().size() == 0) {
+						
+						comboParametro1.setValue(" ");
+						comboParametro1.setTitle("");
+						comboParametro1.setDisabled(true);
+						return;
+					}
+					
 					comboParametro1.setDisabled(false);
 					comboParametro1.setTitle(m.getPrimeiroParametro().getNome());
 					comboParametro1.setValue(" ");
@@ -1168,12 +1192,7 @@ public class ClassesGUI {
 								map.put(ir.getPicture(), ir.getName());
 						   }
 							
-							//map.put("/galery/dog2-c.png", "Cachorro");
-						//	map.put("/galery/bat1-a.png", "Morcego");
-							//map.put("/galery/elephant1-a.png", "Elefante");
-							//map.put("/galery/chiwawa.png", "Chiwawa");
-							 
-							comboParametro1.setValueMap(map);
+						   comboParametro1.setValueMap(map);
 							
 						} else							
 							comboParametro1.setValueMap("Hello");
@@ -1220,6 +1239,7 @@ public class ClassesGUI {
 					return;							
 				}
 				
+				if (m1.getParametros().size() > 0)
 				if (comboParametro1 == null | comboParametro1.getValue().equals("")) {
 					
 					SC.say("Aten&ccedil;&atilde;o", "Selecione um <b>" + m1.getPrimeiroParametro().getNome() + "</b> v&aacute;lido!");
@@ -1229,6 +1249,7 @@ public class ClassesGUI {
 					return;							
 				}
 				
+				if (m1.getParametros().size() > 0)
 				if (m1.getPrimeiroParametro().getTipo().equals("int")) {
 					
 					try {
@@ -1259,8 +1280,24 @@ public class ClassesGUI {
 						return;				
 					}						
 				}
+				
+				String valor = "";
+				if (comboParametro1.getValue() != null)
+					valor = comboParametro1.getValue().toString();
+				
+				if (m1.getParametros().size() > 0 && valor.equals("")) {
+					
+					SC.say("Aten&ccedil;&atilde;o", "Selecione um valor para o m&eacute;todo!");
+					comboParametro1.focusInItem();
+					return;
+				}				
 			
-				AcaoFor acao1 = new AcaoFor(m1, Long.parseLong(comboInicializacao.getValue().toString().trim()), comboParametro1.getValue().toString().trim());
+				AcaoFor acao1;
+				if (m1.getParametros().size() > 0)
+					acao1 = new AcaoFor(m1, Long.parseLong(comboInicializacao.getValue().toString().trim()), comboParametro1.getValue().toString().trim());
+				else
+					acao1 = new AcaoFor(m1, Long.parseLong(comboInicializacao.getValue().toString().trim()), "");
+				
 				inst.adicionarAcao(acao1);	
 				
 				carregarScript(nomeInstancia);

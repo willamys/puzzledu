@@ -3,7 +3,6 @@ package com.puzzledu.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.TextArea;
 import com.smartgwt.client.types.Alignment;
-import com.smartgwt.client.types.ContentsType;
 import com.smartgwt.client.types.Cursor;
 import com.smartgwt.client.types.DragAppearance;
 import com.smartgwt.client.types.Overflow;
@@ -27,7 +26,6 @@ import com.smartgwt.client.types.ListGridFieldType;
 import com.smartgwt.client.widgets.ImgProperties;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
-
 
 public class PuzzlEdu implements EntryPoint {
 	
@@ -339,7 +337,6 @@ public class PuzzlEdu implements EntryPoint {
         tabPane.setWidth100();
         tabPane.setHeight100();
         tabPane.setContents(cabecalho + codigoFonte + rodape);
-        tabPane.setContentsType(ContentsType.FRAGMENT);
 
         Tab tab = new Tab(classe.getNome(), icon);
         tab.setPane(tabPane);
