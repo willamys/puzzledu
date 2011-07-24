@@ -20,43 +20,53 @@ public class ColecaoInterface {
 		
 		Metodo avancar = new Metodo("avancar");
 		avancar.setRetorno("void");
+		avancar.setAcesso("public");
 		avancar.adicionarParametro(new Parametro("valor", "int"));
 		interfaceAnimavel.adicionarMetodo(avancar);		
 		
 		Metodo voltar = new Metodo("voltar");		
 		voltar.setRetorno("void");
+		voltar.setAcesso("public");
 		voltar.adicionarParametro(new Parametro("valor", "int"));		
 		interfaceAnimavel.adicionarMetodo(voltar);		
 		
 		Metodo girar = new Metodo("girar");
-		girar.setRetorno("void");	
+		girar.setRetorno("void");
+		girar.setAcesso("public");
 		girar.adicionarParametro(new Parametro("graus", "float"));
 		interfaceAnimavel.adicionarMetodo(girar);
 		
-		Interface interfaceComestivel = new Interface("Comest&iacute;vel");
-				
-		Metodo comer = new Metodo("comer");
-		comer.setRetorno("void");
-		comer.adicionarParametro(new Parametro("quantidade", "int"));
-		interfaceComestivel.adicionarMetodo(comer);
+		Metodo encontrar = new Metodo("encontrar");
+		encontrar.setRetorno("void");	
+		encontrar.setAcesso("public");
+		encontrar.adicionarParametro(new Parametro("objeto", "Object"));
+		interfaceAnimavel.adicionarMetodo(encontrar);
+		
+		Metodo destruir = new Metodo("destruir");
+		destruir.setRetorno("void");	
+		destruir.setAcesso("public");
+		destruir.adicionarParametro(new Parametro("objeto", "Object"));
+		interfaceAnimavel.adicionarMetodo(destruir);	
 		
 		Interface interfaceDesenhavel = new Interface("Desenh&aacute;vel");
 		
 		Variavel imagem = new Variavel("imagem");
 		imagem.setTipo("Image");
+		imagem.setAcesso("private");
 		interfaceDesenhavel.adicionarVariavel(imagem);
 		
 		Metodo setImagem = new Metodo("setImagem");
 		setImagem.adicionarParametro(new Parametro("imagem", "Image"));
 		setImagem.setRetorno("void");
+		setImagem.setAcesso("public");
 		interfaceDesenhavel.adicionarMetodo(setImagem);
 		
 		Metodo getImagem = new Metodo("getImagem");
 		getImagem.setRetorno("Image");
+		getImagem.setAcesso("public");
 		interfaceDesenhavel.adicionarMetodo(getImagem);
 		
 		listaInterfaces.add(interfaceAnimavel);
-		listaInterfaces.add(interfaceComestivel);
 		listaInterfaces.add(interfaceDesenhavel);
 	}
 

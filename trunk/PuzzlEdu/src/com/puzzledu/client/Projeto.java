@@ -49,5 +49,5 @@ public class Projeto {
 
 	public void setPilha(Pilha pilha) {
 		this.pilha = pilha;
-	}
+	}		
 }

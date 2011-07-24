@@ -18,11 +18,11 @@ public class Metodo {
 		parametros = new ArrayList<Parametro>();
 	}
 
-	public Metodo(String assinatura) {
+	public Metodo(String nome) {
 
 		this();
 		
-		setNome(assinatura);
+		setNome(nome);
 	}
 
 	public String getNome() {
@@ -68,7 +68,7 @@ public class Metodo {
 			if (!params.equals(""))
 				params += ", ";
 			
-			params += p.getNome() + " : " + p.getTipo(); 
+			params += p.getTipo() + " : " + p.getNome(); 
 		}
 		
 		return params;
@@ -156,7 +156,4 @@ public class Metodo {
 	public void setSync(boolean sync) {
 		this.sync = sync;
 	}
-	
-	
-
 }

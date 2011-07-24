@@ -2,6 +2,7 @@ package com.puzzledu.client;
 
 public class Variavel {
 
+	private String acesso;
 	private String nome;
 	private String tipo;
 	private String valorPadrao;
@@ -57,4 +58,12 @@ public class Variavel {
 	public void setValorPadrao(String valorPadrao) {
 		this.valorPadrao = valorPadrao;
 	}
+
+	public String getAcesso() {
+		return acesso;
+	}
+
+	public void setAcesso(String acesso) {
+		this.acesso = acesso;
+	}	
 }
