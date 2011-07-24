@@ -92,6 +92,7 @@ public final class LanguageUtils {
 	
 	
 	private boolean validate(String name) throws Exception{
+		
 		boolean result = false;
 		if (name != null) {
 			int len = name.length();
@@ -155,7 +156,9 @@ public final class LanguageUtils {
 			
 				return false;				
 			}						
-		}
+		
+		} else if (tipoAtributo.equals("String"))
+			return true;
 		
 		return true;
 	}
