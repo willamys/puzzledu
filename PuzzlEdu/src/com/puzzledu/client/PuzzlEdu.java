@@ -3,11 +3,13 @@ package com.puzzledu.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.TextArea;
 import com.smartgwt.client.types.Alignment;
+import com.smartgwt.client.types.ContentsType;
 import com.smartgwt.client.types.Cursor;
 import com.smartgwt.client.types.DragAppearance;
 import com.smartgwt.client.types.Overflow;
 import com.smartgwt.client.types.Side;
 import com.smartgwt.client.widgets.Canvas;
+import com.smartgwt.client.widgets.HTMLPane;
 import com.smartgwt.client.widgets.Img;
 import com.smartgwt.client.widgets.Window;
 import com.smartgwt.client.widgets.events.ClickEvent;
@@ -25,6 +27,7 @@ import com.smartgwt.client.types.ListGridFieldType;
 import com.smartgwt.client.widgets.ImgProperties;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
+
 
 public class PuzzlEdu implements EntryPoint {
 	
@@ -205,6 +208,14 @@ public class PuzzlEdu implements EntryPoint {
          imgPrinter.setTooltip("Imprimir C&oacute;digo-Fonte");
          imgPrinter.setCursor(Cursor.HAND);
          
+         imgPrinter.addClickHandler(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+				mostrarFonte("Códifo-Fonte", 500, 400);
+				
+			}
+         });
+         
          Img imgHelp = new Img("/icons/system-help.png");
          imgHelp.setWidth("32px");
          imgHelp.setHeight("32px");
@@ -271,6 +282,69 @@ public class PuzzlEdu implements EntryPoint {
         win.addItem(tabs);
         
         return tabs;
+    }  
+    
+    public void mostrarFonte(String sourceURL, int width, int height) {
+    
+    	final Window win = new Window();
+        win.setTitle("C&oacute;digo-Fonte");
+        win.setHeaderIcon("silk/page_white_cup.png", 16, 16);
+        win.setShowMinimizeButton(false);  
+        win.setIsModal(true);  
+        win.setWidth(650);
+        win.setHeight(450);
+
+        win.setCanDragReposition(true);
+        win.setCanDragResize(true);
+        win.setMembersMargin(5);
+
+        final TabSet tabs = new TabSet();
+        tabs.setTabBarPosition(Side.TOP);
+        tabs.setWidth100();
+        tabs.setHeight100();
+
+        construirArquivoClasses(tabs, gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz());
+
+        win.addItem(tabs);
+        win.show();   
+        win.centerInPage();
+    }
+    
+    public void construirArquivoClasses(TabSet tabs, Classe classe) {
+    	
+    	if (classe != null)   		
+    	
+    		tabs.addTab(buildSourceTab(classe, "silk/page_white_cup.png"));    		
+    	
+    	
+    	for (Classe c : classe.getFilhas())
+    		
+    		construirArquivoClasses(tabs, c);    	
+    }
+
+    
+    public Tab buildSourceTab(Classe classe, String icon) {
+
+    	String cabecalho = "<html> <head> <link rel='stylesheet' href='/js/sh/SyntaxHighlighter.css' type='text/css' /> <script src='/js/sh/shCore.js'></script> <script src='/js/sh/shBrushJava.js'></script> <style> .source{font-family:Courier New,monospace;  padding: 0;  margin: 0;  white-space: nowrap;  font-size: 11px;} .dp-highlighter {  white-space: nowrap;  overflow: visible;  width: 600px;  font-size: 11px;  font-family:Courier New,monospace; } </style> </head>  <body> <div class='source'><textarea name='code' class='java:nogutter' rows='22' cols='75' border='0'> ";
+    	String rodape = "</textarea></div><script class='javascript'>dp.SyntaxHighlighter.HighlightAll('code');</script></body></html> ";
+    	
+    	//String cabecalho = " <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\"> <html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\"> <head> 	<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /> 	<title>Código-Fonte</title> ";
+    	//cabecalho += "<script type=\"text/javascript\" src=\"/scripts/shCore.js\"></script> ";
+    	//cabecalho += "<script type=\"text/javascript\" src=\"/scripts/shBrushJava.js\"></script> 	<link type=\"text/css\" rel=\"stylesheet\" href=\"/styles/shCoreDefault.css\"/> 	<script type=\"text/javascript\">SyntaxHighlighter.all();</script> </head> <body> <pre class=\"brush: java\"> ";    	
+    	//String rodape = "</pre> </html>";
+    	
+    	String codigoFonte = classe.construirCodigoFonte();    	    	
+
+        HTMLPane tabPane = new HTMLPane();
+        tabPane.setWidth100();
+        tabPane.setHeight100();
+        tabPane.setContents(cabecalho + codigoFonte + rodape);
+        tabPane.setContentsType(ContentsType.FRAGMENT);
+
+        Tab tab = new Tab(classe.getNome(), icon);
+        tab.setPane(tabPane);
+        
+        return tab;
     }    
 }
 

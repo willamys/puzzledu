@@ -144,15 +144,29 @@ public class Pilha {
 						public void run(){ 
 							
 							if (a.getMetodo().getNome().equals("avancar"))
+								
 								inst.getImage().setLeft(inst.getImage().getLeft() + (Integer.valueOf(a.getValor())*3 ));
+							
 							else if (a.getMetodo().getNome().equals("voltar"))
+								
 								inst.getImage().setLeft(inst.getImage().getLeft() - (Integer.valueOf(a.getValor())*3));
+							
 							else if (a.getMetodo().getNome().equals("setNome"))	
+								
 								inst.setNome(a.getValor());	
+							
 							else if (a.getMetodo().getNome().equals("setImagem")) {	
 								
 								inst.getImage().setSrc(a.getValor());
 								inst.getImage().redraw();
+							
+							} else if (a.getMetodo().getNome().equals("encontrar")) {	
+								
+								
+							
+							} else if (a.getMetodo().getNome().equals("destruir")) {	
+								
+								removerInstanciaPilha(inst.getNome());
 							}
 						} 
 					}; 

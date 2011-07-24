@@ -390,5 +390,95 @@ public class Classe {
 		
 		return pertenceArvore(classe.getParent(), classeExcluida);		
 	}
-}
+	
+	public String construirCodigoFonte() {
+		
+		//Script Highlight
+		String cabecalho = "/*\n * PuzzlEdu 1.0\n *\n * Classe: " + this.getNome() + "\n *\n */\n\n";
+			
+		//Declaração da Classe
+		String codigoFonte = " public class " + this.getNome();
+			
+		if (this.getInterfaces().size() > 0) {
+			
+			codigoFonte += " implements ";
+				
+			for (int i=0; i<this.getInterfaces().size(); i++) {
+					
+				codigoFonte += this.getInterfaces().get(i).getNome();
+					
+				if (i < (this.getInterfaces().size() - 1))
+					codigoFonte += ", ";
+			}
+					
+		}
+			
+		//Fim, declaração da classe
+		codigoFonte += " {\n";
+		
+		if (this.getVariaveis().size() > 0)
+			codigoFonte += "\n";
+		
+		//Declaracação das variáveis
+		for (Variavel v : this.getVariaveis()) {
+			
+			codigoFonte += "\t";
+			
+			if (v.getAcesso() != null)
+				codigoFonte += v.getAcesso() + " ";
+			
+			if (v.getTipo() != null);
+				codigoFonte += v.getTipo() + " ";
+				
+			if (v.getNome() != null)
+				codigoFonte += v.getNome();
+			
+			if (v.getValorPadrao() != null)
+			if (!v.getValorPadrao().equals("")) {
+			
+				if (v.getTipo().equals("int") || v.getTipo().equals("float"))
+					codigoFonte += " = " + v.getValorPadrao();
+				else if (v.getTipo().equals("String"))
+					codigoFonte += " = \"" + v.getValorPadrao() + "\"";
+				else 
+					codigoFonte += " = new " + v.getTipo() + "(\"" + v.getValorPadrao() + "\")";				
+			}
+			
+			codigoFonte += ";\n";	
+		}
 
+		codigoFonte += "\n";	
+		
+		//Declaração dos métodos
+		for (Metodo m : this.getAllMetodos(this)) {
+
+			//assinatura
+			codigoFonte += "\t";
+			
+			if (m.getAcesso() != null)
+				codigoFonte += m.getAcesso() + " ";
+			
+			if (m.getRetorno() != null)
+				codigoFonte += m.getRetorno() + " ";
+
+			if (m.getNome() != null)
+				codigoFonte += m.getNome();
+			
+			//parâmetros
+			if (m.getParametros().size() > 0)
+				codigoFonte += "(" + m.getParametrosString() + ")";
+			
+			codigoFonte += " {\n";
+
+			codigoFonte += "\t\n";
+				
+			codigoFonte += "\t}\n\n";		
+		}				
+		
+		//Fim, corpo da classe
+		String rodape = " }";
+			
+		return cabecalho + codigoFonte + rodape;			
+	
+	}	
+}
