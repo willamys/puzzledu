@@ -61,20 +61,20 @@ public abstract class Acao implements Comparable<Acao>{
 
 class AcaoFor extends Acao {
 
-	private long qtdRepeticoes;
+	private int qtdRepeticoes;
 	
-	public AcaoFor(Metodo m, long qtdRepeticoes, String valor) {
+	public AcaoFor(Metodo m, int qtdRepeticoes, String valor) {
 		
 		super(m, valor);
 		setTipo("for");
 		this.qtdRepeticoes = qtdRepeticoes;		
 	}
 
-	public long getQtdRepeticoes() {
+	public int getQtdRepeticoes() {
 		return qtdRepeticoes;
 	}
 
-	public void setQtdRepeticoes(long qtdRepeticoes) {
+	public void setQtdRepeticoes(int qtdRepeticoes) {
 		this.qtdRepeticoes = qtdRepeticoes;
 	}
 }

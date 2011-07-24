@@ -116,7 +116,7 @@ public class Pilha {
 		return map;
 	}
 	
-	public void executarAcoesDasInstancias(final TextArea console) {
+public void executarAcoesDasInstancias(final TextArea console) {
 		
 		console.setText("");
 		
@@ -124,7 +124,7 @@ public class Pilha {
 			
 			final Instancia inst = i;
 			
-			new Runnable() {
+			new Timer() {
 				
 				public void run() {
 					
@@ -142,19 +142,19 @@ public class Pilha {
 							
 							final AcaoFor acaoFor = (AcaoFor) a;
 							
-							Timer timer = new Timer(){
+							//Timer timer = new Timer(){
 						
-								public void run(){
+								//public void run(){
 						
 									for(int i=0; i<acaoFor.getQtdRepeticoes(); i++) {
 																
 										AcaoIO acaoIO = new AcaoIO(acaoFor.getValor(), acaoFor.getMetodo());
 										executarAcaoIO(acaoIO);
 									}
-								}
-							};
+								//}
+							//};
 
-							timer.schedule(1000); 
+							//timer.schedule(1000); 
 							
 							console.setText(console.getText() + "repetir " + acaoFor.getQtdRepeticoes() + " vezes: " + inst.getNome() + "."  + a.getMetodo().getNome() + "("+ a.getValor() +")\n");
 						}
@@ -199,9 +199,9 @@ public class Pilha {
 							    label.setAlign(Alignment.CENTER);
 							    label.setValign(VerticalAlignment.CENTER);  
 							    label.setWrap(false);  
-							    label.setIcon("/icons/sticky-note--pencil.png");  
+							    label.setIcon("/icons/comment-square.png");  
 							    label.setContents("<i>" +  a.getValor() + "</i>");
-							    label.setLeft(inst.getImage().getLeft() + inst.getImage().getWidth());
+							    label.setLeft(inst.getImage().getLeft() + inst.getImage().getWidth() - 10);
 							    label.setTop(inst.getImage().getTop() + (inst.getImage().getHeight() / 4));
 							    
 							    painel.addChild(label);
@@ -215,18 +215,19 @@ public class Pilha {
 									
 							    };
 							    
-							    t2.schedule(2000);
+							    t2.schedule(3000);
 							    
 							}
 						} 
 					}; 
 
-					timer.schedule(1000); 							
+					timer.schedule(800); 							
 				}
-			}.run();
+			}.schedule(1000);
 
 		}
 	}
+
 
 	public Canvas getPainel() {
 		return painel;
