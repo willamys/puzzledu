@@ -43,6 +43,7 @@ public class PuzzlEdu implements EntryPoint {
 		propriedadesGUI = new PropriedadesGUI(gerenciador);
 		scriptList = new PartsListGrid();
 		classesGUI = new ClassesGUI(gerenciador, propriedadesGUI, this.painel, scriptList);
+		gerenciador.getProjetoAtual().getPilha().setPainel(painel);
 	}
 	
     public void onModuleLoad() {
