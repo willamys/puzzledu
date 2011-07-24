@@ -397,7 +397,12 @@ public class Classe {
 		String cabecalho = "/*\n * PuzzlEdu 1.0\n *\n * Classe: " + this.getNome() + "\n *\n */\n\n";
 			
 		//Declaração da Classe
-		String codigoFonte = " public class " + this.getNome();
+		String codigoFonte = " public ";
+		
+		if (this.isAbstrata())
+			codigoFonte += "abstract ";
+		
+		codigoFonte += "class " + this.getNome();
 			
 		if (this.getInterfaces().size() > 0) {
 			
