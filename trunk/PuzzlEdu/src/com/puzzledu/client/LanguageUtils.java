@@ -1,6 +1,5 @@
 package com.puzzledu.client;
 
-
 import java.util.HashMap;
 
 /**
@@ -131,6 +130,34 @@ public final class LanguageUtils {
 	 */
 	public void setKeyWords(HashMap<String, String> keyWords) {
 		this.keyWords = keyWords;
+	}
+
+	public boolean isValidAttributeValue(String tipoAtributo, String valor) {
+
+		if (tipoAtributo.equals("int")) {
+			
+			try {
+				
+				Integer.parseInt(valor.trim());
+				
+			} catch (Exception e) {
+			
+				return false;				
+			}
+			
+		} else if (tipoAtributo.equals("float")) {
+			
+			try {
+				
+				Float.parseFloat(valor.trim());
+				
+			} catch (Exception e) {
+			
+				return false;				
+			}						
+		}
+		
+		return true;
 	}
 	
 }

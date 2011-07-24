@@ -689,7 +689,7 @@ public class ClassesGUI {
 				
 				final Window winModal = new Window();  
                 winModal.setWidth(360);  
-                winModal.setHeight(150);  
+                winModal.setHeight(230);  
                 winModal.setTitle("Digite os dados do Atributo");  
                 winModal.setShowMinimizeButton(false);  
                 winModal.setIsModal(true);  
@@ -716,6 +716,19 @@ public class ClassesGUI {
                 textNome.setTitle("Nome");                
                 textNome.setWrapTitle(true);
                 
+                final RadioGroupItem radioAcesso = new RadioGroupItem("Acesso");
+                radioAcesso.setValueMap("private", "public", "protected", "default");
+                radioAcesso.setDefaultValue("private");
+                radioAcesso.setVertical(false);
+                
+                final CheckboxItem checkGetter = new CheckboxItem();
+                checkGetter.setDefaultValue(true);
+                checkGetter.setTitle("Criar M&eacute;todo Getter");
+                
+                final CheckboxItem checkSetter = new CheckboxItem();
+                checkSetter.setDefaultValue(true);
+                checkSetter.setTitle("Criar M&eacute;todo Setter");
+                
                 final SelectItem comboTipo = new SelectItem();
                 comboTipo.setTitle("Tipo");
                 comboTipo.setType("comboBox");
@@ -736,33 +749,63 @@ public class ClassesGUI {
                 btnAdicionar.addClickHandler(new com.smartgwt.client.widgets.form.fields.events.ClickHandler() {
 					
 					public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
-						String varName = textNome.getValue().toString();
+						
+						String varName = "";
+						if (textNome.getValue() != null)
+							varName = textNome.getValue().toString();
+						
 						if (varName.equals("")) {
+							
 							SC.say("Aten&ccedil;&atilde;o", "Informe o nome do atributo!");
+							textNome.focusInItem();
 							return;
 						}
+												
 					    try {
+					    	
+					    	String valorAtributo = "";
+					    	if (textValorPadrao.getValue() != null )
+					    		valorAtributo = textValorPadrao.getValue().toString();
+					    	
+					    	if(!LanguageUtils.getInstance().isValidAttributeValue(comboTipo.getValue().toString(), valorAtributo)) {
+					    		
+					    		SC.say("Aten&ccedil;&atilde;o", "Valor Padr&atilde;o Inv&aacute;lido!");
+					    		comboTipo.focusInItem();
+								return;
+					    	}
+					    	
+					    	
 							if(LanguageUtils.getInstance().isValidAttribute(varName)){
 							  if (ClassesGUI.classeSelecionada.procurarVariavel(varName) == null){
 									
 									Variavel var = new Variavel();
 									var.setNome(varName);
 									var.setTipo(comboTipo.getValue().toString());
+									var.setAcesso(radioAcesso.getValue().toString());
 									
 									if (textValorPadrao.getValue() != null)
 										var.setValorPadrao(textValorPadrao.getValue().toString());
 									
-									Metodo set = new Metodo("set" + var.getNome().toUpperCase().charAt(0) + var.getNome().substring(1, var.getNome().length()));
-									set.adicionarParametro(new Parametro(var.getNome(), var.getTipo()));
-									set.setRetorno("void");
+									if (checkSetter.getValue().equals(true)) {
 									
-									Metodo get = new Metodo("get" + var.getNome().toUpperCase().charAt(0) + var.getNome().substring(1, var.getNome().length()));
-									get.setRetorno(var.getTipo());						
+										Metodo set = new Metodo("set" + var.getNome().toUpperCase().charAt(0) + var.getNome().substring(1, var.getNome().length()));
+										set.adicionarParametro(new Parametro(var.getNome(), var.getTipo()));
+										set.setRetorno("void");
+										set.setAcesso("public");
+										
+										ClassesGUI.classeSelecionada.addMetodo(set);
+									}
+									
+									if (checkGetter.getValue().equals(true)) {
+									
+										Metodo get = new Metodo("get" + var.getNome().toUpperCase().charAt(0) + var.getNome().substring(1, var.getNome().length()));
+										get.setRetorno(var.getTipo());			
+										get.setAcesso("public");
+										
+										ClassesGUI.classeSelecionada.addMetodo(get);
+									}
 									
 									ClassesGUI.classeSelecionada.addVariavel(var);
-									ClassesGUI.classeSelecionada.addMetodo(get);
-									ClassesGUI.classeSelecionada.addMetodo(set);						
-									
 									ClassesGUI.classeSelecionada.addVariavelMetodosRecursivamente(ClassesGUI.classeSelecionada, var);
 									
 									propriedadesGUI.getListaPropriedades().setData(propriedadesGUI.getPropriedades(ClassesGUI.classeSelecionada.getNome()));
@@ -770,9 +813,11 @@ public class ClassesGUI {
 									propriedadesGUI.getListaInterfaces().setData(propriedadesGUI.getInterfaces(ClassesGUI.classeSelecionada.getNome()));
 									
 									winModal.destroy();
-									winModal.redraw();						
+									winModal.redraw();
+									
 								}else{
-									SC.say("Aten&ccedil;&atilde;o", "J&aacute; existe um atributo com este nome."); 
+									SC.say("Aten&ccedil;&atilde;o", "J&aacute; existe um atributo com este nome.");
+									textNome.focusInItem();
 								}
 								
 							}
@@ -782,7 +827,7 @@ public class ClassesGUI {
 					}
 				});
                 
-                form.setFields(textNome, comboTipo, textValorPadrao, btnAdicionar);
+                form.setFields(textNome, comboTipo, radioAcesso, checkGetter, checkSetter, textValorPadrao, btnAdicionar);
                 winModal.addItem(form);  
                 winModal.show();                
 			}
@@ -1262,35 +1307,13 @@ public class ClassesGUI {
 				}												
 				
 				if (m1.getParametros().size() > 0)
-				if (m1.getPrimeiroParametro().getTipo().equals("int")) {
-					
-					try {
+				if (LanguageUtils.getInstance().isValidAttributeValue(m1.getPrimeiroParametro().getTipo(), comboParametro1.getValue().toString().trim())) {
 						
-						Integer.parseInt(comboParametro1.getValue().toString().trim());
+					SC.say("Aten&ccedil;&atilde;o", "Digite um valor do tipo <b>" + m1.getPrimeiroParametro().getTipo() + "</b> !");
 						
-					} catch (Exception e) {
-					
-						SC.say("Aten&ccedil;&atilde;o", "Digite um valor do tipo <b>" + m1.getPrimeiroParametro().getTipo() + "</b> !");
+					comboParametro1.focusInItem();
 						
-						comboParametro1.focusInItem();
-						
-						return;				
-					}
-					
-				} else if (m1.getPrimeiroParametro().getTipo().equals("float")) {
-					
-					try {
-						
-						Float.parseFloat(comboParametro1.getValue().toString().trim());
-						
-					} catch (Exception e) {
-					
-						SC.say("Aten&ccedil;&atilde;o", "Digite um valor do tipo <b>" + m1.getPrimeiroParametro().getTipo() + "</b> !");
-						
-						comboParametro1.focusInItem();
-						
-						return;				
-					}						
+					return;	
 				}
 				
 				AcaoFor acao1;
