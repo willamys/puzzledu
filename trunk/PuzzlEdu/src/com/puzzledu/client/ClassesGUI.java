@@ -995,6 +995,7 @@ public class ClassesGUI {
         comboValor.setTop(40);
         comboValor.setTitle(nomeInstancia + "." + metodo.getNome());                
         comboValor.setWrapTitle(true);
+        comboValor.setType("comboBox");
         
         if (metodo.getParametros() != null)
         if (metodo.getParametros().size() > 0) {
@@ -1029,6 +1030,7 @@ public class ClassesGUI {
         	
         	} else {	
         		
+        		comboValor.setType(null);
         		comboValor.setValueMap(gerenciador.getProjetoAtual().getPilha().listarInstanciasDisponiveis(nomeInstancia, tipo));   
         	}
         }
@@ -1120,7 +1122,6 @@ public class ClassesGUI {
         comboAcao.setWidth(150);
         comboAcao.setTop(40);
         comboAcao.setTitle("M&eacute;todo");
-        comboAcao.setType("comboBox");
         comboAcao.setRequired(true);
         
         final SelectItem comboParametro1 = new SelectItem();
@@ -1194,8 +1195,16 @@ public class ClassesGUI {
 							
 						   comboParametro1.setValueMap(map);
 							
-						} else							
+						} else	if (tipo.equals("String")) {		
+							
 							comboParametro1.setValueMap("Hello");
+							
+						} else {
+							
+							comboParametro1.setType(null);
+							comboParametro1.setValueMap(gerenciador.getProjetoAtual().getPilha().listarInstanciasDisponiveis(nomeInstancia, tipo));
+						}
+						
 						
 						comboParametro1.updateState();						
 					}
@@ -1220,7 +1229,7 @@ public class ClassesGUI {
 				
 					SC.say("Aten&ccedil;&atilde;o", "Digite um n&uacute;mero de repeti&ccedil;&otilde;es v&aacute;lido!");
 					
-					comboInicializacao.focusInItem();
+					comboParametro1.focusInItem();
 					
 					return;				
 				}		
@@ -1239,15 +1248,18 @@ public class ClassesGUI {
 					return;							
 				}
 				
-				if (m1.getParametros().size() > 0)
-				if (comboParametro1 == null | comboParametro1.getValue().equals("")) {
+				String valor = "";
+				if (comboParametro1.getValue() != null)
+					valor = comboParametro1.getValue().toString();
+			
+				if (m1.getParametros().size() > 0 && valor.trim().equals("")) {
 					
 					SC.say("Aten&ccedil;&atilde;o", "Selecione um <b>" + m1.getPrimeiroParametro().getNome() + "</b> v&aacute;lido!");
 					
-					comboAcao.focusInItem();
+					comboParametro1.focusInItem();
 					
 					return;							
-				}
+				}												
 				
 				if (m1.getParametros().size() > 0)
 				if (m1.getPrimeiroParametro().getTipo().equals("int")) {
@@ -1260,7 +1272,7 @@ public class ClassesGUI {
 					
 						SC.say("Aten&ccedil;&atilde;o", "Digite um valor do tipo <b>" + m1.getPrimeiroParametro().getTipo() + "</b> !");
 						
-						comboInicializacao.focusInItem();
+						comboParametro1.focusInItem();
 						
 						return;				
 					}
@@ -1275,23 +1287,12 @@ public class ClassesGUI {
 					
 						SC.say("Aten&ccedil;&atilde;o", "Digite um valor do tipo <b>" + m1.getPrimeiroParametro().getTipo() + "</b> !");
 						
-						comboInicializacao.focusInItem();
+						comboParametro1.focusInItem();
 						
 						return;				
 					}						
 				}
 				
-				String valor = "";
-				if (comboParametro1.getValue() != null)
-					valor = comboParametro1.getValue().toString();
-				
-				if (m1.getParametros().size() > 0 && valor.equals("")) {
-					
-					SC.say("Aten&ccedil;&atilde;o", "Selecione um valor para o m&eacute;todo!");
-					comboParametro1.focusInItem();
-					return;
-				}				
-			
 				AcaoFor acao1;
 				if (m1.getParametros().size() > 0)
 					acao1 = new AcaoFor(m1, Long.parseLong(comboInicializacao.getValue().toString().trim()), comboParametro1.getValue().toString().trim());
