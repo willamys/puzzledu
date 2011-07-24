@@ -1,6 +1,7 @@
 package com.puzzledu.client;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.TextArea;
@@ -92,6 +93,23 @@ public class Pilha {
 		
 		return null;
 	}	
+	
+	public LinkedHashMap<String, String> listarInstanciasDisponiveis(String nomeInstancia, String tipo) {
+		
+		LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
+		
+		for (Instancia i : pilha) {
+			
+			if (map.containsKey(i.getNome()))
+				continue;
+			
+			if (i.getClasse().pertenceArvore(i.getClasse(), tipo))
+				if (!i.getNome().equals(nomeInstancia))
+					map.put(i.getNome(), i.getNome());
+		}
+		
+		return map;
+	}
 	
 	public void executarAcoesDasInstancias(final TextArea console) {
 		
