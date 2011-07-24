@@ -903,6 +903,7 @@ public class ClassesGUI {
                 
                 final RadioGroupItem radioAcesso = new RadioGroupItem("Acesso");
                 radioAcesso.setValueMap("public", "protected", "default", "private");
+                radioAcesso.setDefaultValue("public");
                 radioAcesso.setVertical(false);
                 
                 final CheckboxItem checkAbstract = new CheckboxItem();
@@ -923,22 +924,25 @@ public class ClassesGUI {
                 btnCriarMetodo.addClickHandler(new com.smartgwt.client.widgets.form.fields.events.ClickHandler() {
 					
 					public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
-						String name   = textNome.getValue().toString().trim();
-						String acesso = radioAcesso.getValue().toString();
+						
+						String name = "";
+						if (textNome.getValue() != null)
+							name = textNome.getValue().toString().trim();
+						
+						String acesso = "";
+						if (radioAcesso.getValue() != null)
+							acesso = radioAcesso.getValue().toString();
 						
 						if (name.equals("")) {
 							SC.say("Aten&ccedil;&atilde;o", "Informe o nome do M&eacute;todo");
-							return;
-						}
-						if(acesso.equals("")){
-							SC.say("Aten&ccedil;&atilde;o", "Escolha o modificador de acesso.");
+							return;	
 						}
 
 						try {
-							if (LanguageUtils.getInstance()
-									.isValidMethod(name)) {
+							
+							if (LanguageUtils.getInstance().isValidMethod(name)) {
 
-								Metodo m      = ClassesGUI.classeSelecionada.procurarMetodo(name);
+								Metodo m = ClassesGUI.classeSelecionada.procurarMetodo(name);
 								Metodo method = new Metodo(name);
 								method.setRetorno(comboRetorno.getValue().toString());
 								method.setAcesso(acesso);
@@ -956,7 +960,8 @@ public class ClassesGUI {
 								  
 								  winModal.destroy();
 								  winModal.redraw();						
-							  }else{
+							  
+								}else{
 								  SC.say("Aten&ccedil;&atilde;o", "J&aacute; existe um M&eacute;todo com este nome"); 
 							  }
 							}
@@ -1361,9 +1366,13 @@ public class ClassesGUI {
         tileGrid.setTop(20);
         tileGrid.setShowAllRecords(true);
         tileGrid.setData(ImagemData.getRecords());
+        tileGrid.setTileWidth(50);
+        tileGrid.setTileHeight(50);
         
         DetailViewerField image = new DetailViewerField("picture");
         image.setType("image");
+        image.setImageHeight(40);
+        image.setImageWidth(40);
         
         tileGrid.addRecordClickHandler(new RecordClickHandler() {
 			
