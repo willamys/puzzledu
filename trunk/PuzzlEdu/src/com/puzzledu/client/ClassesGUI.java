@@ -1323,9 +1323,9 @@ public class ClassesGUI {
 				
 				AcaoFor acao1;
 				if (m1.getParametros().size() > 0)
-					acao1 = new AcaoFor(m1, Long.parseLong(comboInicializacao.getValue().toString().trim()), comboParametro1.getValue().toString().trim());
+					acao1 = new AcaoFor(m1, Integer.parseInt(comboInicializacao.getValue().toString().trim()), comboParametro1.getValue().toString().trim());
 				else
-					acao1 = new AcaoFor(m1, Long.parseLong(comboInicializacao.getValue().toString().trim()), "");
+					acao1 = new AcaoFor(m1, Integer.parseInt(comboInicializacao.getValue().toString().trim()), "");
 				
 				inst.adicionarAcao(acao1);	
 				

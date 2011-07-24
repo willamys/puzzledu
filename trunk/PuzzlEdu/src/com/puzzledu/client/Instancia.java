@@ -68,5 +68,4 @@ public class Instancia {
 	public void setContador(long contador) {
 		this.contador = contador;
 	}
-	
 }
