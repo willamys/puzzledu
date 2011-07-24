@@ -1177,7 +1177,7 @@ public class ClassesGUI {
         final SelectItem comboParametro1 = new SelectItem();
         comboParametro1.setWidth(150);
         comboParametro1.setTop(40);
-        comboParametro1.setTitle(" ");
+        comboParametro1.setTitle("");
         comboParametro1.setType("comboBox");
         comboParametro1.setDisabled(true);
         comboParametro1.setRequired(true);
@@ -1217,7 +1217,7 @@ public class ClassesGUI {
 					
 					if (m.getParametros().size() == 0) {
 						
-						comboParametro1.setValue(" ");
+						comboParametro1.setValue("");
 						comboParametro1.setTitle("");
 						comboParametro1.setDisabled(true);
 						return;
@@ -1225,7 +1225,7 @@ public class ClassesGUI {
 					
 					comboParametro1.setDisabled(false);
 					comboParametro1.setTitle(m.getPrimeiroParametro().getNome());
-					comboParametro1.setValue(" ");
+					comboParametro1.setValue("");
 					
 					if (m.getParametros().size() > 0) {
 						
@@ -1312,7 +1312,7 @@ public class ClassesGUI {
 				}												
 				
 				if (m1.getParametros().size() > 0)
-				if (LanguageUtils.getInstance().isValidAttributeValue(m1.getPrimeiroParametro().getTipo(), comboParametro1.getValue().toString().trim())) {
+				if (!LanguageUtils.getInstance().isValidAttributeValue(m1.getPrimeiroParametro().getTipo(), comboParametro1.getValue().toString().trim())) {
 						
 					SC.say("Aten&ccedil;&atilde;o", "Digite um valor do tipo <b>" + m1.getPrimeiroParametro().getTipo() + "</b> !");
 						

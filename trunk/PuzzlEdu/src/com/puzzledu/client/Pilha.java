@@ -200,7 +200,6 @@ public class Pilha {
 							    label.setValign(VerticalAlignment.CENTER);  
 							    label.setWrap(false);  
 							    label.setIcon("/icons/sticky-note--pencil.png");  
-							    //label.setShowEdges(true);  
 							    label.setContents("<i>" +  a.getValor() + "</i>");
 							    label.setLeft(inst.getImage().getLeft() + inst.getImage().getWidth());
 							    label.setTop(inst.getImage().getTop() + (inst.getImage().getHeight() / 4));
