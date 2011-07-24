@@ -34,6 +34,16 @@ public class Variavel {
 		this.tipo = tipo;
 		this.valorPadrao = valorPadrao;
 	}	
+	
+	public Variavel(String nome, String tipo, String valorPadrao, String acesso) {
+		
+		super();
+		
+		this.nome = nome;
+		this.tipo = tipo;
+		this.valorPadrao = valorPadrao;
+		this.acesso = acesso;
+	}	
 
 	public String getNome() {
 		return nome;

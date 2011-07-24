@@ -30,11 +30,12 @@ public class Gerenciador {
 		Classe hello = new Classe();
 		hello.setNome("Hello");
 		hello.setAbstrata(false);
-		hello.addVariavel(new Variavel("imagem", "Image", "/galery/alomundo.png"));
+		hello.addVariavel(new Variavel("imagem", "Image", "/galery/alomundo.png", "private"));
 		
 		Metodo showMessage = new Metodo("showMessage");
 		showMessage.setRetorno("void");
 		showMessage.adicionarParametro(new Parametro("message", "String"));
+		showMessage.setAcesso("public");
 		hello.addMetodo(showMessage);
 		
 		projetoAtual.getRepositorioDados().getColecaoClasse().addClasseFilha(hello, "Object");

@@ -14,6 +14,7 @@ public class Classe {
 	private boolean abstrata;
 	private Classe parent;
 	
+	
 	public Classe() {
 		
 		filhas = new ArrayList<Classe>();
