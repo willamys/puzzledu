@@ -506,8 +506,17 @@ public class PuzzlEdu implements EntryPoint {
 			topico6_5.setConteudo("Para e cancela a execu&ccedil;&atilde;o da pilha de comandos do programa constru&iacute;do.");
 			
 			TopicoTreeNode topico6_6 = new TopicoTreeNode("Imprimir C&oacute;digo-Fonte", topico6.getNome());
-			topico6_6.setConteudo("Pausa a execu&ccedil;&atilde;o da pilha de comandos do programa constru&iacute;do.");
+			topico6_6.setConteudo("Abre uma janela para sele&ccedil;&atilde.o da classe que se quer imprimir o c&oacute;digo-fonte.");
 			
+			TopicoTreeNode topico6_7 = new TopicoTreeNode("Documenta&ccedil;&atilde;o", topico6.getNome());
+			topico6_7.setConteudo("Abre uma janela para sele&ccedil;&atilde;o da classe que se quer imprimir o c&oacute;digo-fonte.");
+
+		//Tópico 7
+		TopicoTreeNode topico7 = new TopicoTreeNode("Item do menu suspenso das classes");
+			//Sub-Tópicos, pelo segundo parametro do construtor vai o nome do tópico pai, a qual o pertence	
+			TopicoTreeNode topico7_1 = new TopicoTreeNode("Criar classe", topico7.getNome());
+			topico7_1.setConteudo("Cria novas classes ('irm&atilde;s' ou 'filhas') na &aacute;rvore de classes. Classes irm&atilde;s s&atilde;o classes que est&atilde;o no mesmo n&iacute;vel de hierarquia. Classes filhas s&atilde;o as subclasses de uma classe.");
+
 		//Adicionar todos os sub tópicos nesta lista
 		subTopicos.add(topico1_1);
 		subTopicos.add(topico1_2);
@@ -524,9 +533,16 @@ public class PuzzlEdu implements EntryPoint {
 		subTopicos.add(topico4_2);
 		subTopicos.add(topico5_1);
 		subTopicos.add(topico5_2);		
+		subTopicos.add(topico6_1);
+		subTopicos.add(topico6_2);
+		subTopicos.add(topico6_3);
+		subTopicos.add(topico6_4);
+		subTopicos.add(topico6_5);
+		subTopicos.add(topico6_6);
+		subTopicos.add(topico7_1);
 		
 		//adicionar aqui todos os tópicos raizes
-		return new TreeNode[]{topico1, topico2, topico3, topico4, topico5};
+		return new TreeNode[]{topico1, topico2, topico3, topico4, topico5, topico6, topico7};
 	}
 }
 
