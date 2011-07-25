@@ -1,5 +1,8 @@
 package com.puzzledu.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.TextArea;
 import com.smartgwt.client.types.Alignment;
@@ -7,6 +10,8 @@ import com.smartgwt.client.types.Cursor;
 import com.smartgwt.client.types.DragAppearance;
 import com.smartgwt.client.types.Overflow;
 import com.smartgwt.client.types.Side;
+import com.smartgwt.client.types.TreeModelType;
+import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.HTMLPane;
 import com.smartgwt.client.widgets.Img;
@@ -22,6 +27,10 @@ import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
 import com.smartgwt.client.widgets.tab.TabSet;
 import com.smartgwt.client.widgets.toolbar.ToolStrip;
+import com.smartgwt.client.widgets.tree.Tree;
+import com.smartgwt.client.widgets.tree.TreeGrid;
+import com.smartgwt.client.widgets.tree.TreeGridField;
+import com.smartgwt.client.widgets.tree.TreeNode;
 import com.smartgwt.client.types.ListGridFieldType;
 import com.smartgwt.client.widgets.ImgProperties;
 import com.smartgwt.client.widgets.grid.ListGrid;
@@ -35,6 +44,7 @@ public class PuzzlEdu implements EntryPoint {
 	private Canvas painel; 
 	private PartsListGrid scriptList;
 	private TextArea console;
+	private Window janelaPrincipal;
 	
 	public PuzzlEdu() {
 					
@@ -48,8 +58,8 @@ public class PuzzlEdu implements EntryPoint {
 	
     public void onModuleLoad() {
     	        
-        Window janela = getJanelaPrincipal();
-        janela.setMargin(10);
+        janelaPrincipal = getJanelaPrincipal();
+        janelaPrincipal.setMargin(10);
         
         HLayout mainLayout = new HLayout();  
         mainLayout.setWidth100();  
@@ -60,12 +70,12 @@ public class PuzzlEdu implements EntryPoint {
                         
         mainLayout.addMember(getPainelEsquerdo());
         mainLayout.addMember(getArea());
-        mainLayout.addMember(getSourceCode());
+        mainLayout.addMember(getScript());
         
-        janela.addChild(getMenu());
-        janela.addChild(mainLayout);
+        janelaPrincipal.addChild(getMenu());
+        janelaPrincipal.addChild(mainLayout);
         
-        janela.draw();
+        janelaPrincipal.draw();
    }
        
    public Window getJanelaPrincipal() {  
@@ -210,7 +220,7 @@ public class PuzzlEdu implements EntryPoint {
          imgPrinter.addClickHandler(new ClickHandler() {
 			
 			public void onClick(ClickEvent event) {
-				mostrarFonte("Códifo-Fonte", 500, 400);
+				getFonte("Códifo-Fonte", 500, 400);
 				
 			}
          });
@@ -220,17 +230,25 @@ public class PuzzlEdu implements EntryPoint {
          imgHelp.setHeight("32px");
          imgHelp.setTooltip("Documenta&ccedil;&atilde;o");
          imgHelp.setCursor(Cursor.HAND);
+         
+         imgHelp.addClickHandler(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+				
+				getHelp();
+			}
+		});
 
 
-         toolStrip.addMember(imgNovo,  0);
-         toolStrip.addMember(imgSave,  1);
-         toolStrip.addMember(imgPlay,  2);
-         toolStrip.addMember(imgPause, 3);
-         toolStrip.addMember(imgStop,  4);
-         toolStrip.addMember(imgPrinter, 5);
-         toolStrip.addMember(imgHelp, 6);
+        toolStrip.addMember(imgNovo,  0);
+        toolStrip.addMember(imgSave,  1);
+        toolStrip.addMember(imgPlay,  2);
+        toolStrip.addMember(imgPause, 3);
+        toolStrip.addMember(imgStop,  4);
+        toolStrip.addMember(imgPrinter, 5);
+        toolStrip.addMember(imgHelp, 6);
                  
-         return toolStrip;    	
+        return toolStrip;    	
     }   
 
     public VLayout getPainelEsquerdo() {
@@ -253,7 +271,7 @@ public class PuzzlEdu implements EntryPoint {
     	return leftPanel;
     }
     
-    public Canvas getSourceCode() {
+    public Canvas getScript() {
     	
     	final Window win = new Window();
         win.setTitle("Source");
@@ -283,7 +301,7 @@ public class PuzzlEdu implements EntryPoint {
         return tabs;
     }  
     
-    public void mostrarFonte(String sourceURL, int width, int height) {
+    public void getFonte(String sourceURL, int width, int height) {
     
     	final Window win = new Window();
         win.setTitle("C&oacute;digo-Fonte");
@@ -344,6 +362,149 @@ public class PuzzlEdu implements EntryPoint {
         
         return tab;
     }    
+    
+    public void getHelp() {
+        
+    	final Window win = new Window();
+        win.setTitle("Ajuda");
+        win.setHeaderIcon("[SKIN]/actions/help.png", 16, 16);
+        win.setShowMinimizeButton(false);  
+        //win.setIsModal(true);
+        win.setWidth(250);
+        win.setHeight(585);
+        win.setTop(40);
+        
+        int windowLeft = com.google.gwt.user.client.Window.getClientWidth() - (win.getWidth() + 40);
+        win.setLeft(windowLeft);
+        
+        win.setAlign(Alignment.RIGHT);
+        win.setAlign(VerticalAlignment.BOTTOM);
+        win.setKeepInParentRect(true);
+
+        win.setCanDragReposition(true);
+        win.setCanDragResize(true);
+        win.setMembersMargin(5);
+                
+        win.addChild(construirArvoreHelp());
+        janelaPrincipal.addChild(win);
+        win.show();   
+    }
+    
+    private TreeGrid construirArvoreHelp() {
+    	
+    	List<TopicoTreeNode> listaSubTopicos = new ArrayList<TopicoTreeNode>();
+    	
+    	Tree tree = new Tree();  
+        tree.setModelType(TreeModelType.CHILDREN);  
+        tree.setShowRoot(false);
+        tree.setNameProperty("Name");  
+        tree.setIdField("Id");
+        tree.setParentIdField("ParentId"); 
+        tree.setData(getTopicos(listaSubTopicos));
+                  
+        TreeGrid treeGrid = new TreeGrid();  
+        treeGrid.setFields(new TreeGridField("Name", "T&oacute;picos"));  
+        treeGrid.setData(tree);            
+        treeGrid.getData().openAll();
+        treeGrid.setWidth100();
+        treeGrid.setHeight100();
+        treeGrid.setShowResizeBar(true);
+        treeGrid.setAppImgDir("/icons/");
+        treeGrid.setTop(20);
+        
+        for (TopicoTreeNode t : listaSubTopicos) {
+        	
+        	tree.add(t, t.getParentId());
+        }
+        
+        return treeGrid;
+    }
+
+	private TreeNode[] getTopicos(List<TopicoTreeNode> subTopicos) {
+		
+		//Tópico 1
+		TopicoTreeNode topico1 = new TopicoTreeNode("Conceitos");
+		
+			//Sub-Tópicos, pelo segundo parametro do construtor vai o nome do tópico pai, a qual o pertence
+			TopicoTreeNode topico1_1 = new TopicoTreeNode("Conceitos 1.1", topico1.getNome());
+			topico1_1.setConteudo("Conteudo sub-tópico 1.1");
+			
+			TopicoTreeNode topico1_2 = new TopicoTreeNode("Conceitos 1.2", topico1.getNome());
+			topico1_2.setConteudo("Conteudo sub-tópico 1.2");
+		
+			
+		//Tópico 2
+		TopicoTreeNode topico2 = new TopicoTreeNode("Instancias");
+
+		
+		//Adicionar todos os sub tópicos nesta lista
+		subTopicos.add(topico1_1);
+		subTopicos.add(topico1_2);
+		
+		//adicionar aqui todos os tópicos raizes
+		return new TreeNode[]{topico1, topico2};
+	}
+}
+
+class TopicoTreeNode extends TreeNode {
+	
+	public TopicoTreeNode(String nome) {
+		
+		super(nome);
+		
+		setName(nome);
+		setTopicoId(nome);
+		setIcon("/icons/book.png");
+	}
+	
+	public TopicoTreeNode(String nome, String topicoPai) {
+		
+		super(nome);
+		
+		setIcon("/icons/page.png");
+		
+		setParentId(topicoPai);
+		setName(nome);
+	}
+	
+	 public void setIcon(String icon) {
+		 
+		 setAttribute("icon", icon);
+	 }
+	 
+	 public void setTopicoId(String value) {  
+	        setAttribute("Id", value);  
+	    }
+	 
+	 public void setParentId(String value) {  
+	 
+		 setAttribute("ParentId", value);  
+	 }
+	 
+	 public String getParentId() {  
+		 
+		 return getAttribute("ParentId");  
+	 }
+	 
+	 public void setName(String name) {  
+		 
+		 setAttribute("Name", name);  
+	 } 
+	 
+	 public String getNome() {
+		 
+		 return getAttribute("Name");
+	 }
+
+	public String getConteudo() {
+		
+		return getAttribute("Conteudo");
+	}
+
+	public void setConteudo(String conteudo) {
+		
+		setAttribute("Conteudo", conteudo);
+	}
 }
 
 class DroppedPiece extends Img {
