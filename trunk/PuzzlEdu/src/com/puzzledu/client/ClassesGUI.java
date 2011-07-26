@@ -547,7 +547,7 @@ public class ClassesGUI {
 				Variavel varImg = classeSelecionada.procurarVariavel(classeSelecionada, "imagem");
 				
 				if(varImg == null){
-				  varImg = new Variavel("imagem", "Image", "/galery/alomundo.png");
+				  varImg = new Variavel("imagem", "Image", "/galery/object.png");
 			      classeSelecionada.addVariavel(varImg);
 				}
 				
