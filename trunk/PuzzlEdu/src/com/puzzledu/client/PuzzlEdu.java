@@ -371,11 +371,11 @@ public class PuzzlEdu implements EntryPoint {
         win.setTitle("Ajuda");
         win.setHeaderIcon("[SKIN]/actions/help.png", 16, 16);
         win.setShowMinimizeButton(false);  
-        win.setWidth(250);
+        win.setWidth(600);
         win.setHeight(485);
-        win.setTop(40);
+        win.setTop(76);
         
-        int windowLeft = com.google.gwt.user.client.Window.getClientWidth() - (win.getWidth() + 140);
+        int windowLeft = com.google.gwt.user.client.Window.getClientWidth() - (win.getWidth() + 45);
         win.setLeft(windowLeft);
         
         win.setAlign(Alignment.RIGHT);
@@ -386,19 +386,26 @@ public class PuzzlEdu implements EntryPoint {
         win.setCanDragResize(true);
         win.setMembersMargin(5);
         
-        win.addChild(construirArvoreHelp());
+        HLayout layout = new HLayout();
+        layout.setWidth100();
+        layout.setHeight100();
+        layout.setTop(20);
+        
+        win.addChild(layout);
         
         HTMLPane htmlPane = new HTMLPane();  
 	    htmlPane.setWidth("60%");
 	    htmlPane.setHeight100();  
 	    htmlPane.setShowEdges(false);
-	    
-	    win.addChild(htmlPane);
+	    	    
+        layout.addMember(construirArvoreHelp(htmlPane));
+        
+	    layout.addMember(htmlPane);
         
         janelaPrincipal.addChild(win);
     }
     
-    private TreeGrid construirArvoreHelp() {
+    private TreeGrid construirArvoreHelp(final HTMLPane htmlPane) {
     	
     	List<TopicoTreeNode> listaSubTopicos = new ArrayList<TopicoTreeNode>();
     	
@@ -424,7 +431,12 @@ public class PuzzlEdu implements EntryPoint {
 			
 			public void onCellClick(CellClickEvent event) {
 				
-				//getJanelaConteudo();				
+				TopicoTreeNode item = ((TopicoTreeNode) event.getRecord());
+        
+        		if (item == null)
+        			return;
+        		
+        		mostrarConteudo(htmlPane, item);				
 			}
 		});
         
@@ -436,133 +448,115 @@ public class PuzzlEdu implements EntryPoint {
         return treeGrid;
     }
     
-    private void getJanelaConteudo() {
+    private void mostrarConteudo(HTMLPane htmlPane, TopicoTreeNode item) {
     	
-    	final Window win = new Window();
-        win.setTitle("Ajuda");
-        win.setHeaderIcon("[SKIN]/actions/help.png", 16, 16);
-        win.setShowMinimizeButton(false);  
-        win.setWidth(250);
-        win.setHeight(485);
-        win.setTop(40);
-        
-        int windowLeft = com.google.gwt.user.client.Window.getClientWidth() - (win.getWidth() + 140);
-        win.setLeft(windowLeft);
-        
-        win.setAlign(Alignment.RIGHT);
-        win.setAlign(VerticalAlignment.BOTTOM);
-        win.setKeepInParentRect(true);
-        
-        win.setCanDragReposition(true);
-        win.setCanDragResize(true);
-        win.setMembersMargin(5);
-        
-		HTMLPane htmlPane = new HTMLPane();  
-	    htmlPane.setWidth100();
-	    htmlPane.setHeight("40%");  
-	    htmlPane.setShowEdges(false);  
-	    
-        //win.addChild(htmlPane);
-        
-        janelaPrincipal.addChild(win);        		
+    	String nome = item.getNome();
+    	if (nome == null)
+    		nome = "";
+    	
+    	String conteudo = item.getConteudo();
+    	if (conteudo == null)
+    		conteudo = "";
+    	
+    	htmlPane.setContents("<br /><h1>" + nome  + "</h1><h3>" + conteudo + "<h3>");
     }
 
 	private TreeNode[] getTopicos(List<TopicoTreeNode> subTopicos) {
 		
 		//Tópico 1
-		TopicoTreeNode topico1 = new TopicoTreeNode("1", "Janela de Classes");
+		TopicoTreeNode topico1 = new TopicoTreeNode("Janela de Classes");
 		
 			//Sub-Tópicos, pelo segundo parametro do construtor vai o nome do tópico pai, a qual o pertence
-			TopicoTreeNode topico1_1 = new TopicoTreeNode("1.1", "Pra que serve?", topico1.getTopicoId());
+			TopicoTreeNode topico1_1 = new TopicoTreeNode("Pra que serve?", topico1.getNome());
 			topico1_1.setConteudo("Janela com op&ccedil;ões espec&iacute;ficas para cria&ccedil;&atilde;o, altera&ccedil;&atilde;o e exclus&atilde;o de classes. Al&eacute;m disso, pode-se criar m&eacute;todos e atributos, implementar interface, alterar imagem e criar instância.");
 			
-			TopicoTreeNode topico1_2 = new TopicoTreeNode("1.2", "Como acessar?", topico1.getTopicoId());
+			TopicoTreeNode topico1_2 = new TopicoTreeNode("Como acessar?", topico1.getNome());
 			topico1_2.setConteudo("Clicando com o bot&atilde;o direito do mouse sobre uma classe, no menu suspenso que surgir&aacute;.");
 
-			TopicoTreeNode topico1_3 = new TopicoTreeNode("1.3", "Classe Object?", topico1.getTopicoId());
+			TopicoTreeNode topico1_3 = new TopicoTreeNode("Classe Object?", topico1.getNome());
 			topico1_2.setConteudo("A classe Object &eacute;, em muitas linguagens, a classe no topo da hierarquia de classes . Todas as classes herdam direta ou indiretamente dela. Para saber mais sobre Heran&ccedil;a, entre no tópico relacionado.");
 			
-			TopicoTreeNode topico1_4 = new TopicoTreeNode("1.4", "Classe Hello?", topico1.getTopicoId());
+			TopicoTreeNode topico1_4 = new TopicoTreeNode("Classe Hello?", topico1.getNome());
 			topico1_2.setConteudo("Na execu&ccedil;&atilde;o inicial do PuzzlEdu (ou quando a p&aacute;gina &eacute; atualizada), verifica-se a existência de uma classe nomeada como Hello. Ela &eacute; uma classe exemplo para verificar algumas das funcionalidades poss&iacute;veis.");
 		
 		//Tópico 2
-		TopicoTreeNode topico2 = new TopicoTreeNode("2", "Guia de M&eacute;todos/Interfaces");
+		TopicoTreeNode topico2 = new TopicoTreeNode("Guia de M&eacute;todos/Interfaces");
 		
 			//Sub-Tópicos, pelo segundo parametro do construtor vai o nome do tópico pai, a qual o pertence
-			TopicoTreeNode topico2_1 = new TopicoTreeNode("2.1","Pra que serve?", topico2.getTopicoId());
+			TopicoTreeNode topico2_1 = new TopicoTreeNode("Pra que serve?", topico2.getNome());
 			topico2_1.setConteudo("Guia onde ficam os atributos e m&eacute;todos da classe selecionada na janela Classes. Nesta &aacute;rea &eacute; poss&iacute;vel remover atributos e m&eacute;todos e inserir parâmetros aos m&eacute;todos.");
 			
-			TopicoTreeNode topico2_2 = new TopicoTreeNode("2.2","Como acessar?", topico2.getTopicoId());
+			TopicoTreeNode topico2_2 = new TopicoTreeNode("Como acessar?", topico2.getNome());
 			topico2_2.setConteudo("Clicando-se com bot&atilde;o direito do mouse em um atributo ou em um m&eacute;todo, acessando o menu suspenso com op&ccedil;ões espec&iacute;ficas.");
 
-			TopicoTreeNode topico2_3 = new TopicoTreeNode("2.3","E a aba Interface?", topico2.getTopicoId());
+			TopicoTreeNode topico2_3 = new TopicoTreeNode("E a aba Interface?", topico2.getNome());
 			topico2_3.setConteudo("Nesta aba encontram-se as interfaces que a classe selecionada est&aacute; implementando. Para saber mais sobre Interface, entre no tópico relacionado.");
 
-			TopicoTreeNode topico2_4 = new TopicoTreeNode("2.4","O que pode ser feito na aba Interface?", topico2.getTopicoId());
+			TopicoTreeNode topico2_4 = new TopicoTreeNode("O que pode ser feito na aba Interface?", topico2.getNome());
 			topico2_4.setConteudo("Nesta &aacute;rea h&aacute; possibilidade apenas de remover a interface associada à classe selecionada.");
 			
 		//Tópico 3
-		TopicoTreeNode topico3 = new TopicoTreeNode("3", "&Aacute;rea de Execu&ccedil;&atilde;o/Manipula&ccedil;&atilde;o");
+		TopicoTreeNode topico3 = new TopicoTreeNode("&Aacute;rea de Execu&ccedil;&atilde;o/Manipula&ccedil;&atilde;o");
 
 			//Sub-Tópicos, pelo segundo parametro do construtor vai o nome do tópico pai, a qual o pertence	
-			TopicoTreeNode topico3_1 = new TopicoTreeNode("3.1","Pra que serve?", topico3.getTopicoId());
+			TopicoTreeNode topico3_1 = new TopicoTreeNode("Pra que serve?", topico3.getNome());
 			topico3_1.setConteudo("Local onde as classes s&atilde;o manipuladas, ou seja, &eacute; o corpo do programa ou projeto a ser desenvolvido. Dependendo da manipula&ccedil;&atilde;o realizada, essa &eacute; também a &aacute;rea de execu&ccedil;&atilde;o, como por exemplo, fazer um objeto mover-se de um lado a outro;");
 				
-			TopicoTreeNode topico3_2 = new TopicoTreeNode("3.2","Como acessar?", topico3.getTopicoId());
+			TopicoTreeNode topico3_2 = new TopicoTreeNode("Como acessar?", topico3.getNome());
 			topico3_2.setConteudo("Criando uma instância, ou objeto, da classe. Depois, clicando com o bot&atilde;o direito do mouse sobre a instância para acessar as op&ccedil;ões. Para saber mais sobre Instância, entre no tópico relacionado.");
 
-			TopicoTreeNode topico3_3 = new TopicoTreeNode("3.3","Quais op&ccedil;ões est&atilde;o dispon&iacute;veis?", topico3.getTopicoId());
+			TopicoTreeNode topico3_3 = new TopicoTreeNode("Quais op&ccedil;ões est&atilde;o dispon&iacute;veis?", topico3.getNome());
 			topico3_3.setConteudo("Est&atilde;o dispon&iacute;veis as estruturas de sele&ccedil;&atilde;o e repeti&ccedil;&atilde;o para manipula&ccedil;&atilde;o, todos os m&eacute;todos da classe e a op&ccedil;&atilde;o de remo&ccedil;&atilde;o da instância.");							
 
 		//Tópico 4
-		TopicoTreeNode topico4 = new TopicoTreeNode("4","Console");
+		TopicoTreeNode topico4 = new TopicoTreeNode("Console");
 
 			//Sub-Tópicos, pelo segundo parametro do construtor vai o nome do tópico pai, a qual o pertence	
-			TopicoTreeNode topico4_1 = new TopicoTreeNode("4.1","Pra que serve?", topico4.getTopicoId());
+			TopicoTreeNode topico4_1 = new TopicoTreeNode("Pra que serve?", topico4.getNome());
 			topico4_1.setConteudo("Local onde os resultados s&atilde;o exibidos durante a execu&ccedil;&atilde;o dos programas constru&iacute;dos na &aacute;rea de execu&ccedil;&atilde;o.");
 					
-			TopicoTreeNode topico4_2 = new TopicoTreeNode("4.2","Como acessar?", topico4.getTopicoId());
+			TopicoTreeNode topico4_2 = new TopicoTreeNode("Como acessar?", topico4.getNome());
 			topico4_2.setConteudo("Esta &aacute;rea n&atilde;o possui intera&ccedil;&atilde;o.");
 
 		//Tópico 5
-		TopicoTreeNode topico5 = new TopicoTreeNode("5","&Aacute;rea de Script");
+		TopicoTreeNode topico5 = new TopicoTreeNode("&Aacute;rea de Script");
 
 			//Sub-Tópicos, pelo segundo parametro do construtor vai o nome do tópico pai, a qual o pertence	
-			TopicoTreeNode topico5_1 = new TopicoTreeNode("5.1","Pra que serve?", topico5.getTopicoId());
+			TopicoTreeNode topico5_1 = new TopicoTreeNode("Pra que serve?", topico5.getNome());
 			topico5_1.setConteudo("Local onde ser&aacute; exibida a pilha de comandos de manipula&ccedil;&atilde;o realizada pelo usu&aacute;rio.");
 					
-			TopicoTreeNode topico5_2 = new TopicoTreeNode("5.2","Como acessar?", topico5.getTopicoId());
+			TopicoTreeNode topico5_2 = new TopicoTreeNode("Como acessar?", topico5.getNome());
 			topico5_2.setConteudo("A &uacute;nica intera&ccedil;&atilde;o nesta &aacute;rea &eacute; a possibilidade de alterar a ordem dos componentes da pilha.");
 
 		//Tópico 6
-		TopicoTreeNode topico6 = new TopicoTreeNode("6","Bot&otilde;es de Comandos");
+		TopicoTreeNode topico6 = new TopicoTreeNode("Bot&otilde;es de Comandos");
 
 			//Sub-Tópicos, pelo segundo parametro do construtor vai o nome do tópico pai, a qual o pertence	
-			TopicoTreeNode topico6_1 = new TopicoTreeNode("6.1","Novo", topico6.getTopicoId());
+			TopicoTreeNode topico6_1 = new TopicoTreeNode("Novo", topico6.getNome());
 			topico6_1.setConteudo("Cria novos projetos sem o programa exemplo.");
 					
-			TopicoTreeNode topico6_2 = new TopicoTreeNode("6.2","Salvar", topico6.getTopicoId());
+			TopicoTreeNode topico6_2 = new TopicoTreeNode("Salvar", topico6.getNome());
 			topico6_2.setConteudo("Salva o estado atual do projeto para acesso posterior. &Eacute; necess&aacute;rio ter conta na Google.");
 
-			TopicoTreeNode topico6_3 = new TopicoTreeNode("6.3","Executar", topico6.getTopicoId());
+			TopicoTreeNode topico6_3 = new TopicoTreeNode("Executar", topico6.getNome());
 			topico6_3.setConteudo("Executa a pilha de comandos do programa constru&iacute;do.");
 			
-			TopicoTreeNode topico6_4 = new TopicoTreeNode("6.4","Pausar", topico6.getTopicoId());
+			TopicoTreeNode topico6_4 = new TopicoTreeNode("Pausar", topico6.getNome());
 			topico6_4.setConteudo("Pausa a execu&ccedil;&atilde;o da pilha de comandos do programa constru&iacute;do.");
 			
-			TopicoTreeNode topico6_5 = new TopicoTreeNode("6.5","Parar", topico6.getTopicoId());
+			TopicoTreeNode topico6_5 = new TopicoTreeNode("Parar", topico6.getNome());
 			topico6_5.setConteudo("Para e cancela a execu&ccedil;&atilde;o da pilha de comandos do programa constru&iacute;do.");
 			
-			TopicoTreeNode topico6_6 = new TopicoTreeNode("6.6","Imprimir C&oacute;digo-Fonte", topico6.getTopicoId());
+			TopicoTreeNode topico6_6 = new TopicoTreeNode("Imprimir C&oacute;digo-Fonte", topico6.getNome());
 			topico6_6.setConteudo("Abre uma janela para sele&ccedil;&atilde.o da classe que se quer imprimir o c&oacute;digo-fonte.");
 			
-			TopicoTreeNode topico6_7 = new TopicoTreeNode("6.7","Documenta&ccedil;&atilde;o", topico6.getTopicoId());
+			TopicoTreeNode topico6_7 = new TopicoTreeNode("Documenta&ccedil;&atilde;o", topico6.getNome());
 			topico6_7.setConteudo("Abre uma janela para sele&ccedil;&atilde;o da classe que se quer imprimir o c&oacute;digo-fonte.");
 
 		//Tópico 7
-		TopicoTreeNode topico7 = new TopicoTreeNode("8","Item do menu suspenso das classes");
+		TopicoTreeNode topico7 = new TopicoTreeNode("Item do menu suspenso das classes");
 			//Sub-Tópicos, pelo segundo parametro do construtor vai o nome do tópico pai, a qual o pertence	
-			TopicoTreeNode topico7_1 = new TopicoTreeNode("7.1", "Criar classe", topico7.getTopicoId());
+			TopicoTreeNode topico7_1 = new TopicoTreeNode("Criar classe", topico7.getNome());
 			topico7_1.setConteudo("Cria novas classes ('irm&atilde;s' ou 'filhas') na &aacute;rvore de classes. Classes irm&atilde;s s&atilde;o classes que est&atilde;o no mesmo n&iacute;vel de hierarquia. Classes filhas s&atilde;o as subclasses de uma classe.");
 
 		//Adicionar todos os sub tópicos nesta lista
@@ -596,16 +590,15 @@ public class PuzzlEdu implements EntryPoint {
 
 class TopicoTreeNode extends TreeNode {
 	
-	public TopicoTreeNode(String id, String nome) {
+	public TopicoTreeNode(String nome) {
 		
 		super(nome);
 		
 		setName(nome);
-		setTopicoId(id);
 		setIcon("/icons/book.png");
 	}
 	
-	public TopicoTreeNode(String id, String nome, String topicoPai) {
+	public TopicoTreeNode(String nome, String topicoPai) {
 		
 		super(nome);
 		
@@ -613,7 +606,6 @@ class TopicoTreeNode extends TreeNode {
 		
 		setParentId(topicoPai);
 		setName(nome);
-		setTopicoId(id);
 	}
 	
 	 public void setIcon(String icon) {
@@ -624,10 +616,6 @@ class TopicoTreeNode extends TreeNode {
 	 public void setTopicoId(String value) {  
 	        setAttribute("Id", value);  
 	 }
-	 
-	 public String getTopicoId() {  
-	        return getAttribute("Id");  
-	 }	 
 	 
 	 public void setParentId(String value) {  
 	 
