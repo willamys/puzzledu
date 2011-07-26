@@ -404,7 +404,12 @@ public class Classe {
 			codigoFonte += "abstract ";
 		
 		codigoFonte += "class " + this.getNome();
-			
+
+		if (this.getParent() != null){
+			if (!this.getParent().getNome().equals("Object"))
+				codigoFonte += " extends " + getParent().getNome();
+		}
+		
 		if (this.getInterfaces().size() > 0) {
 			
 			codigoFonte += " implements ";
@@ -418,6 +423,7 @@ public class Classe {
 			}
 					
 		}
+		
 			
 		//Fim, declaração da classe
 		codigoFonte += " {\n";
