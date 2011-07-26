@@ -732,7 +732,7 @@ public class ClassesGUI {
                 final SelectItem comboTipo = new SelectItem();
                 comboTipo.setTitle("Tipo");
                 comboTipo.setType("comboBox");
-                comboTipo.setValueMap("String", "int", "float");
+                comboTipo.setValueMap("String", "int", "float", "boolean");
                 comboTipo.setDefaultToFirstOption(true);
                 
                 final TextItem textValorPadrao = new TextItem();
@@ -764,16 +764,16 @@ public class ClassesGUI {
 					    try {
 					    	
 					    	String valorAtributo = "";
-					    	if (textValorPadrao.getValue() != null )
+					    	if (textValorPadrao.getValue() != null ) {
 					    		valorAtributo = textValorPadrao.getValue().toString();
-					    	
-					    	if(!LanguageUtils.getInstance().isValidAttributeValue(comboTipo.getValue().toString(), valorAtributo)) {
-					    		
-					    		SC.say("Aten&ccedil;&atilde;o", "Valor Padr&atilde;o Inv&aacute;lido!");
-					    		comboTipo.focusInItem();
-								return;
+
+					    		if(!LanguageUtils.getInstance().isValidAttributeValue(comboTipo.getValue().toString(), valorAtributo)) {
+
+					    			SC.say("Aten&ccedil;&atilde;o", "Valor Padr&atilde;o Inv&aacute;lido!");
+					    			comboTipo.focusInItem();
+					    			return;
+					    		}
 					    	}
-					    	
 					    	
 							if(LanguageUtils.getInstance().isValidAttribute(varName)){
 							  if (ClassesGUI.classeSelecionada.procurarVariavel(varName) == null){
@@ -898,9 +898,6 @@ public class ClassesGUI {
                 ButtonItem btnCriarMetodo = new ButtonItem(); 
                 btnCriarMetodo.setTitle("Criar M&eacute;todo");
                 
-                ButtonItem btnAdicionar = new ButtonItem(); 
-                btnAdicionar.setTitle("Adicionar Parametro");
-                
                 final RadioGroupItem radioAcesso = new RadioGroupItem("Acesso");
                 radioAcesso.setValueMap("public", "protected", "default", "private");
                 radioAcesso.setDefaultValue("public");
@@ -918,7 +915,7 @@ public class ClassesGUI {
                 final SelectItem comboRetorno = new SelectItem();
                 comboRetorno.setTitle("Retorno");
                 comboRetorno.setType("comboBox");
-                comboRetorno.setValueMap("void", "String", "int", "float");
+                comboRetorno.setValueMap("void", "String", "int", "float", "boolean");
                 comboRetorno.setDefaultToFirstOption(true);
                 
                 btnCriarMetodo.addClickHandler(new com.smartgwt.client.widgets.form.fields.events.ClickHandler() {
