@@ -395,7 +395,7 @@ public class Classe {
 	public String construirCodigoFonte() {
 		
 		//Script Highlight
-		String cabecalho = "/*\n * PuzzlEdu 1.0\n *\n * Classe: " + this.getNome() + "\n *\n */\n\n";
+		String cabecalho = "/*\n * PuzzlEdu \n *\n * Classe: " + this.getNome() + "\n *\n */\n\n";
 			
 		//Declaração da Classe
 		String codigoFonte = " public ";
