@@ -85,7 +85,7 @@ public class PuzzlEdu implements EntryPoint {
         Window window = new Window();  
         window.setAutoSize(false);  
         
-        window.setTitle("PuzzlEdu 1.0: " + gerenciador.getProjetoAtual().getNome());  
+        window.setTitle("PuzzlEdu: " + gerenciador.getProjetoAtual().getNome());  
         window.setWidth100();  
         window.setHeight100(); 
         
@@ -554,7 +554,7 @@ public class PuzzlEdu implements EntryPoint {
 			topico6_7.setConteudo("Abre uma janela para sele&ccedil;&atilde;o da classe que se quer imprimir o c&oacute;digo-fonte.");
 
 		//Tópico 7
-		TopicoTreeNode topico7 = new TopicoTreeNode("Item do menu suspenso das classes");
+		TopicoTreeNode topico7 = new TopicoTreeNode("Itens do menu suspenso das classes");
 			//Sub-Tópicos, pelo segundo parametro do construtor vai o nome do tópico pai, a qual o pertence	
 			TopicoTreeNode topico7_1 = new TopicoTreeNode("Criar classe", topico7.getNome());
 			topico7_1.setConteudo("Cria novas classes ('irm&atilde;s' ou 'filhas') na &aacute;rvore de classes. Classes irm&atilde;s s&atilde;o classes que est&atilde;o no mesmo n&iacute;vel de hierarquia. Classes filhas s&atilde;o as subclasses de uma classe.");
