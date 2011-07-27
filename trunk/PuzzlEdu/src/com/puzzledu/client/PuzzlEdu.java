@@ -480,7 +480,7 @@ public class PuzzlEdu implements EntryPoint {
 			topico1_2.setConteudo("Na execu&ccedil;&atilde;o inicial do PuzzlEdu (ou quando a p&aacute;gina &eacute; atualizada), verifica-se a existência de uma classe nomeada como Hello. Ela &eacute; uma classe exemplo para verificar algumas das funcionalidades poss&iacute;veis.");
 		
 		//Tópico 2
-		TopicoTreeNode topico2 = new TopicoTreeNode("Guia de M&eacute;todos/Interfaces");
+		TopicoTreeNode topico2 = new TopicoTreeNode("Guia de M&eacute;todos e Interfaces");
 		
 			//Sub-Tópicos, pelo segundo parametro do construtor vai o nome do tópico pai, a qual o pertence
 			TopicoTreeNode topico2_1 = new TopicoTreeNode("Pra que serve?", topico2.getNome());
@@ -496,7 +496,7 @@ public class PuzzlEdu implements EntryPoint {
 			topico2_4.setConteudo("Nesta &aacute;rea h&aacute; possibilidade apenas de remover a interface associada à classe selecionada.");
 			
 		//Tópico 3
-		TopicoTreeNode topico3 = new TopicoTreeNode("&Aacute;rea de Execu&ccedil;&atilde;o/Manipula&ccedil;&atilde;o");
+		TopicoTreeNode topico3 = new TopicoTreeNode("&Aacute;rea de Execu&ccedil;&atilde;o e Manipula&ccedil;&atilde;o");
 
 			//Sub-Tópicos, pelo segundo parametro do construtor vai o nome do tópico pai, a qual o pertence	
 			TopicoTreeNode topico3_1 = new TopicoTreeNode("Pra que serve?", topico3.getNome());
