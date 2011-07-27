@@ -191,7 +191,7 @@ public void executarAcoesDasInstancias(final TextArea console) {
 								
 								removerInstanciaPilha(inst.getNome());
 							
-							} else if (a.getMetodo().getNome().equals("showMessage")) {
+							} else if (a.getMetodo().getNome().equals("mostrarMensagem")) {
 								
 								final Label label = new Label();  
 							    label.setHeight(30);  
@@ -201,7 +201,7 @@ public void executarAcoesDasInstancias(final TextArea console) {
 							    label.setWrap(false);  
 							    label.setIcon("/icons/comment-square.png");  
 							    label.setContents("<i>" +  a.getValor() + "</i>");
-							    label.setLeft(inst.getImage().getLeft() + inst.getImage().getWidth() - 10);
+							    label.setLeft(inst.getImage().getLeft() + inst.getImage().getWidth());
 							    label.setTop(inst.getImage().getTop() + (inst.getImage().getHeight() / 4));
 							    
 							    painel.addChild(label);

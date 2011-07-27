@@ -65,8 +65,23 @@ public class ColecaoInterface {
 		getImagem.setAcesso("public");
 		interfaceDesenhavel.adicionarMetodo(getImagem);
 		
+		Interface interfaceComunicavel = new Interface("Comunic&aacute;vel");
+		
+		Metodo mostrarMsg = new Metodo("mostrarMensagem");
+		mostrarMsg.setRetorno("void");
+		mostrarMsg.setAcesso("public");
+		mostrarMsg.adicionarParametro(new Parametro("mensagem", "String"));
+		interfaceComunicavel.adicionarMetodo(mostrarMsg);	
+		
+		Metodo lerAtributo = new Metodo("lerAtributo");
+		lerAtributo.setRetorno("void");
+		lerAtributo.setAcesso("public");
+		lerAtributo.adicionarParametro(new Parametro("atributo", "Atributo"));
+		interfaceComunicavel.adicionarMetodo(lerAtributo);		
+		
 		listaInterfaces.add(interfaceAnimavel);
 		listaInterfaces.add(interfaceDesenhavel);
+		listaInterfaces.add(interfaceComunicavel);
 	}
 
 	public void adicionarInterface(Interface i) {

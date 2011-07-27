@@ -31,17 +31,12 @@ public class Gerenciador {
 		hello.setNome("Hello");
 		hello.setAbstrata(false);
 		hello.addVariavel(new Variavel("imagem", "Image", "/galery/alomundo.png", "private"));
-		
-		Metodo showMessage = new Metodo("showMessage");
-		showMessage.setRetorno("void");
-		showMessage.adicionarParametro(new Parametro("message", "String"));
-		showMessage.setAcesso("public");
-		hello.addMetodo(showMessage);
-		
+	
 		projetoAtual.getRepositorioDados().getColecaoClasse().addClasseFilha(hello, "Object");
 		
 		hello.addInterface(projetoAtual.getRepositorioDados().getColecaoInterface().procurarInterface("Desenh&aacute;vel"));
 		hello.addInterface(projetoAtual.getRepositorioDados().getColecaoInterface().procurarInterface("Anim&aacute;vel"));		
+		hello.addInterface(projetoAtual.getRepositorioDados().getColecaoInterface().procurarInterface("Comunic&aacute;vel"));
 	}	
 	
 	public List<Projeto> listarProjetos() {
