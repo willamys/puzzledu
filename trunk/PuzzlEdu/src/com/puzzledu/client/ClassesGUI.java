@@ -33,6 +33,7 @@ import com.smartgwt.client.widgets.grid.events.CellClickEvent;
 import com.smartgwt.client.widgets.grid.events.CellClickHandler;
 import com.smartgwt.client.widgets.grid.events.CellContextClickEvent;
 import com.smartgwt.client.widgets.grid.events.CellContextClickHandler;
+import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.menu.Menu;
 import com.smartgwt.client.widgets.menu.MenuItem;
 import com.smartgwt.client.widgets.menu.MenuItemSeparator;
@@ -41,6 +42,7 @@ import com.smartgwt.client.widgets.menu.events.MenuItemClickEvent;
 import com.smartgwt.client.widgets.tile.TileGrid;
 import com.smartgwt.client.widgets.tile.events.RecordClickEvent;
 import com.smartgwt.client.widgets.tile.events.RecordClickHandler;
+import com.smartgwt.client.widgets.toolbar.ToolStrip;
 import com.smartgwt.client.widgets.tree.Tree;
 import com.smartgwt.client.widgets.tree.TreeGrid;
 import com.smartgwt.client.widgets.tree.TreeGridField;
@@ -55,14 +57,16 @@ public class ClassesGUI {
 	private Gerenciador gerenciador;
 	private Canvas painel;
 	private PartsListGrid scriptList;
+	private Window janelaPrincipal;
 	
-	public ClassesGUI(Gerenciador gerenciador, PropriedadesGUI propriedadesGUI, Canvas painel, PartsListGrid scriptList) {
+	public ClassesGUI(Gerenciador gerenciador, Window janelaPrincipal, PropriedadesGUI propriedadesGUI, Canvas painel, PartsListGrid scriptList) {
 
 		classeSelecionada = null;
 		this.gerenciador = gerenciador;
 		this.propriedadesGUI = propriedadesGUI;
 		this.painel = painel;
 		this.scriptList = scriptList;
+		this.janelaPrincipal = janelaPrincipal;
 	}
 
 	public TreeGrid createArvoreClasses() {
@@ -647,7 +651,10 @@ public class ClassesGUI {
 								
 								public void onClick(MenuItemClickEvent event) {
 
-									getJanelaValor(m, imagem.getTitle());
+									if (m.getPrimeiroParametro().getTipo().equals("Atributo"))
+										getJanelaLerAtributo(m, imagem);
+									else
+										getJanelaValor(m, imagem.getTitle());
 								}
 							});
 							
@@ -980,6 +987,51 @@ public class ClassesGUI {
     	
     	return menuClasses;
     }
+    
+    private void getJanelaLerAtributo(Metodo m, Img imagem) {
+		
+    	 Window win = new Window();  
+    	 win.setWidth(250);  
+         win.setHeight(130);  
+         win.setTitle("Selecione o Atributo e seu conteudo");  
+         win.setShowMinimizeButton(false);  
+         win.setIsModal(true);
+         win.setKeepInParentRect(true);
+         
+         win.setLeft(imagem.getLeft() + imagem.getWidth() + 310);
+         win.setTop(imagem.getTop() + 70);
+   	 
+    	 TextItem valor = new TextItem();
+    	 valor.setTitle("Valor");
+    	 valor.setWidth(130);
+    	 
+    	 SelectItem comboAtributo = new SelectItem();
+    	 comboAtributo.setTitle("Atributo");
+    	 comboAtributo.setWidth(130);
+    	 comboAtributo.setType("comboBox");
+    	 comboAtributo.setValueMap("void", "String", "int", "float", "boolean");
+    	 comboAtributo.setDefaultToFirstOption(true);
+    	 
+    	 ButtonItem button = new ButtonItem();
+    	 button.setTitle("Confirmar");
+    	 
+    	 DynamicForm form = new DynamicForm();
+         form.setAutoFocus(true);
+         form.setNumCols(2);
+         form.setHeight100();  
+         form.setWidth100();
+         form.setTop(10);
+         form.setPadding(10);  
+         form.setLayoutAlign(VerticalAlignment.CENTER);  
+         form.setAlign(Alignment.CENTER);
+         
+         form.setFields(comboAtributo, valor, button);
+         win.addItem(form);
+         
+         win.show();
+         //janelaPrincipal.addChild(win);
+    	 
+	}    
     
     private void carregarScript(String nomeInstancia) {
 
