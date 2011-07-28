@@ -33,7 +33,6 @@ import com.smartgwt.client.widgets.grid.events.CellClickEvent;
 import com.smartgwt.client.widgets.grid.events.CellClickHandler;
 import com.smartgwt.client.widgets.grid.events.CellContextClickEvent;
 import com.smartgwt.client.widgets.grid.events.CellContextClickHandler;
-import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.menu.Menu;
 import com.smartgwt.client.widgets.menu.MenuItem;
 import com.smartgwt.client.widgets.menu.MenuItemSeparator;
@@ -42,7 +41,6 @@ import com.smartgwt.client.widgets.menu.events.MenuItemClickEvent;
 import com.smartgwt.client.widgets.tile.TileGrid;
 import com.smartgwt.client.widgets.tile.events.RecordClickEvent;
 import com.smartgwt.client.widgets.tile.events.RecordClickHandler;
-import com.smartgwt.client.widgets.toolbar.ToolStrip;
 import com.smartgwt.client.widgets.tree.Tree;
 import com.smartgwt.client.widgets.tree.TreeGrid;
 import com.smartgwt.client.widgets.tree.TreeGridField;
@@ -57,16 +55,14 @@ public class ClassesGUI {
 	private Gerenciador gerenciador;
 	private Canvas painel;
 	private PartsListGrid scriptList;
-	private Window janelaPrincipal;
 	
-	public ClassesGUI(Gerenciador gerenciador, Window janelaPrincipal, PropriedadesGUI propriedadesGUI, Canvas painel, PartsListGrid scriptList) {
+	public ClassesGUI(Gerenciador gerenciador, PropriedadesGUI propriedadesGUI, Canvas painel, PartsListGrid scriptList) {
 
 		classeSelecionada = null;
 		this.gerenciador = gerenciador;
 		this.propriedadesGUI = propriedadesGUI;
 		this.painel = painel;
 		this.scriptList = scriptList;
-		this.janelaPrincipal = janelaPrincipal;
 	}
 
 	public TreeGrid createArvoreClasses() {
@@ -652,7 +648,7 @@ public class ClassesGUI {
 								public void onClick(MenuItemClickEvent event) {
 
 									if (m.getPrimeiroParametro().getTipo().equals("Atributo"))
-										getJanelaLerAtributo(m, imagem);
+										getJanelaLerAtributo(m, imagem, classeSelecionada);
 									else
 										getJanelaValor(m, imagem.getTitle());
 								}
@@ -988,12 +984,12 @@ public class ClassesGUI {
     	return menuClasses;
     }
     
-    private void getJanelaLerAtributo(Metodo m, Img imagem) {
+    private void getJanelaLerAtributo(Metodo m, Img imagem, Classe classeSelecionada) {
 		
     	 Window win = new Window();  
     	 win.setWidth(250);  
          win.setHeight(130);  
-         win.setTitle("Selecione o Atributo e seu conteudo");  
+         win.setTitle("Selecione o Atributo e seu valor");  
          win.setShowMinimizeButton(false);  
          win.setIsModal(true);
          win.setKeepInParentRect(true);
@@ -1009,9 +1005,17 @@ public class ClassesGUI {
     	 comboAtributo.setTitle("Atributo");
     	 comboAtributo.setWidth(130);
     	 comboAtributo.setType("comboBox");
-    	 comboAtributo.setValueMap("void", "String", "int", "float", "boolean");
     	 comboAtributo.setDefaultToFirstOption(true);
     	 
+    	 LinkedHashMap<String, String> map = new LinkedHashMap<String, String>();
+         
+    	 for (Variavel v : classeSelecionada.getVariaveis()) {
+     	
+    		 map.put(v.getNome(), v.getNome());
+     	 }
+     	    	
+     	 comboAtributo.setValueMap(map);
+     	 
     	 ButtonItem button = new ButtonItem();
     	 button.setTitle("Confirmar");
     	 
