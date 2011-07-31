@@ -122,7 +122,32 @@ public class Classe {
 		}	
 		
 		return metodos;
-	}	
+	}
+	
+	public List<Variavel> getAlVariaveis(Classe classe) {
+		
+		List<Variavel> variaveis = new ArrayList<Variavel>();
+		
+		while (classe != null) {
+			
+			for (Variavel v : classe.getVariaveis()) {
+				
+				if (!variaveis.contains(v))
+					variaveis.add(v);
+			}
+			
+			for (Interface i : classe.getInterfaces()) {
+				
+				for (Variavel v : i.getVariaveis())
+					if (!variaveis.contains(v))
+						variaveis.add(v);
+			}
+			
+			classe = classe.getParent();
+		}	
+		
+		return variaveis;
+	}		
 
 	public void setMetodos(List<Metodo> metodos) {
 		this.metodos = metodos;
