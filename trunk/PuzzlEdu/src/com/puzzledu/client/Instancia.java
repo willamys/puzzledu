@@ -12,6 +12,7 @@ public class Instancia {
 	private Img image;
 	private List<Acao> acoes;
 	private long contador;
+	private List<Variavel> variaveis;
 	
 	public Instancia(Classe classe, Img img, String nome) {
 		
@@ -19,7 +20,19 @@ public class Instancia {
 		this.classe = classe;
 		this.nome = nome;
 		acoes = new ArrayList<Acao>();
+		variaveis = new ArrayList<Variavel>();
 		contador = 0;
+		
+		for (Variavel v : classe.getAlVariaveis(classe)) {
+			
+			Variavel v1 = new Variavel();
+			v1.setAcesso(v.getAcesso());
+			v1.setNome(v.getNome());
+			v1.setTipo(v.getTipo());
+			v1.setValorPadrao(v.getValorPadrao());
+			
+			variaveis.add(v1);
+		}
 	}
 	
 	public Classe getClasse() {
@@ -67,5 +80,13 @@ public class Instancia {
 
 	public void setContador(long contador) {
 		this.contador = contador;
+	}
+
+	public List<Variavel> getVariaveis() {
+		return variaveis;
+	}
+
+	public void setVariaveis(List<Variavel> variaveis) {
+		this.variaveis = variaveis;
 	}
 }

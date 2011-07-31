@@ -984,7 +984,7 @@ public class ClassesGUI {
     	return menuClasses;
     }
     
-    private void getJanelaLerAtributo(Metodo m, Img imagem, Classe classeSelecionada) {
+    private void getJanelaLerAtributo(Metodo m, final Img imagem, Classe classeSelecionada) {
 		
     	 Window win = new Window();  
     	 win.setWidth(250);  
@@ -997,11 +997,11 @@ public class ClassesGUI {
          win.setLeft(imagem.getLeft() + imagem.getWidth() + 310);
          win.setTop(imagem.getTop() + 70);
    	 
-    	 TextItem valor = new TextItem();
+    	 final TextItem valor = new TextItem();
     	 valor.setTitle("Valor");
     	 valor.setWidth(130);
     	 
-    	 SelectItem comboAtributo = new SelectItem();
+    	 final SelectItem comboAtributo = new SelectItem();
     	 comboAtributo.setTitle("Atributo");
     	 comboAtributo.setWidth(130);
     	 comboAtributo.setType("comboBox");
@@ -1018,6 +1018,34 @@ public class ClassesGUI {
      	 
     	 ButtonItem button = new ButtonItem();
     	 button.setTitle("Confirmar");
+    	 
+    	 button.addClickHandler(new com.smartgwt.client.widgets.form.fields.events.ClickHandler() {
+			
+			public void onClick(
+					com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
+
+					if (comboAtributo.getValue() == null) {
+						
+						SC.say("Aten&ccedil;&atilde;o", "Selecione o Atributo!");
+						return;	
+					}
+					
+					if (valor.getValue() == null) {
+
+						SC.say("Aten&ccedil;&atilde;o", "Digite o valor do atributo");
+						return;	
+					}
+					
+					Instancia i = gerenciador.getProjetoAtual().getPilha().procurarInstancia(imagem.getTitle());
+					
+					if (i != null) {
+						
+						//i.getVariaveis()
+					}
+					
+					
+			}
+		 });
     	 
     	 DynamicForm form = new DynamicForm();
          form.setAutoFocus(true);
