@@ -1,4 +1,4 @@
-package com.puzzledu.client;
+package com.puzzledu.dao;
 
 import com.smartgwt.client.widgets.tile.TileRecord;
 

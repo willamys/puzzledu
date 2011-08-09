@@ -20,4 +20,11 @@
   <!-- Specify the paths for translatable code                    -->
   <source path='client'/>
   <source path='shared'/>
+  <source path='server'/>
+  <source path='gui'/>
+  <source path='dao'/>
+  <source path='basica'/>
+  <source path='gerenciador'/>
+  <source path='exception'/>  
+  
 </module>

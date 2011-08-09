@@ -1,6 +1,9 @@
-package com.puzzledu.client;
+package com.puzzledu.shared;
 
 import java.util.HashMap;
+
+import com.puzzledu.exception.KeyWordsException;
+import com.puzzledu.exception.SpecialCharactersException;
 
 /**
  * LanguageUtils

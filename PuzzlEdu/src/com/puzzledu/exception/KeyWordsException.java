@@ -1,4 +1,4 @@
-package com.puzzledu.client;
+package com.puzzledu.exception;
 
 @SuppressWarnings("serial")
 public class KeyWordsException extends Exception {

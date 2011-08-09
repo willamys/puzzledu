@@ -1,4 +1,5 @@
-package com.puzzledu.client;
+package com.puzzledu.dao;
+
 
 public class ImagemData {
 

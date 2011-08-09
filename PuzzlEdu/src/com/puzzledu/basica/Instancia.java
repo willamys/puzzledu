@@ -1,8 +1,9 @@
-package com.puzzledu.client;
+package com.puzzledu.basica;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.puzzledu.gerenciador.Acao;
 import com.smartgwt.client.widgets.Img;
 
 public class Instancia {
@@ -33,6 +34,17 @@ public class Instancia {
 			
 			variaveis.add(v1);
 		}
+	}
+	
+	public Variavel procurarVariavel(String nomeVariavel) {
+		
+		for (Variavel v : variaveis) {
+			
+			if (v.getNome().equals(nomeVariavel))
+				return v;
+		}
+		
+		return null;
 	}
 	
 	public Classe getClasse() {
