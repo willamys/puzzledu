@@ -1,9 +1,21 @@
-package com.puzzledu.client;
+package com.puzzledu.gui;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import com.puzzledu.basica.Classe;
+import com.puzzledu.basica.Instancia;
+import com.puzzledu.basica.Interface;
+import com.puzzledu.basica.Metodo;
+import com.puzzledu.basica.Parametro;
+import com.puzzledu.basica.Variavel;
+import com.puzzledu.dao.Gerenciador;
+import com.puzzledu.dao.ImagemData;
+import com.puzzledu.dao.ImagemRecord;
+import com.puzzledu.gerenciador.AcaoFor;
+import com.puzzledu.gerenciador.AcaoIO;
+import com.puzzledu.shared.LanguageUtils;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.Cursor;
 import com.smartgwt.client.types.DragAppearance;
@@ -691,8 +703,8 @@ public class ClassesGUI {
 			public void onClick(MenuItemClickEvent event) {
 				
 				final Window winModal = new Window();  
-                winModal.setWidth(360);  
-                winModal.setHeight(230);  
+                winModal.setWidth(365);  
+                winModal.setHeight(235);  
                 winModal.setTitle("Digite os dados do Atributo");  
                 winModal.setShowMinimizeButton(false);  
                 winModal.setIsModal(true);  
@@ -950,8 +962,6 @@ public class ClassesGUI {
 								method.setFinal((checkFinal.getValue() != null));
 								method.setSync((checkSynchronized.getValue() != null));
 								
-								/**TODO, adicionar validação e tratamento baseado nos parametros do método antes
-								 * de inserir um novo método na classe */
 								if (m == null){
 								  
 								  ClassesGUI.classeSelecionada.addMetodo(method);
@@ -986,7 +996,7 @@ public class ClassesGUI {
     
     private void getJanelaLerAtributo(Metodo m, final Img imagem, Classe classeSelecionada) {
 		
-    	 Window win = new Window();  
+    	 final Window win = new Window();  
     	 win.setWidth(250);  
          win.setHeight(130);  
          win.setTitle("Selecione o Atributo e seu valor");  
@@ -1040,10 +1050,18 @@ public class ClassesGUI {
 					
 					if (i != null) {
 						
-						//i.getVariaveis()
-					}
-					
-					
+						Variavel v = i.procurarVariavel(comboAtributo.getValue().toString());
+						v.setValorPadrao(valor.getValue().toString());
+						
+						//AcaoIO acao1 = new AcaoIO(valor, metodo);
+						//i.adicionarAcao(acao1);	
+						
+						carregarScript(imagem.getTitle());
+
+						
+						win.destroy();
+						win.redraw();	
+					}										
 			}
 		 });
     	 
@@ -1061,7 +1079,6 @@ public class ClassesGUI {
          win.addItem(form);
          
          win.show();
-         //janelaPrincipal.addChild(win);
     	 
 	}    
     

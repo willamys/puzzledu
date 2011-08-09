@@ -5,6 +5,11 @@ import java.util.List;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.TextArea;
+import com.puzzledu.basica.Classe;
+import com.puzzledu.dao.Gerenciador;
+import com.puzzledu.gui.ClassesGUI;
+import com.puzzledu.gui.PartsListGrid;
+import com.puzzledu.gui.PropriedadesGUI;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.Cursor;
 import com.smartgwt.client.types.DragAppearance;
@@ -15,6 +20,7 @@ import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.HTMLPane;
 import com.smartgwt.client.widgets.Img;
+import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.Window;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
@@ -22,6 +28,8 @@ import com.smartgwt.client.widgets.events.DropEvent;
 import com.smartgwt.client.widgets.events.DropHandler;
 import com.smartgwt.client.widgets.events.ShowContextMenuEvent;
 import com.smartgwt.client.widgets.events.ShowContextMenuHandler;
+import com.smartgwt.client.widgets.grid.events.CellClickEvent;
+import com.smartgwt.client.widgets.grid.events.CellClickHandler;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
@@ -31,12 +39,6 @@ import com.smartgwt.client.widgets.tree.Tree;
 import com.smartgwt.client.widgets.tree.TreeGrid;
 import com.smartgwt.client.widgets.tree.TreeGridField;
 import com.smartgwt.client.widgets.tree.TreeNode;
-import com.smartgwt.client.types.ListGridFieldType;
-import com.smartgwt.client.widgets.ImgProperties;
-import com.smartgwt.client.widgets.grid.ListGrid;
-import com.smartgwt.client.widgets.grid.ListGridField;
-import com.smartgwt.client.widgets.grid.events.CellClickEvent;
-import com.smartgwt.client.widgets.grid.events.CellClickHandler;
 
 public class PuzzlEdu implements EntryPoint {
 	
@@ -68,19 +70,27 @@ public class PuzzlEdu implements EntryPoint {
         mainLayout.setHeight100();
         mainLayout.setPadding(15);
         mainLayout.setTop(60);
-        //mainLayout.setBottom(10);
                         
         mainLayout.addMember(getPainelEsquerdo());
         mainLayout.addMember(getArea());
         mainLayout.addMember(getScript());
         
+        janelaPrincipal.addChild(getUser());
         janelaPrincipal.addChild(getMenu());
         janelaPrincipal.addChild(mainLayout);
         
         janelaPrincipal.draw();
    }
        
-   public Window getJanelaPrincipal() {  
+   private Canvas getUser() {
+		
+	   Label labelUser = new Label();
+	   
+		   	   
+	   return labelUser;
+	}
+
+public Window getJanelaPrincipal() {  
   
         Window window = new Window();  
         window.setAutoSize(false);  
@@ -668,35 +678,5 @@ class DroppedPiece extends Img {
                 event.cancel();
             }
         });
-    }
-}
-
-class PartsListGrid extends ListGrid {
-
-    PartsListGrid() {
-    	
-        setWidth100();
-        setHeight100();
-        setCellHeight(30);
-        setImageSize(16);
-        setWrapCells(true);
-        setShowEdges(false);
-        setBorder("0px");
-        setBodyStyleName("normal");
-        setShowHeader(false);
-        setLeaveScrollbarGap(false);
-        setEmptyMessage("<br><br>Lista Vazia...");
-
-        ListGridField partSrcField = new ListGridField("imageField", 24);
-        partSrcField.setType(ListGridFieldType.IMAGE);
-        partSrcField.setImgDir("pieces/16/");
-
-        ListGridField partNameField = new ListGridField("name");
-        
-        ListGridField valueField = new ListGridField("value");
-
-        setFields(partSrcField, partNameField, valueField);
-
-        setTrackerImage(new ImgProperties("pieces/24/cubes_all.png", 24, 24));
     }
 }

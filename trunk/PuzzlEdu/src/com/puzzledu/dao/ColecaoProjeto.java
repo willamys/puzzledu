@@ -1,7 +1,13 @@
-package com.puzzledu.client;
+package com.puzzledu.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.puzzledu.basica.Classe;
+import com.puzzledu.basica.Metodo;
+import com.puzzledu.basica.Parametro;
+import com.puzzledu.basica.Variavel;
+import com.puzzledu.gerenciador.Projeto;
 
 /**
  * Classe para manipular os projetos, a persistencia ainda em memoria.....

@@ -1,7 +1,12 @@
-package com.puzzledu.client;
+package com.puzzledu.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.puzzledu.basica.Interface;
+import com.puzzledu.basica.Metodo;
+import com.puzzledu.basica.Parametro;
+import com.puzzledu.basica.Variavel;
 
 public class ColecaoInterface {
 
@@ -77,7 +82,7 @@ public class ColecaoInterface {
 		lerAtributo.setRetorno("void");
 		lerAtributo.setAcesso("public");
 		lerAtributo.adicionarParametro(new Parametro("atributo", "Atributo"));
-		interfaceComunicavel.adicionarMetodo(lerAtributo);		
+		//interfaceComunicavel.adicionarMetodo(lerAtributo);		
 		
 		listaInterfaces.add(interfaceAnimavel);
 		listaInterfaces.add(interfaceDesenhavel);

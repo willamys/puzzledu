@@ -1,4 +1,6 @@
-package com.puzzledu.client;
+package com.puzzledu.gerenciador;
+
+import com.puzzledu.basica.Metodo;
 
 public abstract class Acao implements Comparable<Acao>{
 	
@@ -59,31 +61,3 @@ public abstract class Acao implements Comparable<Acao>{
 	}
 }
 
-class AcaoFor extends Acao {
-
-	private int qtdRepeticoes;
-	
-	public AcaoFor(Metodo m, int qtdRepeticoes, String valor) {
-		
-		super(m, valor);
-		setTipo("for");
-		this.qtdRepeticoes = qtdRepeticoes;		
-	}
-
-	public int getQtdRepeticoes() {
-		return qtdRepeticoes;
-	}
-
-	public void setQtdRepeticoes(int qtdRepeticoes) {
-		this.qtdRepeticoes = qtdRepeticoes;
-	}
-}
-
-class AcaoIO extends Acao {
-
-	public AcaoIO(String valor, Metodo m) {
-		
-		super(m, valor);
-		setTipo("io");
-	}
-}

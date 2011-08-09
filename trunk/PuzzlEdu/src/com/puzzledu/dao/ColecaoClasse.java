@@ -1,6 +1,10 @@
-package com.puzzledu.client;
+package com.puzzledu.dao;
 
 import java.util.List;
+
+import com.puzzledu.basica.Classe;
+import com.puzzledu.basica.Interface;
+import com.puzzledu.basica.Metodo;
 
 public class ColecaoClasse {
 

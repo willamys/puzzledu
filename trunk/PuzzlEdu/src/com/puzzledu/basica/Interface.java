@@ -1,7 +1,8 @@
-package com.puzzledu.client;
+package com.puzzledu.basica;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class Interface {
 

@@ -1,4 +1,6 @@
-package com.puzzledu.client;
+package com.puzzledu.gerenciador;
+
+import com.puzzledu.dao.RepositorioDados;
 
 public class Projeto {
 	

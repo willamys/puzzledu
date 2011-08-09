@@ -1,10 +1,12 @@
-package com.puzzledu.client;
+package com.puzzledu.gerenciador;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.TextArea;
+import com.puzzledu.basica.Classe;
+import com.puzzledu.basica.Instancia;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.widgets.Canvas;

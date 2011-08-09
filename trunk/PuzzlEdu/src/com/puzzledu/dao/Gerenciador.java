@@ -1,6 +1,10 @@
-package com.puzzledu.client;
+package com.puzzledu.dao;
 
 import java.util.List;
+
+import com.puzzledu.basica.Classe;
+import com.puzzledu.basica.Variavel;
+import com.puzzledu.gerenciador.Projeto;
 
 public class Gerenciador {
 

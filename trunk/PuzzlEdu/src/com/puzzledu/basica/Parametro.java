@@ -1,4 +1,4 @@
-package com.puzzledu.client;
+package com.puzzledu.basica;
 
 public class Parametro {
 
