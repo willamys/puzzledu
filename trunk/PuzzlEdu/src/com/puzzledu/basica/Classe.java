@@ -3,7 +3,6 @@ package com.puzzledu.basica;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Classe {
 
 	private long id;
