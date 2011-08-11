@@ -1,9 +1,15 @@
 package com.puzzledu.basica;
 
-public class Parametro {
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public class Parametro implements IsSerializable {
 
 	private String nome;
 	private String tipo;
+	
+	public Parametro() {
+		
+	}
 	
 	public Parametro(String nome, String tipo) {
 		

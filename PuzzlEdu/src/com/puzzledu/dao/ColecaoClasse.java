@@ -1,12 +1,12 @@
 package com.puzzledu.dao;
 
 import java.util.List;
-
+import com.google.gwt.user.client.rpc.IsSerializable;
 import com.puzzledu.basica.Classe;
 import com.puzzledu.basica.Interface;
 import com.puzzledu.basica.Metodo;
 
-public class ColecaoClasse {
+public class ColecaoClasse implements IsSerializable {
 
 	private Classe raiz;
 	

@@ -1,6 +1,8 @@
 package com.puzzledu.basica;
 
-public class Variavel {
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public class Variavel implements IsSerializable {
 
 	private String acesso;
 	private String nome;

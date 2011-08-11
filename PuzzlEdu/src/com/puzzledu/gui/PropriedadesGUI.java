@@ -8,7 +8,7 @@ import com.puzzledu.basica.Interface;
 import com.puzzledu.basica.Metodo;
 import com.puzzledu.basica.Parametro;
 import com.puzzledu.basica.Variavel;
-import com.puzzledu.dao.Gerenciador;
+import com.puzzledu.gerenciador.Gerenciador;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.ListGridFieldType;
 import com.smartgwt.client.types.Side;
