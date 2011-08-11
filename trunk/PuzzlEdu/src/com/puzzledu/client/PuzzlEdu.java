@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.TextArea;
 import com.puzzledu.basica.Classe;
 import com.puzzledu.gerenciador.Gerenciador;
@@ -49,6 +52,7 @@ public class PuzzlEdu implements EntryPoint {
 	private PartsListGrid scriptList;
 	private TextArea console;
 	private Window janelaPrincipal;
+	private LoginServiceAsync loginService;
 	
 	public PuzzlEdu() {
 					
@@ -58,9 +62,29 @@ public class PuzzlEdu implements EntryPoint {
 		scriptList = new PartsListGrid();
 		classesGUI = new ClassesGUI(gerenciador, propriedadesGUI, this.painel, scriptList);
 		gerenciador.getPilha().setPainel(painel);
+		
+		iniciarServicos();
 	}
 	
-    public void onModuleLoad() {
+    private void iniciarServicos() {
+		
+    	loginService = (LoginServiceAsync) GWT.create(LoginService.class);
+		ServiceDefTarget endpoint = (ServiceDefTarget) loginService;
+     	endpoint.setServiceEntryPoint( "/Login");
+     	
+     	loginService.login(new AsyncCallback<Void>() {
+			
+			public void onSuccess(Void result) {
+				
+			}
+			
+			public void onFailure(Throwable caught) {
+				
+			}
+		});
+	}
+
+	public void onModuleLoad() {
     	        
         janelaPrincipal = getJanelaPrincipal();
         janelaPrincipal.setMargin(10);

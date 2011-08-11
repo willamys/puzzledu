@@ -7,24 +7,24 @@
 
   <!-- Servlets -->
   <servlet>
-    <servlet-name>salvarProjetoServiceImpl</servlet-name>
-    <servlet-class>com.puzzledu.server.SalvarProjetoServiceImpl</servlet-class>
+    <servlet-name>ProjetoServiceImpl</servlet-name>
+    <servlet-class>com.puzzledu.server.ProjetoServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
-    <servlet-name>salvarProjetoServiceImpl</servlet-name>
-    <url-pattern>SalvarProjetoService</url-pattern>
+    <servlet-name>ProjetoServiceImpl</servlet-name>
+    <url-pattern>ProjetoService</url-pattern>
   </servlet-mapping>
     
     
   <servlet>
-    <servlet-name>loginServiceServlet</servlet-name>
+    <servlet-name>loginServiceImpl</servlet-name>
     <servlet-class>com.puzzledu.server.LoginServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
-    <servlet-name>loginServiceServlet</servlet-name>
-    <url-pattern>/puzzledu/Login</url-pattern>
+    <servlet-name>loginServiceImpl</servlet-name>
+    <url-pattern>Login</url-pattern>
   </servlet-mapping>
       
   <welcome-file-list>

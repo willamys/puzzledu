@@ -5,35 +5,43 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
-import com.google.gwt.user.client.ui.DialogBox;
 import com.puzzledu.basica.Classe;
 import com.puzzledu.basica.Variavel;
-import com.puzzledu.client.SalvarProjetoService;
-import com.puzzledu.client.SalvarProjetoServiceAsync;
-import com.smartgwt.client.util.SC;
+import com.puzzledu.client.ProjetoService;
+import com.puzzledu.client.ProjetoServiceAsync;
+import com.smartgwt.client.widgets.Button;
+import com.smartgwt.client.widgets.Canvas;
+import com.smartgwt.client.widgets.Window;
+import com.smartgwt.client.widgets.events.ClickEvent;
+import com.smartgwt.client.widgets.events.ClickHandler;
 
-public class Gerenciador implements SalvarProjetoServiceAsync {
+public class Gerenciador implements ProjetoServiceAsync {
 
 	private Pilha pilha;
 	private Projeto projetoAtual;
-	private final SalvarProjetoServiceAsync serviceSalvarProjeto;
+	private ProjetoServiceAsync serviceSalvarProjeto;
 	
 	public Gerenciador() {
 
-		serviceSalvarProjeto = (SalvarProjetoServiceAsync) GWT.create(SalvarProjetoService.class);
-		ServiceDefTarget endpoint = (ServiceDefTarget) serviceSalvarProjeto;
-     	endpoint.setServiceEntryPoint( "/SalvarProjetoService");
-
+		inicializarServicos();
 		pilha = new Pilha();
-		novoProjetoExemplo();
 		
-		//novoProjeto("New Project");
+		novoProjetoExemplo();
+		//novoProjeto("New Project");		
 	}
 	
+	private void inicializarServicos() {
+		
+		serviceSalvarProjeto = (ProjetoServiceAsync) GWT.create(ProjetoService.class);
+		ServiceDefTarget endpoint = (ServiceDefTarget) serviceSalvarProjeto;
+     	endpoint.setServiceEntryPoint("/ProjetoService");
+	}
+
 	public void novoProjeto(String nomeProjeto){
 		
 	 	setProjetoAtual(new Projeto(1L, nomeProjeto));
 	}	
+	
 	public void novoProjetoExemplo() {
 		
 		projetoAtual = new Projeto(1L, "Projeto Exemplo");
@@ -80,19 +88,55 @@ public class Gerenciador implements SalvarProjetoServiceAsync {
 
 	public void salvar() {
 
+		final Window winSaving = new Window();  
+		winSaving.setWidth(360);  
+		winSaving.setHeight(130);  
+		winSaving.setTitle("Salvar Projeto");  
+		winSaving.setShowMinimizeButton(false);  
+		winSaving.setIsModal(true);  
+		winSaving.centerInPage();
+		
+		final Canvas textCanvas = new Canvas();  
+        textCanvas.setContents("<br /><center><b>Salvando, aguarde ...</b></center>");   
+        textCanvas.setPadding(5);  
+        textCanvas.setHeight(1);
+        textCanvas.setWidth100();
+        textCanvas.setTop(30);
+        
+        final Button botao = new Button("Sair");
+        botao.setTop(80);
+        botao.setLeft(125);
+        
+        botao.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				winSaving.hide();
+				winSaving.redraw();
+			}
+		});
+        
+        
+        
+        winSaving.addChild(textCanvas);
+        winSaving.addChild(botao);
+        
 		@SuppressWarnings("rawtypes")
 		AsyncCallback callback = new AsyncCallback() {
 			
 			public void onFailure(Throwable caught) {
 				
-				SC.say("Aten&ccedil;&atilde;o", "Erro ao Salvar o Projeto: " + caught.getMessage());
+				textCanvas.setContents("<br /><center><b>Erro ao Salvar o Projeto: " + caught.getMessage() + "</b></center>");
 			}
 
 			public void onSuccess(Object result) {
 
-				SC.say("Aten&ccedil;&atilde;o", "Projeto Salvo com Sucesso!");
+				textCanvas.setContents("<br /><center><b>Projeto Salvo com Sucesso!</b></center>");
 			}
 		};
+		
+		winSaving.show();
 		
 		salvarProjeto(getProjetoAtual(), callback);
 	}
