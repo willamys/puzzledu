@@ -1,22 +1,33 @@
 package com.puzzledu.gerenciador;
 
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+
 import com.google.gwt.user.client.rpc.IsSerializable;
 import com.puzzledu.dao.RepositorioDados;
 
+@PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Projeto implements IsSerializable {
 	
+	@PrimaryKey @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Long id;
+	
+	@Persistent 
 	private String nome;
-	//private Pilha pilha; 
+    
+    //@Persistent
 	private RepositorioDados repositorioDados;
 
 	public Projeto() {
 		
 		repositorioDados = new RepositorioDados();
-		//pilha = new Pilha()
 	}
 	
 	public Projeto(Long id, String nome, RepositorioDados repositorioDados) {
+		
 		this();
 		this.id = id;
 		this.nome = nome;
@@ -53,12 +64,4 @@ public class Projeto implements IsSerializable {
 	public void setRepositorioDados(RepositorioDados repositorioDados) {
 		this.repositorioDados = repositorioDados;
 	}
-
-	/*public Pilha getPilha() {
-		return pilha;
-	}
-
-	public void setPilha(Pilha pilha) {
-		this.pilha = pilha;
-	}	*/	
 }
