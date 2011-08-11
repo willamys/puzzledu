@@ -2,8 +2,9 @@ package com.puzzledu.basica;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class Classe {
+public class Classe implements IsSerializable {
 
 	private long id;
 	private String nome;
@@ -13,7 +14,6 @@ public class Classe {
 	private List<Variavel> variaveis;
 	private boolean abstrata;
 	private Classe parent;
-	
 	
 	public Classe() {
 		

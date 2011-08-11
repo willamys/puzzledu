@@ -15,6 +15,10 @@ public class Instancia {
 	private long contador;
 	private List<Variavel> variaveis;
 	
+	public Instancia() {
+		
+	}
+	
 	public Instancia(Classe classe, Img img, String nome) {
 		
 		this.image = img;

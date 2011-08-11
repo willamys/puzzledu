@@ -1,24 +1,33 @@
 package com.puzzledu.gerenciador;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
 import com.puzzledu.dao.RepositorioDados;
 
-public class Projeto {
+public class Projeto implements IsSerializable {
 	
 	private Long id;
 	private String nome;
-	private Pilha pilha; 
+	//private Pilha pilha; 
 	private RepositorioDados repositorioDados;
+
+	public Projeto() {
+		
+		repositorioDados = new RepositorioDados();
+		//pilha = new Pilha()
+	}
 	
-	/* Cada projeto tem sua pilha de execução individual, e seu repositório de dados 
-	 * (classes, interfaces) */
+	public Projeto(Long id, String nome, RepositorioDados repositorioDados) {
+		this();
+		this.id = id;
+		this.nome = nome;
+		this.repositorioDados = repositorioDados;
+	}
 
 	public Projeto(Long id, String nome) {
 		
+		this();
 		this.id = id;
-		this.nome = nome;
-		
-		repositorioDados = new RepositorioDados();
-		pilha = new Pilha();
+		this.nome = nome;		
 	}
 
 	public Long getId() {
@@ -45,11 +54,11 @@ public class Projeto {
 		this.repositorioDados = repositorioDados;
 	}
 
-	public Pilha getPilha() {
+	/*public Pilha getPilha() {
 		return pilha;
 	}
 
 	public void setPilha(Pilha pilha) {
 		this.pilha = pilha;
-	}		
+	}	*/	
 }

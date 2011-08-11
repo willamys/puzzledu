@@ -6,7 +6,7 @@ import java.util.List;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.TextArea;
 import com.puzzledu.basica.Classe;
-import com.puzzledu.dao.Gerenciador;
+import com.puzzledu.gerenciador.Gerenciador;
 import com.puzzledu.gui.ClassesGUI;
 import com.puzzledu.gui.PartsListGrid;
 import com.puzzledu.gui.PropriedadesGUI;
@@ -57,7 +57,7 @@ public class PuzzlEdu implements EntryPoint {
 		propriedadesGUI = new PropriedadesGUI(gerenciador);
 		scriptList = new PartsListGrid();
 		classesGUI = new ClassesGUI(gerenciador, propriedadesGUI, this.painel, scriptList);
-		gerenciador.getProjetoAtual().getPilha().setPainel(painel);
+		gerenciador.getPilha().setPainel(painel);
 	}
 	
     public void onModuleLoad() {
@@ -90,7 +90,7 @@ public class PuzzlEdu implements EntryPoint {
 	   return labelUser;
 	}
 
-public Window getJanelaPrincipal() {  
+   public Window getJanelaPrincipal() {  
   
         Window window = new Window();  
         window.setAutoSize(false);  
@@ -187,6 +187,7 @@ public Window getJanelaPrincipal() {
 			public void onClick(ClickEvent event) {
 				
 				//repositorioDados = new RepositorioDados();
+				gerenciador.novoProjeto("Hello");
 
 			}
 		 });
@@ -196,6 +197,14 @@ public Window getJanelaPrincipal() {
          imgSave.setHeight("32px");
          imgSave.setTooltip("Salvar");
          imgSave.setCursor(Cursor.HAND);     
+         
+         imgSave.addClickHandler(new ClickHandler() {
+			
+			public void onClick(ClickEvent event) {
+				
+				gerenciador.salvar();
+			}
+		});
          
          Img imgPlay = new Img("/icons/play-icon.png");
          imgPlay.setWidth("32px");
@@ -207,7 +216,7 @@ public Window getJanelaPrincipal() {
 			
 			public void onClick(ClickEvent event) {
 
-				gerenciador.getProjetoAtual().getPilha().executarAcoesDasInstancias(console);
+				gerenciador.getPilha().executarAcoesDasInstancias(console);
 			}
 		});
          
@@ -232,6 +241,7 @@ public Window getJanelaPrincipal() {
          imgPrinter.addClickHandler(new ClickHandler() {
 			
 			public void onClick(ClickEvent event) {
+				
 				getFonte("Códifo-Fonte", 500, 400);
 				
 			}
@@ -356,12 +366,7 @@ public Window getJanelaPrincipal() {
 
     	String cabecalho = "<html> <head> <link rel='stylesheet' href='/js/sh/SyntaxHighlighter.css' type='text/css' /> <script src='/js/sh/shCore.js'></script> <script src='/js/sh/shBrushJava.js'></script> <style> .source{font-family:Courier New,monospace;  padding: 0;  margin: 0;  white-space: nowrap;  font-size: 11px;} .dp-highlighter {  white-space: nowrap;  overflow: visible;  width: 600px;  font-size: 11px;  font-family:Courier New,monospace; } </style> </head>  <body> <div class='source'><textarea name='code' class='java:nogutter' rows='22' cols='75' border='0'> ";
     	String rodape = "</textarea></div><script class='javascript'>dp.SyntaxHighlighter.HighlightAll('code');</script></body></html> ";
-    	
-    	//String cabecalho = " <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\"> <html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\"> <head> 	<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /> 	<title>Código-Fonte</title> ";
-    	//cabecalho += "<script type=\"text/javascript\" src=\"/scripts/shCore.js\"></script> ";
-    	//cabecalho += "<script type=\"text/javascript\" src=\"/scripts/shBrushJava.js\"></script> 	<link type=\"text/css\" rel=\"stylesheet\" href=\"/styles/shCoreDefault.css\"/> 	<script type=\"text/javascript\">SyntaxHighlighter.all();</script> </head> <body> <pre class=\"brush: java\"> ";    	
-    	//String rodape = "</pre> </html>";
-    	
+
     	String codigoFonte = classe.construirCodigoFonte();    	    	
 
         HTMLPane tabPane = new HTMLPane();

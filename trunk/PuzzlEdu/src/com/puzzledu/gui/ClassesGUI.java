@@ -10,11 +10,11 @@ import com.puzzledu.basica.Interface;
 import com.puzzledu.basica.Metodo;
 import com.puzzledu.basica.Parametro;
 import com.puzzledu.basica.Variavel;
-import com.puzzledu.dao.Gerenciador;
 import com.puzzledu.dao.ImagemData;
 import com.puzzledu.dao.ImagemRecord;
 import com.puzzledu.gerenciador.AcaoFor;
 import com.puzzledu.gerenciador.AcaoIO;
+import com.puzzledu.gerenciador.Gerenciador;
 import com.puzzledu.shared.LanguageUtils;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.Cursor;
@@ -419,7 +419,7 @@ public class ClassesGUI {
             					
                         		gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().removerClasse(raiz.getAttribute("Name"));
                         		
-                        		gerenciador.getProjetoAtual().getPilha().removerInstanciaPilhaDaClasse(raiz.getAttribute("Name"));
+                        		gerenciador.getPilha().removerInstanciaPilhaDaClasse(raiz.getAttribute("Name"));
                         		
             					tree.remove(raiz);
             				
@@ -590,7 +590,7 @@ public class ClassesGUI {
 
 						final Img imagem = (Img) event.getSource();
 
-						classeSelecionada = gerenciador.getProjetoAtual().getPilha().procurarClasseDaInstancia(imagem.getTitle());
+						classeSelecionada = gerenciador.getPilha().procurarClasseDaInstancia(imagem.getTitle());
 
 						Menu menuPropriedades = new Menu();
 				    	menuPropriedades.setWidth(130);
@@ -638,7 +638,7 @@ public class ClassesGUI {
 				                        
 										if (value != null && value) {  
 											
-											gerenciador.getProjetoAtual().getPilha().removerInstanciaPilha(imagem.getTitle());
+											gerenciador.getPilha().removerInstanciaPilha(imagem.getTitle());
 											
 										}
 				                    }
@@ -688,11 +688,11 @@ public class ClassesGUI {
 			
 				painel.addChild(img);
 				
-				String nomeInstancia = gerenciador.getProjetoAtual().getPilha().gerarNomeInstancia(classeSelecionada.getNome());
+				String nomeInstancia = gerenciador.getPilha().gerarNomeInstancia(classeSelecionada.getNome());
 				img.setTooltip(nomeInstancia);
 				img.setTitle(nomeInstancia);
 				
-				gerenciador.getProjetoAtual().getPilha().adicionarInstanciaPilha(new Instancia(classeSelecionada, img, nomeInstancia));
+				gerenciador.getPilha().adicionarInstanciaPilha(new Instancia(classeSelecionada, img, nomeInstancia));
 			}
 		});
     	
@@ -1046,7 +1046,7 @@ public class ClassesGUI {
 						return;	
 					}
 					
-					Instancia i = gerenciador.getProjetoAtual().getPilha().procurarInstancia(imagem.getTitle());
+					Instancia i = gerenciador.getPilha().procurarInstancia(imagem.getTitle());
 					
 					if (i != null) {
 						
@@ -1084,7 +1084,7 @@ public class ClassesGUI {
     
     private void carregarScript(String nomeInstancia) {
 
-		Instancia i = gerenciador.getProjetoAtual().getPilha().procurarInstancia(nomeInstancia);
+		Instancia i = gerenciador.getPilha().procurarInstancia(nomeInstancia);
 
 		ListGridRecord[] lst = new ListGridRecord[i.getAcoes().size()+1];
 		
@@ -1179,7 +1179,7 @@ public class ClassesGUI {
         	} else {	
         		
         		comboValor.setType(null);
-        		comboValor.setValueMap(gerenciador.getProjetoAtual().getPilha().listarInstanciasDisponiveis(nomeInstancia, tipo));   
+        		comboValor.setValueMap(gerenciador.getPilha().listarInstanciasDisponiveis(nomeInstancia, tipo));   
         	}
         }
         
@@ -1204,7 +1204,7 @@ public class ClassesGUI {
 					return;
 				}
 				
-				Instancia i = gerenciador.getProjetoAtual().getPilha().procurarInstancia(nomeInstancia);
+				Instancia i = gerenciador.getPilha().procurarInstancia(nomeInstancia);
 				
 				AcaoIO acao1 = new AcaoIO(valor, metodo);
 				i.adicionarAcao(acao1);	
@@ -1289,7 +1289,7 @@ public class ClassesGUI {
         
         comboParametro1.setValueIcons(mapIcons);
         
-        final Instancia inst = gerenciador.getProjetoAtual().getPilha().procurarInstancia(nomeInstancia);
+        final Instancia inst = gerenciador.getPilha().procurarInstancia(nomeInstancia);
         
         if (inst == null)
         	return;
@@ -1350,7 +1350,7 @@ public class ClassesGUI {
 						} else {
 							
 							comboParametro1.setType(null);
-							comboParametro1.setValueMap(gerenciador.getProjetoAtual().getPilha().listarInstanciasDisponiveis(nomeInstancia, tipo));
+							comboParametro1.setValueMap(gerenciador.getPilha().listarInstanciasDisponiveis(nomeInstancia, tipo));
 						}
 						
 						

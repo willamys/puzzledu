@@ -16,7 +16,7 @@
   
   <!-- Specify the app entry point class.                         -->
   <entry-point class='com.puzzledu.client.PuzzlEdu'/>
-  
+  	
   <!-- Specify the paths for translatable code                    -->
   <source path='client'/>
   <source path='shared'/>

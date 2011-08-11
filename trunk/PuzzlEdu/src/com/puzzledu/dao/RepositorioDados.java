@@ -1,6 +1,8 @@
 package com.puzzledu.dao;
 
-public class RepositorioDados {
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public class RepositorioDados implements IsSerializable {
 
 	private ColecaoClasse colecaoClasse;
 	private ColecaoInterface colecaoInterface;

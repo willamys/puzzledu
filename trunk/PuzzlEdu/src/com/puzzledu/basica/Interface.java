@@ -2,9 +2,9 @@ package com.puzzledu.basica;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.google.gwt.user.client.rpc.IsSerializable;
 
-
-public class Interface {
+public class Interface implements IsSerializable {
 
 	private long id;
 	private String nome;

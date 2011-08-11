@@ -3,12 +3,13 @@ package com.puzzledu.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
 import com.puzzledu.basica.Interface;
 import com.puzzledu.basica.Metodo;
 import com.puzzledu.basica.Parametro;
 import com.puzzledu.basica.Variavel;
 
-public class ColecaoInterface {
+public class ColecaoInterface implements IsSerializable {
 
 	private List<Interface> listaInterfaces;
 	

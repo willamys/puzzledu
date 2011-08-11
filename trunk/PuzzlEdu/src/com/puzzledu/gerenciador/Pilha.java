@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.user.client.ui.TextArea;
 import com.puzzledu.basica.Classe;
 import com.puzzledu.basica.Instancia;
@@ -12,7 +13,7 @@ import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.Label;
 
-public class Pilha {
+public class Pilha implements IsSerializable {
 
 	private List<Instancia> pilha;
 	private int contadorObjetos;

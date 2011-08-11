@@ -2,8 +2,9 @@ package com.puzzledu.basica;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class Metodo {
+public class Metodo implements IsSerializable {
 
 	private String nome;
 	private String retorno;
