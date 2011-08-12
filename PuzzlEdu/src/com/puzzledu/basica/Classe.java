@@ -502,8 +502,7 @@ public class Classe implements IsSerializable {
 				codigoFonte += m.getNome();
 			
 			//parâmetros
-			if (m.getParametros().size() > 0)
-				codigoFonte += "(" + m.getParametrosString() + ")";
+			codigoFonte += "(" + m.getParametrosString() + ")";
 			
 			codigoFonte += " {\n";
 
