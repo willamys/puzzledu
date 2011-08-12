@@ -189,7 +189,7 @@ public class ClassesGUI {
     }
     
     
-    public void fillTree(Classe raiz, ClasseTreeNode nodeRaiz) {
+    public void fillTree(Classe raiz, ClasseTreeNode parent) {
     	
     	if (raiz.getFilhas() == null)
     		return;
@@ -197,8 +197,8 @@ public class ClassesGUI {
     	for (Classe c : raiz.getFilhas()) {
     		
         	ClasseTreeNode node = new ClasseTreeNode(c.getNome(), c.getNome(), raiz.getNome(), c.isAbstrata());
-        	 tree.add(node, nodeRaiz);
-        	 fillTree(c, nodeRaiz);
+        	tree.add(node, parent);
+            fillTree(c, node);
     	}    	
     }
                     
