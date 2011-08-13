@@ -14,6 +14,7 @@ public class Classe implements IsSerializable {
 	private List<Variavel> variaveis;
 	private boolean abstrata;
 	private Classe parent;
+	private String comentario;
 	
 	public Classe() {
 		
@@ -516,5 +517,20 @@ public class Classe implements IsSerializable {
 			
 		return cabecalho + codigoFonte + rodape;			
 	
-	}	
+	}
+
+	/**
+	 * @return the comentario
+	 */
+	public String getComentario() {
+		return comentario;
+	}
+
+	/**
+	 * @param comentario the comentario to set
+	 */
+	public void setComentario(String comentario) {
+		this.comentario = comentario;
+	}
+	
 }
