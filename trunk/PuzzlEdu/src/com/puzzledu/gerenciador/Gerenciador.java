@@ -62,15 +62,18 @@ public class Gerenciador implements ProjetoServiceAsync {
 		projetoAtual = new Projeto(1L, "Projeto Exemplo");
 
 		Classe eletro = new Classe();
+		eletro.setComentario("Definição para a classe Abstrata Eletrodomestico");
 		eletro.setNome("Eletrodomestico");
 		eletro.setAbstrata(true);
 		eletro.addVariavel(new Variavel("imagem", "Image", "/galery/alomundo.png", "private"));	
 
 		Classe tv = new Classe();
 		tv.setNome("TV");
+		tv.setComentario("Classe concreta que herda as caracteristicas da classe Eletrodomestico");
 		
 		Classe radio = new Classe();
 		radio.setNome("Radio");
+		radio.setComentario("Classe concreta que herda as caracteristicas da classe Eletrodomestico");
 		
 		projetoAtual.getRepositorioDados().getColecaoClasse().addClasseFilha(eletro, "Object");
 		projetoAtual.getRepositorioDados().getColecaoClasse().addClasseFilha(tv,     "Eletrodomestico");
