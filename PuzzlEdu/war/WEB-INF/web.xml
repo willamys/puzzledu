@@ -13,7 +13,7 @@
   
   <servlet-mapping>
     <servlet-name>ProjetoServiceImpl</servlet-name>
-    <url-pattern>ProjetoService</url-pattern>
+    <url-pattern>/ProjetoService</url-pattern>
   </servlet-mapping>
     
     
@@ -24,7 +24,7 @@
   
   <servlet-mapping>
     <servlet-name>loginServiceImpl</servlet-name>
-    <url-pattern>Login</url-pattern>
+    <url-pattern>/Login</url-pattern>
   </servlet-mapping>
       
   <welcome-file-list>
