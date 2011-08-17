@@ -26,7 +26,8 @@ public class Gerenciador implements ProjetoServiceAsync {
 		inicializarServicos();
 		pilha = new Pilha();
 		
-		criarProjetoExemplo();
+		novoProjetoExemplo();
+		//novoProjeto("New Project");		
 	}
 	
 	private void inicializarServicos() {
@@ -41,7 +42,7 @@ public class Gerenciador implements ProjetoServiceAsync {
 	 	setProjetoAtual(new Projeto(1L, nomeProjeto));
 	}	
 	
-	/*public void novoProjetoExemplo() {
+	public void novoProjetoExemplo() {
 		
 		projetoAtual = new Projeto(1L, "Projeto Exemplo");
 
@@ -55,30 +56,7 @@ public class Gerenciador implements ProjetoServiceAsync {
 		hello.addInterface(projetoAtual.getRepositorioDados().getColecaoInterface().procurarInterface("Desenh&aacute;vel"));
 		hello.addInterface(projetoAtual.getRepositorioDados().getColecaoInterface().procurarInterface("Anim&aacute;vel"));		
 		hello.addInterface(projetoAtual.getRepositorioDados().getColecaoInterface().procurarInterface("Comunic&aacute;vel"));
-	}	*/
-
-	public void criarProjetoExemplo(){
-
-		projetoAtual = new Projeto(1L, "Projeto Exemplo");
-
-		Classe eletro = new Classe();
-		eletro.setComentario("Definição para a classe Abstrata Eletrodomestico");
-		eletro.setNome("Eletrodomestico");
-		eletro.setAbstrata(true);
-		eletro.addVariavel(new Variavel("imagem", "Image", "/galery/alomundo.png", "private"));	
-
-		Classe tv = new Classe();
-		tv.setNome("TV");
-		tv.setComentario("Classe concreta que herda as caracteristicas da classe Eletrodomestico");
-		
-		Classe radio = new Classe();
-		radio.setNome("Radio");
-		radio.setComentario("Classe concreta que herda as caracteristicas da classe Eletrodomestico");
-		
-		projetoAtual.getRepositorioDados().getColecaoClasse().addClasseFilha(eletro, "Object");
-		projetoAtual.getRepositorioDados().getColecaoClasse().addClasseFilha(tv,     "Eletrodomestico");
-		projetoAtual.getRepositorioDados().getColecaoClasse().addClasseFilha(radio,  "Eletrodomestico");
-	}
+	}	
 	
 	public List<Projeto> listarProjetos() {
 		
@@ -168,4 +146,5 @@ public class Gerenciador implements ProjetoServiceAsync {
 		
 		serviceSalvarProjeto.salvarProjeto(projeto, callback);
 	}	
+	
 }
