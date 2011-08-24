@@ -70,7 +70,7 @@ public class PuzzlEdu implements EntryPoint {
 		
     	loginService = (LoginServiceAsync) GWT.create(LoginService.class);
 		ServiceDefTarget endpoint = (ServiceDefTarget) loginService;
-     	endpoint.setServiceEntryPoint( "/Login");
+     	endpoint.setServiceEntryPoint("/Login");
      	
      	loginService.login(new AsyncCallback<Void>() {
 			
