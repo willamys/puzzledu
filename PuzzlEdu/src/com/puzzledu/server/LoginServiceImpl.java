@@ -20,7 +20,7 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 	    	System.out.println(user.getEmail());
 	    } else {
 	    	
-	    	//System.out.println("redirecionando..");
+	    	System.out.println("redirecionando..");
 	    	//Window.open(userService.createLoginURL("https://www.google.com/accounts/"), "_self", "");
         }
 	}

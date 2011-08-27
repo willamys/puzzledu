@@ -25,6 +25,7 @@ import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.util.BooleanCallback;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Canvas;
+import com.smartgwt.client.widgets.HTMLPane;
 import com.smartgwt.client.widgets.Img;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.Window;
@@ -67,14 +68,16 @@ public class ClassesGUI {
 	private Gerenciador gerenciador;
 	private Canvas painel;
 	private PartsListGrid scriptList;
+	private HTMLPane htmlPane;
 	
-	public ClassesGUI(Gerenciador gerenciador, PropriedadesGUI propriedadesGUI, Canvas painel, PartsListGrid scriptList) {
+	public ClassesGUI(Gerenciador gerenciador, PropriedadesGUI propriedadesGUI, Canvas painel, PartsListGrid scriptList, HTMLPane htmlPane) {
 
 		classeSelecionada = null;
 		this.gerenciador = gerenciador;
 		this.propriedadesGUI = propriedadesGUI;
 		this.painel = painel;
 		this.scriptList = scriptList;
+		this.htmlPane = htmlPane;
 	}
 
 	public TreeGrid createArvoreClasses() {
@@ -127,11 +130,17 @@ public class ClassesGUI {
 			
 			public void onCellClick(CellClickEvent event) {
 				
+				htmlPane.setContents("<br /><b><h3><center>" + gerenciador.getGuia().getGuia("Classe") + "</center></h3></b>");
+				//htmlPane.
+				System.out.println(123);
+				
 				classeSelecionada = gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz(), ((TreeNode) event.getRecord()).getAttribute("Name").toString());
 				
 				propriedadesGUI.getListaPropriedades().setData(propriedadesGUI.getPropriedades(((TreeNode) event.getRecord()).getAttribute("Name")));
 				
 				propriedadesGUI.getListaInterfaces().setData(propriedadesGUI.getInterfaces(((TreeNode) event.getRecord()).getAttribute("Name")));
+				
+	
 										
 			}
 		});
