@@ -1,4 +1,4 @@
-package com.puzzledu.gerenciador;
+ package com.puzzledu.gerenciador;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;

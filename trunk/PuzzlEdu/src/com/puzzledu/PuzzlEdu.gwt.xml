@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <module rename-to='puzzledu'>
   <!-- Inherit the core Web Toolkit stuff.                        -->
@@ -21,11 +20,11 @@
   <!-- Specify the paths for translatable code                    -->
   <source path='client'/>
   <source path='shared'/>
-
-  <source path='gui'/>
-  <source path='dao'/>
-  <source path='basica'/>
-  <source path='gerenciador'/>
-  <source path='exception'/>  
   
+  <source path='basica'/>
+  <source path='dao'/>
+  <source path='exception'/>
+  <source path='gerenciador'/>
+  <source path='gui'/>
+   
 </module>
