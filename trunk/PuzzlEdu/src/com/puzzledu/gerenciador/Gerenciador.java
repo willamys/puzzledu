@@ -9,6 +9,7 @@ import com.puzzledu.basica.Classe;
 import com.puzzledu.basica.Variavel;
 import com.puzzledu.client.ProjetoService;
 import com.puzzledu.client.ProjetoServiceAsync;
+import com.puzzledu.shared.Guia;
 import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.Window;
@@ -20,11 +21,13 @@ public class Gerenciador implements ProjetoServiceAsync {
 	private Pilha pilha;
 	private Projeto projetoAtual;
 	private ProjetoServiceAsync serviceSalvarProjeto;
+	private Guia guia;
 	
 	public Gerenciador() {
 
 		inicializarServicos();
 		pilha = new Pilha();
+		guia = new Guia();
 		
 		novoProjetoExemplo();
 		//novoProjeto("New Project");		
@@ -145,6 +148,21 @@ public class Gerenciador implements ProjetoServiceAsync {
 	public void salvarProjeto(Projeto projeto, AsyncCallback callback) {
 		
 		serviceSalvarProjeto.salvarProjeto(projeto, callback);
+	}
+
+	@Override
+	@SuppressWarnings("rawtypes") 
+	public void listarProjetos(AsyncCallback callback) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Guia getGuia() {
+		return guia;
+	}
+
+	public void setGuia(Guia guia) {
+		this.guia = guia;
 	}	
 	
 }

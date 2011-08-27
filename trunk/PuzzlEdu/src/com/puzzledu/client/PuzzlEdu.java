@@ -31,6 +31,8 @@ import com.smartgwt.client.widgets.events.DropEvent;
 import com.smartgwt.client.widgets.events.DropHandler;
 import com.smartgwt.client.widgets.events.ShowContextMenuEvent;
 import com.smartgwt.client.widgets.events.ShowContextMenuHandler;
+import com.smartgwt.client.widgets.grid.ListGrid;
+import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.events.CellClickEvent;
 import com.smartgwt.client.widgets.grid.events.CellClickHandler;
 import com.smartgwt.client.widgets.layout.HLayout;
@@ -53,6 +55,7 @@ public class PuzzlEdu implements EntryPoint {
 	private TextArea console;
 	private Window janelaPrincipal;
 	private LoginServiceAsync loginService;
+	private HTMLPane htmlPane;
 	
 	public PuzzlEdu() {
 					
@@ -60,9 +63,14 @@ public class PuzzlEdu implements EntryPoint {
 		gerenciador = new Gerenciador();
 		propriedadesGUI = new PropriedadesGUI(gerenciador);
 		scriptList = new PartsListGrid();
-		classesGUI = new ClassesGUI(gerenciador, propriedadesGUI, this.painel, scriptList);
+		classesGUI = new ClassesGUI(gerenciador, propriedadesGUI, this.painel, scriptList, this.htmlPane);
 		gerenciador.getPilha().setPainel(painel);
 		
+        htmlPane = new HTMLPane();  
+	    htmlPane.setWidth("100%");
+	    htmlPane.setHeight100();  
+	    htmlPane.setShowEdges(false);
+	    
 		iniciarServicos();
 	}
 	
@@ -76,10 +84,12 @@ public class PuzzlEdu implements EntryPoint {
 			
 			public void onSuccess(Void result) {
 				
+				System.out.println("sucess");
 			}
 			
 			public void onFailure(Throwable caught) {
 				
+				System.out.println("failure");
 			}
 		});
 	}
@@ -215,6 +225,22 @@ public class PuzzlEdu implements EntryPoint {
 
 			}
 		 });
+         
+         Img imgOpen = new Img("/icons/my-documents-icon.png");
+         imgOpen.setWidth("32px");
+         imgOpen.setHeight("32px");
+         imgOpen.setTooltip("Novo");
+         imgOpen.setCursor(Cursor.HAND);
+         
+         imgOpen.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				
+				getOpenDialog();
+			}
+		 });
   
          Img imgSave = new Img("/icons/save.png");
          imgSave.setWidth("32px");
@@ -287,12 +313,13 @@ public class PuzzlEdu implements EntryPoint {
 
 
         toolStrip.addMember(imgNovo,  0);
-        toolStrip.addMember(imgSave,  1);
-        toolStrip.addMember(imgPlay,  2);
-        toolStrip.addMember(imgPause, 3);
-        toolStrip.addMember(imgStop,  4);
-        toolStrip.addMember(imgPrinter, 5);
-        toolStrip.addMember(imgHelp, 6);
+        toolStrip.addMember(imgOpen,  2);
+        toolStrip.addMember(imgSave,  3);
+        toolStrip.addMember(imgPlay,  4);
+        toolStrip.addMember(imgPause, 5);
+        toolStrip.addMember(imgStop,  6);
+        toolStrip.addMember(imgPrinter, 7);
+        toolStrip.addMember(imgHelp, 8);
                  
         return toolStrip;    	
     }   
@@ -320,18 +347,18 @@ public class PuzzlEdu implements EntryPoint {
     public Canvas getScript() {
     	
     	final Window win = new Window();
-        win.setTitle("Source");
+        win.setTitle("Area de Informacao");
         win.setHeaderIcon("pieces/16/cube_green.png", 16, 16);
         win.setKeepInParentRect(true);
-        win.setWidth("30%");
-        win.setHeight("100%");
+        //win.setWidth("100%");
+        //win.setHeight("30%");
         
-        win.setCanDragReposition(true);
-        win.setCanDragResize(true);
-        win.setMembersMargin(5);    
+        win.setCanDragReposition(false);
+        win.setCanDragResize(false);
+        win.setMembersMargin(10);    
         
         final TabSet tabs = new TabSet();
-        tabs.setWidth("40%");
+        tabs.setWidth100();
         tabs.setTabBarPosition(Side.TOP);
         tabs.setHeight(300);
 
@@ -342,9 +369,24 @@ public class PuzzlEdu implements EntryPoint {
         
         tab1.setPane(scriptList);        
         tabs.addTab(tab1);
-        win.addItem(tabs);
+       // win.addItem(tabs); 
+     	
+        VLayout panel = new VLayout();
+        panel.addMember(tabs);
+        panel.setWidth("40%");
+        panel.setHeight("90%");
+        panel.setBorder("1px");
         
-        return tabs;
+        TextArea help = new TextArea();
+        help.setWidth("95%");
+        
+        htmlPane.setContents("<br /><h3><b>Área de Informação</b></h3>");
+        
+        panel.addMember(win);
+        
+        win.addChild(htmlPane);
+                        
+        return panel;
     }  
     
     public void getFonte(String sourceURL, int width, int height) {
@@ -625,6 +667,43 @@ public class PuzzlEdu implements EntryPoint {
 		//adicionar aqui todos os tópicos raizes
 		return new TreeNode[]{topico1, topico2, topico3, topico4, topico5, topico6, topico7};
 	}
+	
+	public void getOpenDialog() {
+        
+		final Window win = new Window();
+        win.setTitle("Abrir Projeto");
+        win.setHeaderIcon("silk/page_white_cup.png", 16, 16);
+        win.setShowMinimizeButton(false);  
+        win.setIsModal(true);  
+        win.setWidth(400);
+        win.setHeight(300);
+
+        win.setCanDragReposition(true);
+        win.setCanDragResize(true);
+        win.setMembersMargin(5);
+
+        ListGrid lista = new ListGrid();
+        lista.setCellHeight(24);
+        lista.setImageSize(16);
+        lista.setWidth100();
+        lista.setHeight100();
+        lista.setTop(25);
+        lista.setBorder("0px");
+        lista.setBodyStyleName("normal");        
+        lista.setAlternateRecordStyles(true);
+        lista.setShowHeader(false);
+        lista.setEmptyMessage("Nenhum Projeto Salvo!");
+
+        ListGridField nameField = new ListGridField("name");
+        
+        lista.setFields(nameField);
+        
+        win.addItem(lista);
+        win.show();   
+        win.centerInPage();
+        
+        janelaPrincipal.addChild(win);
+    }	
 }
 
 class TopicoTreeNode extends TreeNode {
