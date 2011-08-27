@@ -15,6 +15,7 @@ import com.smartgwt.client.types.Side;
 import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.util.BooleanCallback;
 import com.smartgwt.client.util.SC;
+import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.Window;
 import com.smartgwt.client.widgets.events.ShowContextMenuEvent;
 import com.smartgwt.client.widgets.events.ShowContextMenuHandler;
@@ -25,6 +26,8 @@ import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
+import com.smartgwt.client.widgets.grid.events.CellClickEvent;
+import com.smartgwt.client.widgets.grid.events.CellClickHandler;
 import com.smartgwt.client.widgets.grid.events.CellContextClickEvent;
 import com.smartgwt.client.widgets.grid.events.CellContextClickHandler;
 import com.smartgwt.client.widgets.menu.Menu;
@@ -39,10 +42,12 @@ public class PropriedadesGUI {
 	private Gerenciador gerenciador;
 	private ListGrid listaInterfaces;
 	private ListGrid listaPropriedades;
+	private Label labelHelp;
 
-	public PropriedadesGUI(Gerenciador gerenciador) {
+	public PropriedadesGUI(Gerenciador gerenciador, Label help) {
 
 		this.gerenciador = gerenciador;
+		this.labelHelp = help;
 	}
 
 	public TabSet createPainelPropriedades() {
@@ -85,6 +90,17 @@ public class PropriedadesGUI {
 		ListGridField nameField = new ListGridField("name");
 
 		listaPropriedades.setFields(imageField, nameField);
+
+		listaPropriedades.addCellClickHandler(new CellClickHandler() {
+
+			public void onCellClick(CellClickEvent event) {
+
+				labelHelp.setContents("<br /><b><h3><center>"
+						+ gerenciador.getGuia().getGuia("Métodos")
+						+ "</center></h3></b>");
+
+			}
+		});
 
 		listaPropriedades
 				.addCellContextClickHandler(new CellContextClickHandler() {
@@ -364,6 +380,8 @@ public class PropriedadesGUI {
 		ListGridField nameField = new ListGridField("name");
 
 		listaInterfaces.setFields(imageField, nameField);
+
+	
 
 		listaInterfaces
 				.addCellContextClickHandler(new CellContextClickHandler() {

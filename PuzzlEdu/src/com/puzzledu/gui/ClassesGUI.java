@@ -25,7 +25,6 @@ import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.util.BooleanCallback;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Canvas;
-import com.smartgwt.client.widgets.HTMLPane;
 import com.smartgwt.client.widgets.Img;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.Window;
@@ -68,16 +67,16 @@ public class ClassesGUI {
 	private Gerenciador gerenciador;
 	private Canvas painel;
 	private PartsListGrid scriptList;
-	private HTMLPane htmlPane;
+	private Label labelHelp;
 	
-	public ClassesGUI(Gerenciador gerenciador, PropriedadesGUI propriedadesGUI, Canvas painel, PartsListGrid scriptList, HTMLPane htmlPane) {
+	public ClassesGUI(Gerenciador gerenciador, PropriedadesGUI propriedadesGUI, Canvas painel, PartsListGrid scriptList, Label help) {
 
 		classeSelecionada = null;
 		this.gerenciador = gerenciador;
 		this.propriedadesGUI = propriedadesGUI;
 		this.painel = painel;
 		this.scriptList = scriptList;
-		this.htmlPane = htmlPane;
+		this.labelHelp = help;
 	}
 
 	public TreeGrid createArvoreClasses() {
@@ -130,9 +129,7 @@ public class ClassesGUI {
 			
 			public void onCellClick(CellClickEvent event) {
 				
-				htmlPane.setContents("<br /><b><h3><center>" + gerenciador.getGuia().getGuia("Classe") + "</center></h3></b>");
-				//htmlPane.
-				System.out.println(123);
+				labelHelp.setContents("<br /><b><h3><center>" + gerenciador.getGuia().getGuia("Classe") + "</center></h3></b>");
 				
 				classeSelecionada = gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz(), ((TreeNode) event.getRecord()).getAttribute("Name").toString());
 				
@@ -588,6 +585,8 @@ public class ClassesGUI {
 						final Img imagem = (Img) event.getSource();
 						
 						carregarScript(imagem.getTitle());
+						
+						labelHelp.setContents("<br /><b><h3><center>" + gerenciador.getGuia().getGuia("Instancia") + "</center></h3></b>");
 					}
 
 				});

@@ -25,9 +25,10 @@ public class Gerenciador implements ProjetoServiceAsync {
 	
 	public Gerenciador() {
 
+		guia = new Guia();
+		
 		inicializarServicos();
 		pilha = new Pilha();
-		guia = new Guia();
 		
 		novoProjetoExemplo();
 		//novoProjeto("New Project");		

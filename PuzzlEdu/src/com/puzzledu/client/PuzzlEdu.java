@@ -55,21 +55,21 @@ public class PuzzlEdu implements EntryPoint {
 	private TextArea console;
 	private Window janelaPrincipal;
 	private LoginServiceAsync loginService;
-	private HTMLPane htmlPane;
+	private final Label help;
 	
 	public PuzzlEdu() {
 					
+	    help = new Label("<h3>Area de Informa&ccedil;&atilde;o</h3>");
+	    help.setWidth100();
+	    help.setHeight100();
+	    help.setStyleName("console");
+		
 		this.painel = createPainel();
 		gerenciador = new Gerenciador();
-		propriedadesGUI = new PropriedadesGUI(gerenciador);
+		propriedadesGUI = new PropriedadesGUI(gerenciador, this.help);
 		scriptList = new PartsListGrid();
-		classesGUI = new ClassesGUI(gerenciador, propriedadesGUI, this.painel, scriptList, this.htmlPane);
+		classesGUI = new ClassesGUI(gerenciador, propriedadesGUI, this.painel, scriptList, this.help);
 		gerenciador.getPilha().setPainel(painel);
-		
-        htmlPane = new HTMLPane();  
-	    htmlPane.setWidth("100%");
-	    htmlPane.setHeight100();  
-	    htmlPane.setShowEdges(false);
 	    
 		iniciarServicos();
 	}
@@ -346,46 +346,46 @@ public class PuzzlEdu implements EntryPoint {
     
     public Canvas getScript() {
     	
-    	final Window win = new Window();
-        win.setTitle("Area de Informacao");
-        win.setHeaderIcon("pieces/16/cube_green.png", 16, 16);
-        win.setKeepInParentRect(true);
-        //win.setWidth("100%");
-        //win.setHeight("30%");
-        
-        win.setCanDragReposition(false);
-        win.setCanDragResize(false);
-        win.setMembersMargin(10);    
+    	final Window window = new Window();
+    	window.setTitle("Area de Informacao");
+        window.setHeaderIcon("pieces/16/cube_green.png", 16, 16);
+        window.setAutoSize(true);
+        window.setCanDragReposition(true);  
+        window.setCanDragResize(true);
+        window.setWidth100();
+        window.setHeight100();
         
         final TabSet tabs = new TabSet();
         tabs.setWidth100();
         tabs.setTabBarPosition(Side.TOP);
-        tabs.setHeight(300);
+        tabs.setHeight(400);
 
         Tab tab1 = new Tab("Script", "silk/script_go.png");
 
         scriptList.setCanAcceptDroppedRecords(true);  
         scriptList.setCanReorderRecords(true);
         
+        scriptList.addCellClickHandler(new CellClickHandler() {
+			
+			public void onCellClick(CellClickEvent event) {
+				
+				help.setContents("<br /><b><h3><center>" + gerenciador.getGuia().getGuia("Script") + "</center></h3></b>");
+			}
+		});
+        
         tab1.setPane(scriptList);        
         tabs.addTab(tab1);
-       // win.addItem(tabs); 
      	
         VLayout panel = new VLayout();
-        panel.addMember(tabs);
         panel.setWidth("40%");
         panel.setHeight("90%");
         panel.setBorder("1px");
         
-        TextArea help = new TextArea();
-        help.setWidth("95%");
+        window.addItem(help);
         
-        htmlPane.setContents("<br /><h3><b>Área de Informação</b></h3>");
+        panel.addMember(tabs);
+        panel.addMember(window);
         
-        panel.addMember(win);
-        
-        win.addChild(htmlPane);
-                        
         return panel;
     }  
     
