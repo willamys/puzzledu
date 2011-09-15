@@ -1,6 +1,7 @@
 package com.puzzledu.gui;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import com.puzzledu.basica.Classe;
@@ -43,7 +44,7 @@ public class PropriedadesGUI {
 	private ListGrid listaInterfaces;
 	private ListGrid listaPropriedades;
 	private Label labelHelp;
-
+	
 	public PropriedadesGUI(Gerenciador gerenciador, Label help) {
 
 		this.gerenciador = gerenciador;
@@ -90,25 +91,21 @@ public class PropriedadesGUI {
 		ListGridField nameField = new ListGridField("name");
 
 		listaPropriedades.setFields(imageField, nameField);
-
+		
 		listaPropriedades.addCellClickHandler(new CellClickHandler() {
-
+			
 			public void onCellClick(CellClickEvent event) {
 
-				labelHelp.setContents("<br /><b><h3><center>"
-						+ gerenciador.getGuia().getGuia("Métodos")
-						+ "</center></h3></b>");
+				labelHelp.setContents("<br /><b><h3><center>" + gerenciador.getGuia().getGuia("Métodos") + "</center></h3></b>");
 
 			}
 		});
 
-		listaPropriedades
-				.addCellContextClickHandler(new CellContextClickHandler() {
+		listaPropriedades.addCellContextClickHandler(new CellContextClickHandler() {
 
 					public void onCellContextClick(CellContextClickEvent event) {
 
-						Menu menu = createMenuPropriedades(((ListGridRecord) event
-								.getRecord()));
+						Menu menu = createMenuPropriedades(((ListGridRecord) event.getRecord()));
 
 						menu.setTop(event.getY());
 						menu.setLeft(event.getX());
@@ -118,11 +115,9 @@ public class PropriedadesGUI {
 						event.cancel();
 					}
 
-					private Menu createMenuPropriedades(
-							ListGridRecord listGridRecord) {
+					private Menu createMenuPropriedades(ListGridRecord listGridRecord) {
 
-						String m = listGridRecord.getAttribute("name")
-								.toString();
+						String m = listGridRecord.getAttribute("name").toString();
 						final String nome;
 
 						Menu menuPropriedades = new Menu();
@@ -135,14 +130,11 @@ public class PropriedadesGUI {
 
 							m = m.substring(0, m.indexOf("("));
 
-							inserirParametro = new MenuItem(
-									"Inserir Par&acirc;metro",
+							inserirParametro = new MenuItem("Inserir Par&acirc;metro",
 									"/icons/plugin_add.png");
-							removerMetodo = new MenuItem(
-									"Remover M&eacute;todo",
+							removerMetodo = new MenuItem("Remover M&eacute;todo",
 									"/icons/plugin_delete.png");
-							menuPropriedades.setItems(inserirParametro,
-									removerMetodo);
+							menuPropriedades.setItems(inserirParametro,	removerMetodo);
 
 						} else {
 
@@ -380,11 +372,18 @@ public class PropriedadesGUI {
 		ListGridField nameField = new ListGridField("name");
 
 		listaInterfaces.setFields(imageField, nameField);
+		
+		listaInterfaces.addCellClickHandler(new CellClickHandler() {
+			
+			@Override
+			public void onCellClick(CellClickEvent event) {
+				
+				labelHelp.setContents("<br /><b><h3><center>" + gerenciador.getGuia().getGuia("Interface") + "</center></h3></b>");
+				
+			}
+		});
 
-	
-
-		listaInterfaces
-				.addCellContextClickHandler(new CellContextClickHandler() {
+		listaInterfaces.addCellContextClickHandler(new CellContextClickHandler() {
 
 					public void onCellContextClick(CellContextClickEvent event) {
 
@@ -485,13 +484,7 @@ public class PropriedadesGUI {
 
 		List<Interface> lista = new ArrayList<Interface>();
 
-		Classe c = gerenciador
-				.getProjetoAtual()
-				.getRepositorioDados()
-				.getColecaoClasse()
-				.procurarClasse(
-						gerenciador.getProjetoAtual().getRepositorioDados()
-								.getColecaoClasse().getRaiz(), nomeClasse);
+		Classe c = gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz(), nomeClasse);
 
 		while (c != null) {
 
@@ -524,6 +517,30 @@ public class PropriedadesGUI {
 
 		return lst;
 	}
+	
+	public LinkedHashMap<String, String> getInterfacesLink(String nomeClasse) {
+
+		LinkedHashMap<String, String> lista = new LinkedHashMap<String, String>();
+
+		Classe c = gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz(), nomeClasse);
+
+		while (c != null) {
+
+			if (c.getInterfaces() != null) {
+
+				for (Interface i : c.getInterfaces()) {
+
+					if (!lista.containsValue(i))
+
+						lista.put(i.getNome(), i.getNome());
+				}
+			}
+
+			c = c.getParent();
+		}
+
+		return lista;	
+	}
 
 	public ListGrid getListaPropriedades() {
 		return listaPropriedades;
@@ -537,12 +554,8 @@ public class PropriedadesGUI {
 
 		List<Variavel> variaveis = new ArrayList<Variavel>();
 
-		Classe classe = gerenciador
-				.getProjetoAtual()
-				.getRepositorioDados()
-				.getColecaoClasse()
-				.procurarClasse(
-						gerenciador.getProjetoAtual().getRepositorioDados()
+		Classe classe = gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse()
+				.procurarClasse(gerenciador.getProjetoAtual().getRepositorioDados()
 								.getColecaoClasse().getRaiz(), nomeClasse);
 
 		Classe c = classe;

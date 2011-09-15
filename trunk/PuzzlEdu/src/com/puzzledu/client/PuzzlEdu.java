@@ -10,6 +10,7 @@ import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.TextArea;
 import com.puzzledu.basica.Classe;
 import com.puzzledu.gerenciador.Gerenciador;
+import com.puzzledu.gerenciador.Projeto;
 import com.puzzledu.gui.ClassesGUI;
 import com.puzzledu.gui.PartsListGrid;
 import com.puzzledu.gui.PropriedadesGUI;
@@ -55,6 +56,7 @@ public class PuzzlEdu implements EntryPoint {
 	private TextArea console;
 	private Window janelaPrincipal;
 	private LoginServiceAsync loginService;
+	private ProjetoServiceAsync projetoService;
 	private final Label help;
 	
 	public PuzzlEdu() {
@@ -79,6 +81,10 @@ public class PuzzlEdu implements EntryPoint {
     	loginService = (LoginServiceAsync) GWT.create(LoginService.class);
 		ServiceDefTarget endpoint = (ServiceDefTarget) loginService;
      	endpoint.setServiceEntryPoint("/Login");
+     	
+     	projetoService = (ProjetoServiceAsync) GWT.create(ProjetoService.class);
+     	ServiceDefTarget endpoint2 = (ServiceDefTarget) projetoService;
+     	endpoint2.setServiceEntryPoint("/ProjetoService");
      	
      	loginService.login(new AsyncCallback<Void>() {
 			
@@ -229,7 +235,7 @@ public class PuzzlEdu implements EntryPoint {
          Img imgOpen = new Img("/icons/my-documents-icon.png");
          imgOpen.setWidth("32px");
          imgOpen.setHeight("32px");
-         imgOpen.setTooltip("Novo");
+         imgOpen.setTooltip("Abrir");
          imgOpen.setCursor(Cursor.HAND);
          
          imgOpen.addClickHandler(new ClickHandler() {
@@ -332,6 +338,14 @@ public class PuzzlEdu implements EntryPoint {
     	leftPanel.setShowResizeBar(true);
     	leftPanel.setBottom(10);
     	
+    	ToolStrip toolStrip2 = new ToolStrip();  
+    	toolStrip2.setWidth("100%");  
+    	toolStrip2.setPadding(5);
+    	toolStrip2.setTop(28);
+    	toolStrip2.setLeft(15);
+    	toolStrip2.setAlign(Alignment.LEFT);
+         
+    	leftPanel.addMember(toolStrip2);
     	leftPanel.addMember(classesGUI.createArvoreClasses());    	
     	leftPanel.addMember(propriedadesGUI.createPainelPropriedades());
     	
@@ -697,6 +711,19 @@ public class PuzzlEdu implements EntryPoint {
         ListGridField nameField = new ListGridField("name");
         
         lista.setFields(nameField);
+        
+        projetoService.listarProjetos(new AsyncCallback<List<Projeto>>() {
+
+			public void onFailure(Throwable caught) {
+
+				
+			}
+
+			public void onSuccess(List<Projeto> result) {
+			
+				
+			}
+		});
         
         win.addItem(lista);
         win.show();   

@@ -12,6 +12,7 @@ public class ImagemRecord extends TileRecord {
 		
 		setName(name);
 		setPicture(image);
+		setHeader(name);
 	}
 
 	public void setPicture(String image) {
@@ -32,5 +33,15 @@ public class ImagemRecord extends TileRecord {
 	public String getPicture() {
 		
 		return getAttribute("picture");
+	}
+	
+	public String getHeader() {
+		
+		return getAttribute("name");
+	}
+	
+	public void setHeader(String header) {
+		
+		setAttribute("name", header);
 	}
 }

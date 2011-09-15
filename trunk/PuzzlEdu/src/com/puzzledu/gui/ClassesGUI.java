@@ -34,11 +34,14 @@ import com.smartgwt.client.widgets.events.ShowContextMenuHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.ButtonItem;
 import com.smartgwt.client.widgets.form.fields.CheckboxItem;
+import com.smartgwt.client.widgets.form.fields.FormItemIcon;
 import com.smartgwt.client.widgets.form.fields.RadioGroupItem;
 import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.form.fields.events.ChangedEvent;
 import com.smartgwt.client.widgets.form.fields.events.ChangedHandler;
+import com.smartgwt.client.widgets.form.fields.events.IconClickEvent;
+import com.smartgwt.client.widgets.form.fields.events.IconClickHandler;
 import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.grid.events.CellClickEvent;
@@ -96,7 +99,7 @@ public class ClassesGUI {
         treeGrid.setData(tree);            
         treeGrid.getData().openAll();
         treeGrid.setWidth100();
-        treeGrid.setHeight(330);
+        treeGrid.setHeight(310);
         treeGrid.setShowResizeBar(true);
         treeGrid.setAppImgDir("/icons/");
         
@@ -224,7 +227,7 @@ public class ClassesGUI {
 				
 				final Window winModal = new Window();  
                 winModal.setWidth(360);  
-                winModal.setHeight(130);  
+                winModal.setHeight(210);  
                 winModal.setTitle("Digite os dados da classe");  
                 winModal.setShowMinimizeButton(false);  
                 winModal.setIsModal(true);  
@@ -238,7 +241,7 @@ public class ClassesGUI {
                 
                 DynamicForm form = new DynamicForm();
                 form.setAutoFocus(true);
-                form.setNumCols(2);
+                form.setNumCols(3);
                 form.setHeight100();  
                 form.setWidth100();  
                 form.setPadding(10);  
@@ -251,9 +254,35 @@ public class ClassesGUI {
                 textItem.setTitle("Nome");                
                 textItem.setWrapTitle(true);
                 
+                final TextItem textSuperClass = new TextItem();
+                textSuperClass.setWidth(195);
+                textSuperClass.setTop(20);
+                textSuperClass.setTitle("Super Classe");                
+                textSuperClass.setWrapTitle(true);
+                textSuperClass.setDisabled(true);
+                textSuperClass.setValue(classeSelecionada.getNome());
+                
+                FormItemIcon icon = new FormItemIcon();  
+                icon.setSrc("/icons/plugin_edit.png"); 
+                
+                textSuperClass.setIcons(icon);  
+                textSuperClass.addIconClickHandler(new IconClickHandler() {  
+                    public void onIconClick(IconClickEvent event) {  
+                        
+                    	
+                    }  
+                }); 
+
                 final CheckboxItem checkAbstract = new CheckboxItem();
                 checkAbstract.setTitle("Abstract");
-
+                
+                SelectItem listaInterfaces = new SelectItem();  
+                listaInterfaces.setTitle("Interfaces");  
+                listaInterfaces.setMultiple(true);
+                listaInterfaces.setWidth(200);
+                listaInterfaces.setHeight(60);
+                listaInterfaces.setValueMap(propriedadesGUI.getInterfacesLink(classeSelecionada.getNome()));
+          
                 ButtonItem btnAdicionar = new ButtonItem(); 
                 btnAdicionar.setTitle("Criar Classe");
                 
@@ -308,7 +337,7 @@ public class ClassesGUI {
 					}
 				});
 
-                form.setFields(textItem, checkAbstract, btnAdicionar);
+                form.setFields(textItem, checkAbstract, textSuperClass, listaInterfaces, btnAdicionar);
                 winModal.addItem(form);  
                 winModal.show();                
 			}
