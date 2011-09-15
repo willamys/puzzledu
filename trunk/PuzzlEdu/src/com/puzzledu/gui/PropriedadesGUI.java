@@ -532,7 +532,7 @@ public class PropriedadesGUI {
 
 					if (!lista.containsValue(i))
 
-						lista.put(i.getNome(), i.getNome());
+					lista.put(i.getNome(), i.getNome());
 				}
 			}
 
