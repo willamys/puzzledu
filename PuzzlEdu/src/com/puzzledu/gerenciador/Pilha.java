@@ -127,7 +127,7 @@ public void executarAcoesDasInstancias(final TextArea console) {
 			
 			final Instancia inst = i;
 			
-			new Timer() {
+			new Runnable() {
 				
 				public void run() {
 					
@@ -145,21 +145,20 @@ public void executarAcoesDasInstancias(final TextArea console) {
 							
 							final AcaoFor acaoFor = (AcaoFor) a;
 							
-							//Timer timer = new Timer(){
-						
-								//public void run(){
-						
-									for(int i=0; i<acaoFor.getQtdRepeticoes(); i++) {
+							for(int i=0; i<acaoFor.getQtdRepeticoes(); i++) {
 																
-										AcaoIO acaoIO = new AcaoIO(acaoFor.getValor(), acaoFor.getMetodo());
-										executarAcaoIO(acaoIO);
-									}
-								//}
-							//};
+								//Timer timer = new Timer(){ 
+									//public void run(){ 
+										
+										AcaoIO acaoIO = new AcaoIO("1", acaoFor.getMetodo());
+										executarAcaoIO(acaoIO); 
+									//} 
+								//}; 
 
-							//timer.schedule(1000); 
+								//timer.schedule(1000); 
+							}
 							
-							console.setText(console.getText() + "repetir " + acaoFor.getQtdRepeticoes() + " vezes: " + inst.getNome() + "."  + a.getMetodo().getNome() + "("+ a.getValor() +")\n");
+							console.setText(console.getText() + "repetir " + acaoFor.getQtdRepeticoes() + " vezes: " + inst.getNome() + "."  + a.getMetodo().getNome() + "(1)\n");
 						}
 					}					
 				}
@@ -168,7 +167,7 @@ public void executarAcoesDasInstancias(final TextArea console) {
 				
 					Timer timer = new Timer(){ 
 						public void run(){ 
-							
+					
 							if (a.getMetodo().getNome().equals("avancar"))
 								
 								inst.getImage().setLeft(inst.getImage().getLeft() + (Integer.valueOf(a.getValor())*3 ));
@@ -220,13 +219,13 @@ public void executarAcoesDasInstancias(final TextArea console) {
 							    
 							    t2.schedule(3000);
 							    
-							}
+							}				
 						} 
 					}; 
 
-					timer.schedule(800); 							
+					timer.schedule(1000); 							
 				}
-			}.schedule(1000);
+			}.run();
 
 		}
 	}

@@ -66,14 +66,24 @@ public class Gerenciador implements ProjetoServiceAsync {
 		
 		//Usar API do GAE para retornar os projetos do usuário logado
 		
+		/*serviceSalvarProjeto.listarProjetos(new AsyncCallback<List<Projeto>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				
+				return null;
+			}
+
+
+			@Override
+			public void onSuccess(List<Projeto> result) {
+				return result;				
+			}
+		});*/
 		return null;
+		
 	}
 	
-	public List<Projeto> buscarProjetoNome(String nomeProjeto) {
-		
-		return null;
-	}
-
 	public Projeto getProjetoAtual() {
 		return projetoAtual;
 	}
@@ -154,7 +164,7 @@ public class Gerenciador implements ProjetoServiceAsync {
 	@Override
 	@SuppressWarnings("rawtypes") 
 	public void listarProjetos(AsyncCallback callback) {
-		// TODO Auto-generated method stub
+		serviceSalvarProjeto.listarProjetos(callback);
 		
 	}
 
