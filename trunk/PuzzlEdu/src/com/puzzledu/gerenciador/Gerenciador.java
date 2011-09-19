@@ -57,9 +57,9 @@ public class Gerenciador implements ProjetoServiceAsync {
 	
 		projetoAtual.getRepositorioDados().getColecaoClasse().addClasseFilha(hello, "Object");
 		
-		hello.addInterface(projetoAtual.getRepositorioDados().getColecaoInterface().procurarInterface("Desenh&aacute;vel"));
-		hello.addInterface(projetoAtual.getRepositorioDados().getColecaoInterface().procurarInterface("Anim&aacute;vel"));		
-		hello.addInterface(projetoAtual.getRepositorioDados().getColecaoInterface().procurarInterface("Comunic&aacute;vel"));
+		hello.addInterface(projetoAtual.getRepositorioDados().getColecaoInterface().procurarInterface("Desenhavel"));
+		hello.addInterface(projetoAtual.getRepositorioDados().getColecaoInterface().procurarInterface("Animavel"));		
+		hello.addInterface(projetoAtual.getRepositorioDados().getColecaoInterface().procurarInterface("Comunicavel"));
 	}	
 	
 	public List<Projeto> listarProjetos() {

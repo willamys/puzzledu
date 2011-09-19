@@ -40,8 +40,11 @@ import com.smartgwt.client.widgets.form.fields.SelectItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.form.fields.events.ChangedEvent;
 import com.smartgwt.client.widgets.form.fields.events.ChangedHandler;
+import com.smartgwt.client.widgets.form.fields.events.FormItemClickHandler;
+import com.smartgwt.client.widgets.form.fields.events.FormItemIconClickEvent;
 import com.smartgwt.client.widgets.form.fields.events.IconClickEvent;
 import com.smartgwt.client.widgets.form.fields.events.IconClickHandler;
+import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.grid.events.CellClickEvent;
@@ -140,8 +143,6 @@ public class ClassesGUI {
 				
 				propriedadesGUI.getListaInterfaces().setData(propriedadesGUI.getInterfaces(((TreeNode) event.getRecord()).getAttribute("Name")));
 				
-	
-										
 			}
 		});
         
@@ -158,7 +159,39 @@ public class ClassesGUI {
     	
     	Classe raiz = gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz();
 
-    	return  new TreeNode[]{new ClasseTreeNode(raiz.getNome(), raiz.getNome(), true)};
+    	return new TreeNode[]{new ClasseTreeNode(raiz.getNome(), raiz.getNome(), raiz.isAbstrata())};
+    }
+    
+    public TreeNode[] getTodasClasses() {
+    	
+    	Classe raiz = gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz();
+    	
+    	List<Classe> lst = new ArrayList<Classe>();
+    	
+    	lst.add(raiz);
+    	
+    	getFilhas(raiz, lst);
+    	
+    	ClasseTreeNode[] lista = new ClasseTreeNode[lst.size()];
+    	
+    	for (int i=0; i<lst.size(); i++) {
+    		
+    		Classe c = lst.get(i);
+    		
+    		lista[i] = new ClasseTreeNode(c.getNome(), c.getNome(), c.isAbstrata());
+    	}
+  
+    	return lista;
+    }
+    
+    public void getFilhas(Classe raiz, List<Classe> lst) {
+    	
+    	for (Classe filha : raiz.getFilhas()) {
+    	
+    		lst.add(filha);
+    		
+    		getFilhas(filha, lst);
+    	}
     }
     
     public TreeNode[] getInterfaces() {
@@ -255,46 +288,222 @@ public class ClassesGUI {
                 textItem.setWrapTitle(true);
                 
                 final TextItem textSuperClass = new TextItem();
-                textSuperClass.setWidth(195);
+                textSuperClass.setWidth(220);
                 textSuperClass.setTop(20);
                 textSuperClass.setTitle("Super Classe");                
                 textSuperClass.setWrapTitle(true);
-                textSuperClass.setDisabled(true);
+                textSuperClass.setIconHeight(16);
+                textSuperClass.setIconWidth(16);
+                textSuperClass.setAttribute("readOnly", true); 
                 textSuperClass.setValue(classeSelecionada.getNome());
                 
-                FormItemIcon icon = new FormItemIcon();  
-                icon.setSrc("/icons/plugin_edit.png"); 
+                FormItemIcon iconSearch = new FormItemIcon();  
+                iconSearch.setSrc("/icons/search.png"); 
                 
-                textSuperClass.setIcons(icon);  
+                textSuperClass.setIcons(iconSearch);
+                
                 textSuperClass.addIconClickHandler(new IconClickHandler() {  
                     public void onIconClick(IconClickEvent event) {  
-                        
                     	
+                    	final Window winModal = new Window();  
+                        winModal.setWidth(300);  
+                        winModal.setHeight(300);  
+                        winModal.setTitle("Selecione a Super Classe");  
+                        winModal.setShowMinimizeButton(false);  
+                        winModal.setIsModal(true);  
+                        winModal.centerInPage();
+                        
+                        winModal.addShowContextMenuHandler(new ShowContextMenuHandler() {
+                            public void onShowContextMenu(ShowContextMenuEvent event) {
+                                event.cancel();
+                            }
+                        });
+                        
+                        ListGrid lista = new ListGrid();
+                        lista.setCellHeight(24);
+                        lista.setImageSize(16);
+                        lista.setWidth100();
+                        lista.setHeight100();
+                        lista.setTop(20);
+                        lista.setBorder("0px");
+                		lista.setBodyStyleName("normal");
+                		lista.setAlternateRecordStyles(true);
+                		lista.setShowHeader(false);
+
+                		ListGridField imageField = new ListGridField("icon", 24);
+                		imageField.setType(ListGridFieldType.IMAGE);
+                		imageField.setImgDir("/icons/");
+
+                		ListGridField nameField = new ListGridField("Name");
+
+                		lista.setFields(imageField, nameField);
+                		
+                		lista.addCellClickHandler(new CellClickHandler() {
+                			
+                			public void onCellClick(CellClickEvent event) {
+
+                				textSuperClass.setValue(event.getRecord().getAttribute("Name").toString());
+                				
+                				winModal.destroy();
+								winModal.redraw();	
+                			}
+                		});
+                		
+                		lista.setData(getTodasClasses());
+
+
+                        winModal.addChild(lista);
+                        
+                        winModal.show();
                     }  
-                }); 
+                });
 
                 final CheckboxItem checkAbstract = new CheckboxItem();
                 checkAbstract.setTitle("Abstract");
                 
-                SelectItem listaInterfaces = new SelectItem();  
+                FormItemIcon iconAdd = new FormItemIcon();  
+                iconAdd.setSrc("/icons/add.png");
+                
+                FormItemIcon iconDel = new FormItemIcon();  
+                iconDel.setSrc("/icons/del.png");
+                
+                final SelectItem listaInterfaces = new SelectItem();  
                 listaInterfaces.setTitle("Interfaces");  
                 listaInterfaces.setMultiple(true);
-                listaInterfaces.setWidth(200);
+                listaInterfaces.setWidth(238);
                 listaInterfaces.setHeight(60);
-                listaInterfaces.setValueMap(propriedadesGUI.getInterfacesLink(classeSelecionada.getNome()));
-          
+                listaInterfaces.setIconHeight(16);
+                listaInterfaces.setIconWidth(16);
+                final LinkedHashMap<String, String> interfaces = new LinkedHashMap<String, String>();
+                
+                listaInterfaces.setIcons(iconAdd, iconDel);
+              
                 ButtonItem btnAdicionar = new ButtonItem(); 
                 btnAdicionar.setTitle("Criar Classe");
                 
-                ButtonItem btnCancelar = new ButtonItem();
-                btnCancelar.setTitle("Cancelar");                                
+                iconDel.addFormItemClickHandler(new FormItemClickHandler() {
+					
+					@Override
+					public void onFormItemClick(FormItemIconClickEvent event) {
+						
+						if (listaInterfaces.getValue() != null) {
+							
+							String nome = listaInterfaces.getValue().toString();
+							
+							interfaces.remove(nome);
+							
+							listaInterfaces.setValueMap(interfaces);
+							
+						} else  {
+							
+							SC.say("Aten&ccedil;&atilde;o", "Selecione uma interface");
+							return;
+						}
+						
+					}
+				});
                 
+                iconAdd.addFormItemClickHandler(new FormItemClickHandler() {
+					
+					public void onFormItemClick(FormItemIconClickEvent event) {
+						
+						final Window winModal = new Window();  
+		                winModal.setWidth(396);  
+		                winModal.setHeight(436);  
+		                winModal.setTitle("Selecione a Interface");  
+		                winModal.setShowMinimizeButton(false);  
+		                winModal.setIsModal(true);  
+		                winModal.centerInPage(); 
+		                winModal.setAlign(Alignment.CENTER);
+		                
+		                winModal.addShowContextMenuHandler(new ShowContextMenuHandler() {
+		                    public void onShowContextMenu(ShowContextMenuEvent event) {
+		                        event.cancel();
+		                    }
+		                });                
+		                
+		                Tree treeInter = new Tree();  
+		                treeInter.setModelType(TreeModelType.PARENT);  
+		                treeInter.setShowRoot(false);
+		                treeInter.setNameProperty("Name");  
+		                treeInter.setIdField("Id");
+		                treeInter.setParentIdField("ParentId"); 
+		                treeInter.setData(getInterfaces());
+		                          
+		                final TreeGrid treeGrid = new TreeGrid();  
+		                treeGrid.setFields(new TreeGridField("Name", "Interfaces"));  
+		                treeGrid.setData(treeInter);            
+		                treeGrid.getData().openAll();
+		                treeGrid.setWidth100();
+		                treeGrid.setHeight(360);
+		                treeGrid.setShowResizeBar(false);
+		                treeGrid.setShowHeader(false);
+		                treeGrid.setAppImgDir("/icons/");              
+		        		                
+		                DynamicForm form = new DynamicForm();
+		                form.setAutoFocus(true);
+		                form.setNumCols(1);
+		 
+		                form.setWidth100();
+		                form.setPadding(10);
+		                form.setLayoutAlign(Alignment.CENTER);  
+		                
+		                ButtonItem btnImplementar = new ButtonItem();
+		                btnImplementar.setWidth("150px");
+		                btnImplementar.setHeight("25px");
+		                btnImplementar.setTitle("Implementar Interface");
+		                                     					
+		                form.setFields(btnImplementar);
+		                
+		                winModal.addItem(treeGrid);
+		                winModal.addItem(form);
+		                winModal.setAlign(Alignment.CENTER);
+		                
+		                btnImplementar.addClickHandler(new com.smartgwt.client.widgets.form.fields.events.ClickHandler() {
+							
+							public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
+															
+								String nomeInterface = treeGrid.getSelectedRecord().getAttribute("ParentId");
+								
+								if (nomeInterface == null)
+									nomeInterface = treeGrid.getSelectedRecord().getAttribute("Name");
+								
+								Interface i = gerenciador.getProjetoAtual().getRepositorioDados().getColecaoInterface().procurarInterface(nomeInterface);
+								
+								if (i == null) {
+									
+									SC.say("Aten&ccedil;&atilde;o", "Interface N&atilde;o Encontrada!");
+									
+									return;
+								}
+
+								if (interfaces.containsKey(nomeInterface)) {
+									
+									SC.say("Aten&ccedil;&atilde;o", "Esta interface j&aacute; foi implementada");
+									return;
+								}
+									
+								interfaces.put(nomeInterface, nomeInterface);
+								
+								listaInterfaces.setValueMap(interfaces);
+									
+								winModal.destroy();
+								winModal.redraw();					
+							}
+						});
+
+		                winModal.show();                
+					}
+				});
+                                
                 btnAdicionar.addClickHandler(new com.smartgwt.client.widgets.form.fields.events.ClickHandler() {
 					
 					public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
 
 						try {
+							
 							if (LanguageUtils.getInstance().isValidClass(textItem.getValue().toString())){
+								
 								if (gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz(), textItem.getValue().toString()) != null) {
 									
 									SC.say("Aten&ccedil;&atilde;o", "J&aacute; existe uma classe com este nome!");
@@ -305,12 +514,15 @@ public class ClassesGUI {
 								Classe classeFilha = new Classe();
 								classeFilha.setNome(textItem.getValue().toString());
 								
+								for (String i : interfaces.keySet())								
+									classeFilha.addInterface(gerenciador.getProjetoAtual().getRepositorioDados().getColecaoInterface().procurarInterface(i));
+								
 								if (checkAbstract.getValue() != null)
 									classeFilha.setAbstrata(true);
 								else
 									classeFilha.setAbstrata(false);
 								
-								Classe classePai = gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().procurarClasse(classeSelecionada, raiz.getAttribute("Name"));
+								Classe classePai = gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz(), textSuperClass.getValue().toString());
 								
 								for (Variavel v : classePai.getVariaveis()) {
 									
@@ -318,13 +530,17 @@ public class ClassesGUI {
 									classeFilha.addVariavel(v1);
 								}
 								
-								gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().addClasseFilha(classeFilha, raiz.getAttribute("Name"));
+								//gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().addClasseFilha(classeFilha, textSuperClass.getValue().toString());
 								
-								ClasseTreeNode node = new ClasseTreeNode(
-										textItem.getValue().toString(), textItem.getValue().toString(), raiz.getAttribute("Name"), classeFilha.isAbstrata());
+								classeFilha.setParent(classePai);
+								classePai.addClasseFilha(classeFilha);
+																
+								ClasseTreeNode node = new ClasseTreeNode(classeFilha.getNome(), classeFilha.getNome(), classePai.getNome(), classeFilha.isAbstrata());
 								
-								tree.add(node, raiz);
+								//TreeNode subRootNode = new ClasseTreeNode(classePai.getNome(), classePai.getNome(), classePai.isAbstrata());
+								//TreeNode subRootNode2 = tree.getAllNodes(subRootNode);
 								
+								tree.add(node, raiz);								
 								tree.openAll(raiz);
 								
 								winModal.destroy();
@@ -1553,14 +1769,16 @@ class ClasseTreeNode extends TreeNode {
     
 	public ClasseTreeNode(String classeId, String name, String parentId, boolean abstrata) {  
         
-    	setClasseId(classeId);  
+		this(classeId, name, abstrata);
+		
+    	//setClasseId(classeId);  
     	setParentId(parentId);  
-        setName(name);   
+        //setName(name);   
         
-        if (abstrata)
-        	setIcon("/icons/puzzle_white.png");
-        else
-        	setIcon("/icons/puzzle_green.png");
+        //if (abstrata)
+        	//setIcon("/icons/puzzle_white.png");
+       // else
+        	//setIcon("/icons/puzzle_green.png");
     }  
 
     public void setClasseId(String value) {  
