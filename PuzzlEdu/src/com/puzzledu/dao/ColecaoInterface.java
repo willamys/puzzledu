@@ -22,7 +22,7 @@ public class ColecaoInterface implements IsSerializable {
 
 		listaInterfaces = new ArrayList<Interface>();
 		
-		Interface interfaceAnimavel = new Interface("Anim&aacute;vel");
+		Interface interfaceAnimavel = new Interface("Animavel");
 		
 		Metodo avancar = new Metodo("avancar");
 		avancar.setRetorno("void");
@@ -53,7 +53,7 @@ public class ColecaoInterface implements IsSerializable {
 		destruir.setAcesso("public");
 		interfaceAnimavel.adicionarMetodo(destruir);	
 		
-		Interface interfaceDesenhavel = new Interface("Desenh&aacute;vel");
+		Interface interfaceDesenhavel = new Interface("Desenhavel");
 		
 		Variavel imagem = new Variavel("imagem");
 		imagem.setTipo("Image");
@@ -71,7 +71,7 @@ public class ColecaoInterface implements IsSerializable {
 		getImagem.setAcesso("public");
 		interfaceDesenhavel.adicionarMetodo(getImagem);
 		
-		Interface interfaceComunicavel = new Interface("Comunic&aacute;vel");
+		Interface interfaceComunicavel = new Interface("Comunicavel");
 		
 		Metodo mostrarMsg = new Metodo("mostrarMensagem");
 		mostrarMsg.setRetorno("void");

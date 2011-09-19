@@ -56,7 +56,7 @@ public class PropriedadesGUI {
 		TabSet topTabSet = new TabSet();
 		topTabSet.setTabBarPosition(Side.TOP);
 		topTabSet.setWidth100();
-		topTabSet.setHeight(245);
+		topTabSet.setHeight(265);
 
 		Tab tabMetodos = new Tab("M&eacute;todos", "pieces/16/piece_yellow.png");
 		Tab tabInterfaces = new Tab("Interfaces", "pieces/16/piece_blue.png");
@@ -234,43 +234,28 @@ public class PropriedadesGUI {
 											final SelectItem comboTipo = new SelectItem();
 											comboTipo.setTitle("Tipo");
 											comboTipo.setType("comboBox");
-											comboTipo.setValueMap("String",
-													"int", "float");
-											comboTipo
-													.setDefaultToFirstOption(true);
+											comboTipo.setValueMap("String",	"int", "float");
+											comboTipo.setDefaultToFirstOption(true);
 
 											ButtonItem btnAdicionar = new ButtonItem();
-											btnAdicionar
-													.setTitle("Criar Par&acirc;metro");
+											btnAdicionar.setTitle("Criar Par&acirc;metro");
 
-											btnAdicionar
-													.addClickHandler(new com.smartgwt.client.widgets.form.fields.events.ClickHandler() {
+											btnAdicionar.addClickHandler(new com.smartgwt.client.widgets.form.fields.events.ClickHandler() {
 
-														public void onClick(
-																com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
-															String varName = textNome
-																	.getValue()
-																	.toString();
-															if (varName
-																	.equals("")) {
-																SC.say("Aten&ccedil;&atilde;o",
-																		"Informe o nome do Par&acirc;metro.");
+														public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
+															String varName = textNome.getValue().toString();
+															if (varName.equals("")) {
+															
+																SC.say("Aten&ccedil;&atilde;o", "Informe o nome do Par&acirc;metro.");
 																return;
 															}
 
-															Metodo metodo = ClassesGUI.classeSelecionada
-																	.procurarMetodo(nome);
+															Metodo metodo = ClassesGUI.classeSelecionada.procurarMetodo(nome);
 															if (metodo != null) {
-																if (metodo
-																		.procurarParametro(varName) == null) {
-																	metodo.adicionarParametro(new Parametro(
-																			varName,
-																			comboTipo
-																					.getValue()
-																					.toString()));
+																if (metodo.procurarParametro(varName) == null) {
+																	metodo.adicionarParametro(new Parametro(varName,comboTipo.getValue().toString()));
 
-																	getListaPropriedades()
-																			.setData(
+																	getListaPropriedades().setData(
 																					getPropriedades(ClassesGUI.classeSelecionada
 																							.getNome()));
 																	getListaInterfaces()
