@@ -302,6 +302,34 @@ public class ClassesGUI {
                 
                 textSuperClass.setIcons(iconSearch);
                 
+                final CheckboxItem checkAbstract = new CheckboxItem();
+                checkAbstract.setTitle("Abstract");
+                
+                FormItemIcon iconAdd = new FormItemIcon();  
+                iconAdd.setSrc("/icons/add.png");
+                
+                FormItemIcon iconDel = new FormItemIcon();  
+                iconDel.setSrc("/icons/del.png");
+                
+                final SelectItem listaInterfaces = new SelectItem();  
+                listaInterfaces.setTitle("Interfaces");  
+                listaInterfaces.setMultiple(true);
+                listaInterfaces.setWidth(238);
+                listaInterfaces.setHeight(60);
+                listaInterfaces.setIconHeight(16);
+                listaInterfaces.setIconWidth(16);
+                final LinkedHashMap<String, String> interfaces = new LinkedHashMap<String, String>();
+                
+                for (Interface i : classeSelecionada.getInterfaces())
+                	interfaces.put(i.getNome(), i.getNome());
+                
+                listaInterfaces.setValueMap(interfaces);
+                
+                listaInterfaces.setIcons(iconAdd, iconDel);
+              
+                ButtonItem btnAdicionar = new ButtonItem(); 
+                btnAdicionar.setTitle("Criar Classe");
+                
                 textSuperClass.addIconClickHandler(new IconClickHandler() {  
                     public void onIconClick(IconClickEvent event) {  
                     	
@@ -344,6 +372,13 @@ public class ClassesGUI {
 
                 				textSuperClass.setValue(event.getRecord().getAttribute("Name").toString());
                 				
+                				interfaces.clear();
+                				
+                				for (Interface i : gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz(), event.getRecord().getAttribute("Name").toString()).getInterfaces())
+                                	interfaces.put(i.getNome(), i.getNome());
+                                
+                                listaInterfaces.setValueMap(interfaces);
+                				
                 				winModal.destroy();
 								winModal.redraw();	
                 			}
@@ -357,29 +392,7 @@ public class ClassesGUI {
                         winModal.show();
                     }  
                 });
-
-                final CheckboxItem checkAbstract = new CheckboxItem();
-                checkAbstract.setTitle("Abstract");
                 
-                FormItemIcon iconAdd = new FormItemIcon();  
-                iconAdd.setSrc("/icons/add.png");
-                
-                FormItemIcon iconDel = new FormItemIcon();  
-                iconDel.setSrc("/icons/del.png");
-                
-                final SelectItem listaInterfaces = new SelectItem();  
-                listaInterfaces.setTitle("Interfaces");  
-                listaInterfaces.setMultiple(true);
-                listaInterfaces.setWidth(238);
-                listaInterfaces.setHeight(60);
-                listaInterfaces.setIconHeight(16);
-                listaInterfaces.setIconWidth(16);
-                final LinkedHashMap<String, String> interfaces = new LinkedHashMap<String, String>();
-                
-                listaInterfaces.setIcons(iconAdd, iconDel);
-              
-                ButtonItem btnAdicionar = new ButtonItem(); 
-                btnAdicionar.setTitle("Criar Classe");
                 
                 iconDel.addFormItemClickHandler(new FormItemClickHandler() {
 					
@@ -390,9 +403,21 @@ public class ClassesGUI {
 							
 							String nome = listaInterfaces.getValue().toString();
 							
-							interfaces.remove(nome);
+							Classe c = gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz(), textSuperClass.getValue().toString());
 							
-							listaInterfaces.setValueMap(interfaces);
+							if (c != null) {
+								
+								String superClass = c.implementaInterface(c, gerenciador.getProjetoAtual().getRepositorioDados().getColecaoInterface().procurarInterface(nome));
+								
+								if (superClass.equals("")) {
+									
+									interfaces.remove(nome);
+							
+									listaInterfaces.setValueMap(interfaces);
+									
+								} else
+									SC.say("Aten&ccedil;&atilde;o", "Esta interface é implementada na Super Classe: <b>" + superClass + "</b>");
+							}
 							
 						} else  {
 							
@@ -537,11 +562,8 @@ public class ClassesGUI {
 																
 								ClasseTreeNode node = new ClasseTreeNode(classeFilha.getNome(), classeFilha.getNome(), classePai.getNome(), classeFilha.isAbstrata());
 								
-								//TreeNode subRootNode = new ClasseTreeNode(classePai.getNome(), classePai.getNome(), classePai.isAbstrata());
-								//TreeNode subRootNode2 = tree.getAllNodes(subRootNode);
-								
-								tree.add(node, raiz);								
-								tree.openAll(raiz);
+								tree.add(node, tree.findById(classePai.getNome()));								
+								tree.openAll(node);
 								
 								winModal.destroy();
 								winModal.redraw();						
@@ -1106,11 +1128,11 @@ public class ClassesGUI {
 			
 			public void onClick(MenuItemClickEvent event) {
 				
-				if (ClassesGUI.classeSelecionada.procurarInterface(ClassesGUI.classeSelecionada, "Desenh&aacute;vel"))
+				if (ClassesGUI.classeSelecionada.procurarInterface(ClassesGUI.classeSelecionada, "Desenhavel"))
 					getJanelaSelecionarImagem();
 				else {
 
-					Interface i = gerenciador.getProjetoAtual().getRepositorioDados().getColecaoInterface().procurarInterface("Desenh&aacute;vel");
+					Interface i = gerenciador.getProjetoAtual().getRepositorioDados().getColecaoInterface().procurarInterface("Desenhavel");
 								
 					for (Variavel v : i.getVariaveis()) {
 
