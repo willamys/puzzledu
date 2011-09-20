@@ -563,7 +563,7 @@ public class ClassesGUI {
 								ClasseTreeNode node = new ClasseTreeNode(classeFilha.getNome(), classeFilha.getNome(), classePai.getNome(), classeFilha.isAbstrata());
 								
 								tree.add(node, tree.findById(classePai.getNome()));								
-								tree.openAll(node);
+								tree.openAll(raiz);
 								
 								winModal.destroy();
 								winModal.redraw();						
@@ -1132,16 +1132,6 @@ public class ClassesGUI {
 					getJanelaSelecionarImagem();
 				else {
 
-					Interface i = gerenciador.getProjetoAtual().getRepositorioDados().getColecaoInterface().procurarInterface("Desenhavel");
-								
-					for (Variavel v : i.getVariaveis()) {
-
-						classeSelecionada.addVariavel(new Variavel(v.getNome(), v.getTipo()));
-						classeSelecionada.addVariavelRecursivamente(classeSelecionada, v);											
-					}
-								
-					classeSelecionada.addInterface(i);
-																								
 					getJanelaSelecionarImagem();
 							
 					propriedadesGUI.getListaPropriedades().setData(propriedadesGUI.getPropriedades(classeSelecionada.getNome()));
@@ -1741,6 +1731,7 @@ public class ClassesGUI {
         tileGrid.setData(ImagemData.getRecords());
         tileGrid.setTileWidth(50);
         tileGrid.setTileHeight(50);
+        tileGrid.setBorder("0px");
         
         DetailViewerField image = new DetailViewerField("picture");
         image.setType("image");
@@ -1751,6 +1742,19 @@ public class ClassesGUI {
 			
 			public void onRecordClick(RecordClickEvent event) {
 			
+				Interface i = gerenciador.getProjetoAtual().getRepositorioDados().getColecaoInterface().procurarInterface("Desenhavel");
+				
+				for (Variavel v : i.getVariaveis()) {
+					
+					if (!classeSelecionada.contemVariavel(v.getNome())) {
+						
+						classeSelecionada.addVariavel(new Variavel(v.getNome(), v.getTipo()));
+						classeSelecionada.addVariavelRecursivamente(classeSelecionada, v);
+					}
+				}
+							
+				classeSelecionada.addInterface(i);
+				
 				winModal.destroy();
 				winModal.redraw();	
 				
@@ -1762,7 +1766,12 @@ public class ClassesGUI {
 						v.setValorPadrao(img);	
 				}
 				
-				classeSelecionada.atribuirValorVariaveisRecursivamente(classeSelecionada, "imagem", img);				
+				classeSelecionada.atribuirValorVariaveisRecursivamente(classeSelecionada, "imagem", img);
+				
+				propriedadesGUI.getListaPropriedades().setData(propriedadesGUI.getPropriedades(ClassesGUI.classeSelecionada.getNome()));
+				
+				propriedadesGUI.getListaInterfaces().setData(propriedadesGUI.getInterfaces(ClassesGUI.classeSelecionada.getNome()));
+				
 			}
 		});
                
