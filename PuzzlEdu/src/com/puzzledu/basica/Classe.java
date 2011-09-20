@@ -48,6 +48,17 @@ public class Classe implements IsSerializable {
 	public List<Classe> getFilhas() {
 		return filhas;
 	}
+	
+	public boolean contemVariavel(String nomeVariavel) {
+		
+		for (Variavel v : variaveis) {
+			
+			if (v.getNome().equals(nomeVariavel))
+				return true;
+		}
+		
+		return false;
+	}
 
 	public void setFilhas(List<Classe> filhas) {
 		this.filhas = filhas;
