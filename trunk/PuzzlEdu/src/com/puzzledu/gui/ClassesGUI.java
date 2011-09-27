@@ -260,7 +260,7 @@ public class ClassesGUI {
 				
 				final Window winModal = new Window();  
                 winModal.setWidth(360);  
-                winModal.setHeight(210);  
+                winModal.setHeight(220);  
                 winModal.setTitle("Digite os dados da classe");  
                 winModal.setShowMinimizeButton(false);  
                 winModal.setIsModal(true);  
@@ -275,7 +275,7 @@ public class ClassesGUI {
                 DynamicForm form = new DynamicForm();
                 form.setAutoFocus(true);
                 form.setNumCols(3);
-                form.setHeight100();  
+                form.setHeight("90%");  
                 form.setWidth100();  
                 form.setPadding(10);  
                 form.setLayoutAlign(VerticalAlignment.CENTER);  

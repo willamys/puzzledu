@@ -7,28 +7,13 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.puzzledu.client.ProjetoService;
+import com.puzzledu.client.CarregarProjetoService;
 import com.puzzledu.gerenciador.Projeto;
 
 @SuppressWarnings("serial")
-public class ProjetoServiceImpl extends RemoteServiceServlet implements ProjetoService {
+public class CarregarProjetoServiceImpl extends RemoteServiceServlet implements CarregarProjetoService {
 
-	public void salvarProjeto(Projeto projeto) {
-		
-		PersistenceManager pm = GerenciadorPersistencia.get().getPersistenceManager();
-
-        try {
-        	
-            pm.makePersistent(projeto);
-            
-        } finally {
-            pm.close();
-        }
-		
-	}
-
-	
-	public List<Projeto> listarProjetos() {
+public List<Projeto> listarProjetos() {
 		
 		ArrayList<Projeto> lst = null;
 		

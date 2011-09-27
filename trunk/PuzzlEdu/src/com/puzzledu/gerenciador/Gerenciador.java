@@ -7,6 +7,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.puzzledu.basica.Classe;
 import com.puzzledu.basica.Variavel;
+import com.puzzledu.client.CarregarProjetoService;
+import com.puzzledu.client.CarregarProjetoServiceAsync;
 import com.puzzledu.client.ProjetoService;
 import com.puzzledu.client.ProjetoServiceAsync;
 import com.puzzledu.shared.Guia;
@@ -22,6 +24,7 @@ public class Gerenciador implements ProjetoServiceAsync {
 	private Projeto projetoAtual;
 	private ProjetoServiceAsync serviceSalvarProjeto;
 	private Guia guia;
+	private CarregarProjetoServiceAsync carregarProjetoService;
 	
 	public Gerenciador() {
 
@@ -39,6 +42,11 @@ public class Gerenciador implements ProjetoServiceAsync {
 		serviceSalvarProjeto = (ProjetoServiceAsync) GWT.create(ProjetoService.class);
 		ServiceDefTarget endpoint = (ServiceDefTarget) serviceSalvarProjeto;
      	endpoint.setServiceEntryPoint("/ProjetoService");
+     	
+     	carregarProjetoService = (CarregarProjetoServiceAsync) GWT.create(CarregarProjetoService.class);
+     	ServiceDefTarget endpoint3 = (ServiceDefTarget) carregarProjetoService;
+     	endpoint3.setServiceEntryPoint("/CarregarProjetoService");
+     	
 	}
 
 	public void novoProjeto(String nomeProjeto){
@@ -161,11 +169,9 @@ public class Gerenciador implements ProjetoServiceAsync {
 		serviceSalvarProjeto.salvarProjeto(projeto, callback);
 	}
 
-	@Override
 	@SuppressWarnings("rawtypes") 
 	public void listarProjetos(AsyncCallback callback) {
-		serviceSalvarProjeto.listarProjetos(callback);
-		
+		carregarProjetoService.listarProjetos(callback);		
 	}
 
 	public Guia getGuia() {
@@ -175,5 +181,4 @@ public class Gerenciador implements ProjetoServiceAsync {
 	public void setGuia(Guia guia) {
 		this.guia = guia;
 	}	
-	
 }
