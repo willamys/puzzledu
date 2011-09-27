@@ -11,14 +11,14 @@ import com.puzzledu.dao.RepositorioDados;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Projeto implements IsSerializable {
-	
+
 	@PrimaryKey @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Long id;
 	
 	@Persistent 
 	private String nome;
     
-    //@Persistent
+    @Persistent
 	private RepositorioDados repositorioDados;
 
 	public Projeto() {
@@ -39,6 +39,11 @@ public class Projeto implements IsSerializable {
 		this();
 		this.id = id;
 		this.nome = nome;		
+	}
+	
+	public Projeto(String nome) {
+		
+		this.nome = nome;
 	}
 
 	public Long getId() {

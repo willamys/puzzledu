@@ -17,6 +17,7 @@ import com.puzzledu.gui.PropriedadesGUI;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.Cursor;
 import com.smartgwt.client.types.DragAppearance;
+import com.smartgwt.client.types.ListGridFieldType;
 import com.smartgwt.client.types.Overflow;
 import com.smartgwt.client.types.Side;
 import com.smartgwt.client.types.TreeModelType;
@@ -34,6 +35,7 @@ import com.smartgwt.client.widgets.events.ShowContextMenuEvent;
 import com.smartgwt.client.widgets.events.ShowContextMenuHandler;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
+import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.grid.events.CellClickEvent;
 import com.smartgwt.client.widgets.grid.events.CellClickHandler;
 import com.smartgwt.client.widgets.layout.HLayout;
@@ -57,6 +59,7 @@ public class PuzzlEdu implements EntryPoint {
 	private Window janelaPrincipal;
 	private LoginServiceAsync loginService;
 	private ProjetoServiceAsync projetoService;
+	private CarregarProjetoServiceAsync carregarProjetoService;
 	private final Label help;
 	
 	public PuzzlEdu() {
@@ -85,6 +88,10 @@ public class PuzzlEdu implements EntryPoint {
      	projetoService = (ProjetoServiceAsync) GWT.create(ProjetoService.class);
      	ServiceDefTarget endpoint2 = (ServiceDefTarget) projetoService;
      	endpoint2.setServiceEntryPoint("/ProjetoService");
+     	
+     	carregarProjetoService = (CarregarProjetoServiceAsync) GWT.create(CarregarProjetoService.class);
+     	ServiceDefTarget endpoint3 = (ServiceDefTarget) carregarProjetoService;
+     	endpoint3.setServiceEntryPoint("/CarregarProjetoService");
      	
      	loginService.login(new AsyncCallback<Void>() {
 			
@@ -257,7 +264,7 @@ public class PuzzlEdu implements EntryPoint {
          imgSave.addClickHandler(new ClickHandler() {
 			
 			public void onClick(ClickEvent event) {
-				
+
 				gerenciador.salvar();
 			}
 		});
@@ -696,8 +703,8 @@ public class PuzzlEdu implements EntryPoint {
         win.setCanDragResize(true);
         win.setMembersMargin(5);
 
-        ListGrid lista = new ListGrid();
-        lista.setCellHeight(24);
+        final ListGrid lista = new ListGrid();
+        lista.setCellHeight(36);
         lista.setImageSize(16);
         lista.setWidth100();
         lista.setHeight100();
@@ -708,19 +715,35 @@ public class PuzzlEdu implements EntryPoint {
         lista.setShowHeader(false);
         lista.setEmptyMessage("Nenhum Projeto Salvo!");
 
-        ListGridField nameField = new ListGridField("name");
+        ListGridField nameField = new ListGridField("name", "Nome do Projeto");
         
-        lista.setFields(nameField);
+        ListGridField imageField = new ListGridField("imageField", " ");
+        imageField.setType(ListGridFieldType.IMAGE);
+        imageField.setWidth(30);
         
-        projetoService.listarProjetos(new AsyncCallback<List<Projeto>>() {
+        lista.setFields(imageField, nameField);
+        
+        carregarProjetoService.listarProjetos(new AsyncCallback<List<Projeto>>() {
 
 			public void onFailure(Throwable caught) {
 
-				
+				System.out.println("Failure " + caught.getMessage());
 			}
 
 			public void onSuccess(List<Projeto> result) {
-			
+				
+				ListGridRecord[] lst = new ListGridRecord[result.size()];
+				
+				for (int i = 0; i < result.size(); i++) {
+
+					ListGridRecord record = new ListGridRecord();
+					record.setAttribute("imageField", "silk/page_white_cup.png");
+					record.setAttribute("name", result.get(i).getNome());
+
+					lst[i] = record;
+				}
+
+				lista.setData(lst);
 				
 			}
 		});

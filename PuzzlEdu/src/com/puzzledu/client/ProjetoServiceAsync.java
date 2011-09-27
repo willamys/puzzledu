@@ -8,5 +8,5 @@ public interface ProjetoServiceAsync {
 
 	public void salvarProjeto(Projeto projeto, AsyncCallback callback);
 
-	public void listarProjetos(AsyncCallback callback);
+	//public void listarProjetos(AsyncCallback callback);
 }
