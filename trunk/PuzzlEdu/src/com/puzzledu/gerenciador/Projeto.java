@@ -26,14 +26,6 @@ public class Projeto implements IsSerializable {
 		repositorioDados = new RepositorioDados();
 	}
 	
-	public Projeto(Long id, String nome, RepositorioDados repositorioDados) {
-		
-		this();
-		this.id = id;
-		this.nome = nome;
-		this.repositorioDados = repositorioDados;
-	}
-
 	public Projeto(Long id, String nome) {
 		
 		this();
@@ -44,6 +36,13 @@ public class Projeto implements IsSerializable {
 	public Projeto(String nome) {
 		
 		this.nome = nome;
+	}
+
+	public Projeto(Long id, String nome, RepositorioDados repositorioDados) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.repositorioDados = repositorioDados;
 	}
 
 	public Long getId() {

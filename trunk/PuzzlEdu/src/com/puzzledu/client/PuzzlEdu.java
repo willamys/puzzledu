@@ -739,6 +739,8 @@ public class PuzzlEdu implements EntryPoint {
 					ListGridRecord record = new ListGridRecord();
 					record.setAttribute("imageField", "silk/page_white_cup.png");
 					record.setAttribute("name", result.get(i).getNome());
+					
+					System.out.println( result.get(i).getRepositorioDados());
 
 					lst[i] = record;
 				}
