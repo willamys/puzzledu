@@ -74,6 +74,7 @@ public class ClassesGUI {
 	private Canvas painel;
 	private PartsListGrid scriptList;
 	private Label labelHelp;
+	private TreeGrid treeGrid;
 	
 	public ClassesGUI(Gerenciador gerenciador, PropriedadesGUI propriedadesGUI, Canvas painel, PartsListGrid scriptList, Label help) {
 
@@ -97,7 +98,7 @@ public class ClassesGUI {
         tree.setParentIdField("ParentId"); 
         tree.setData(root);
                   
-        TreeGrid treeGrid = new TreeGrid();  
+        treeGrid = new TreeGrid();  
         treeGrid.setFields(new TreeGridField("Name", "Classes"));  
         treeGrid.setData(tree);            
         treeGrid.getData().openAll();
@@ -154,6 +155,26 @@ public class ClassesGUI {
         
         return treeGrid;
     }
+	
+	public void carregaroArvore() {
+		
+		TreeNode[] root = getRootClasses();
+		
+		tree = new Tree();  
+        tree.setModelType(TreeModelType.CHILDREN);  
+        tree.setShowRoot(false);
+        tree.setNameProperty("Name");  
+        tree.setIdField("Id");
+        tree.setParentIdField("ParentId"); 
+        tree.setData(root);
+        
+        treeGrid.setData(tree);
+        
+		Classe raiz = gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz();
+        fillTree(raiz, (ClasseTreeNode)root[0]);
+    	        
+    	tree.openAll(root[0]);
+	}
    
     public TreeNode[] getRootClasses() {
     	

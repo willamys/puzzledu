@@ -386,6 +386,13 @@ public class PropriedadesGUI {
 
 		return listaInterfaces;
 	}
+	
+	public void atualizarDados() {
+		
+		getListaPropriedades().setData(getPropriedades(ClassesGUI.classeSelecionada.getNome()));
+
+		getListaInterfaces().setData(getInterfaces(ClassesGUI.classeSelecionada.getNome()));
+	}
 
 	private Menu createMenuInterfaces(ListGridRecord record) {
 

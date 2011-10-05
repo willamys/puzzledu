@@ -1,5 +1,4 @@
 package com.puzzledu.client;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +32,9 @@ import com.smartgwt.client.widgets.events.DropEvent;
 import com.smartgwt.client.widgets.events.DropHandler;
 import com.smartgwt.client.widgets.events.ShowContextMenuEvent;
 import com.smartgwt.client.widgets.events.ShowContextMenuHandler;
+import com.smartgwt.client.widgets.form.DynamicForm;
+import com.smartgwt.client.widgets.form.fields.ButtonItem;
+import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
@@ -61,6 +63,7 @@ public class PuzzlEdu implements EntryPoint {
 	private ProjetoServiceAsync projetoService;
 	private CarregarProjetoServiceAsync carregarProjetoService;
 	private final Label help;
+	private Window window;
 	
 	public PuzzlEdu() {
 					
@@ -139,7 +142,7 @@ public class PuzzlEdu implements EntryPoint {
 
    public Window getJanelaPrincipal() {  
   
-        Window window = new Window();  
+        window = new Window();  
         window.setAutoSize(false);  
         
         window.setTitle("PuzzlEdu: " + gerenciador.getProjetoAtual().getNome());  
@@ -233,8 +236,65 @@ public class PuzzlEdu implements EntryPoint {
 			@Override
 			public void onClick(ClickEvent event) {
 				
-				//repositorioDados = new RepositorioDados();
-				gerenciador.novoProjeto("Hello");
+				final Window winModal = new Window();  
+                winModal.setWidth(320);  
+                winModal.setHeight(160);  
+                winModal.setTitle("Novo Projeto");  
+                winModal.setShowMinimizeButton(false);  
+                winModal.setIsModal(true);  
+                winModal.centerInPage();
+                
+                winModal.addShowContextMenuHandler(new ShowContextMenuHandler() {
+                    public void onShowContextMenu(ShowContextMenuEvent event) {
+                        event.cancel();
+                    }
+                });
+                
+                DynamicForm form = new DynamicForm();
+                form.setAutoFocus(true);
+                form.setNumCols(3);
+                form.setHeight("90%");  
+                form.setWidth100();  
+                form.setPadding(10);  
+                form.setLayoutAlign(VerticalAlignment.CENTER);  
+                form.setAlign(Alignment.CENTER);
+                
+                final TextItem textItem = new TextItem();
+                textItem.setWidth(150);
+                textItem.setTop(20);
+                textItem.setTitle("Nome do Projeto");                
+                textItem.setWrapTitle(true);
+                
+                ButtonItem btnAdicionar = new ButtonItem(); 
+                btnAdicionar.setTitle("Criar Novo Projeto");
+                
+                form.setFields(textItem, btnAdicionar);
+                form.setTop(40);
+                winModal.addChild(form);
+                winModal.setAlign(Alignment.CENTER);
+                
+                btnAdicionar.addClickHandler(new com.smartgwt.client.widgets.form.fields.events.ClickHandler() {
+					
+					public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
+						
+						if (textItem.getValue() != null) {
+							
+							gerenciador.novoProjeto(textItem.getValue().toString());
+							
+							//propriedadesGUI.atualizarDados();
+							
+							classesGUI.carregaroArvore();
+							
+							window.setTitle("PuzzlEdu: " + gerenciador.getProjetoAtual().getNome());
+							
+							winModal.destroy();
+							winModal.redraw();
+						}							
+					}
+                });
+                
+                winModal.show();  
+				
 
 			}
 		 });
@@ -740,8 +800,6 @@ public class PuzzlEdu implements EntryPoint {
 					record.setAttribute("imageField", "silk/page_white_cup.png");
 					record.setAttribute("name", result.get(i).getNome());
 					
-					System.out.println(result.get(i).getId() + "\t" + result.get(i).getRepositorioDados());
-
 					lst[i] = record;
 				}
 
