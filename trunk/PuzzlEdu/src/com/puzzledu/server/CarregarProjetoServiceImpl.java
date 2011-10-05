@@ -30,7 +30,7 @@ public List<Projeto> listarProjetos() {
     		 lst = new ArrayList<Projeto>();
     		 
     		 for (Projeto p : results) 
-    			 lst.add(new Projeto(p.getNome()));
+    			 lst.add(p);
     		 
 			return lst;				
 			 
@@ -39,6 +39,5 @@ public List<Projeto> listarProjetos() {
 			query.closeAll();
 		}
 		
-		//return null;
 	}
 }

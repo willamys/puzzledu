@@ -2,16 +2,39 @@ package com.puzzledu.basica;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+
 import com.google.gwt.user.client.rpc.IsSerializable;
 
+@PersistenceCapable(detachable="false")
 public class Metodo implements IsSerializable {
 
+	@PrimaryKey @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+	private Long id;
+	
+	@Persistent		
 	private String nome;
+	
+	@Persistent
 	private String retorno;
+	
+	@Persistent
 	private List<Parametro> parametros;
+	
+	@Persistent
 	private String acesso;
+	
+	@Persistent
 	private boolean isAbstract;
+	
+	@Persistent
 	private boolean isFinal;
+	
+	@Persistent
 	private boolean sync;
 	
 	public Metodo() {
@@ -19,11 +42,33 @@ public class Metodo implements IsSerializable {
 		parametros = new ArrayList<Parametro>();
 	}
 
+	public Metodo(Long id, String nome, String retorno,
+			List<Parametro> parametros, String acesso, boolean isAbstract,
+			boolean isFinal, boolean sync) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.retorno = retorno;
+		this.parametros = parametros;
+		this.acesso = acesso;
+		this.isAbstract = isAbstract;
+		this.isFinal = isFinal;
+		this.sync = sync;
+	}
+
 	public Metodo(String nome) {
 
 		this();
 		
 		setNome(nome);
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getNome() {

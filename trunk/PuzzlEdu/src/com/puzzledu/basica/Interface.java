@@ -2,13 +2,27 @@ package com.puzzledu.basica;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+
 import com.google.gwt.user.client.rpc.IsSerializable;
 
+@PersistenceCapable(detachable="false")
 public class Interface implements IsSerializable {
 
-	private long id;
+	@PrimaryKey @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+	private Long id;
+	
+	@Persistent		
 	private String nome;
+	
+	@Persistent	
 	private List<Metodo> metodos;
+	
+	@Persistent	
 	private List<Variavel> variaveis;
 	
 	public Interface() {
@@ -24,11 +38,20 @@ public class Interface implements IsSerializable {
 		this.nome = nome;
 	}
 
-	public long getId() {
+	public Interface(Long id, String nome, List<Metodo> metodos,
+			List<Variavel> variaveis) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.metodos = metodos;
+		this.variaveis = variaveis;
+	}
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

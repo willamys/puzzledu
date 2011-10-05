@@ -18,7 +18,7 @@ public class Projeto implements IsSerializable {
 	@Persistent 
 	private String nome;
     
-    @Persistent
+	@Persistent 
 	private RepositorioDados repositorioDados;
 
 	public Projeto() {
