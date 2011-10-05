@@ -1,7 +1,5 @@
 package com.puzzledu.gerenciador;
 
-import java.util.List;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
@@ -34,7 +32,6 @@ public class Gerenciador implements ProjetoServiceAsync {
 		pilha = new Pilha();
 		
 		novoProjetoExemplo();
-		//novoProjeto("New Project");		
 	}
 	
 	private void inicializarServicos() {
@@ -69,29 +66,7 @@ public class Gerenciador implements ProjetoServiceAsync {
 		hello.addInterface(projetoAtual.getRepositorioDados().getColecaoInterface().procurarInterface("Animavel"));		
 		hello.addInterface(projetoAtual.getRepositorioDados().getColecaoInterface().procurarInterface("Comunicavel"));
 	}	
-	
-	public List<Projeto> listarProjetos() {
 		
-		//Usar API do GAE para retornar os projetos do usuário logado
-		
-		/*serviceSalvarProjeto.listarProjetos(new AsyncCallback<List<Projeto>>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				
-				return null;
-			}
-
-
-			@Override
-			public void onSuccess(List<Projeto> result) {
-				return result;				
-			}
-		});*/
-		return null;
-		
-	}
-	
 	public Projeto getProjetoAtual() {
 		return projetoAtual;
 	}
