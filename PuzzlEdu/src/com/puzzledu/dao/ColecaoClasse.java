@@ -1,19 +1,51 @@
 package com.puzzledu.dao;
 
 import java.util.List;
+
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+
 import com.google.gwt.user.client.rpc.IsSerializable;
 import com.puzzledu.basica.Classe;
 import com.puzzledu.basica.Interface;
 import com.puzzledu.basica.Metodo;
 
+@PersistenceCapable(detachable="false")
 public class ColecaoClasse implements IsSerializable {
-
+	
+	@PrimaryKey @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+	private Long id;
+	
+	@Persistent	
 	private Classe raiz;
 	
 	public ColecaoClasse() {
 		
 		cadastrarClassesPadrao();
+	}	
+
+	public ColecaoClasse(Long id, Classe raiz) {
+		super();
+		this.id = id;
+		this.raiz = raiz;
 	}
+
+	public Long getId() {
+		return id;
+	}
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+	public void setRaiz(Classe raiz) {
+		this.raiz = raiz;
+	}
+
 
 	private void cadastrarClassesPadrao() {
 		

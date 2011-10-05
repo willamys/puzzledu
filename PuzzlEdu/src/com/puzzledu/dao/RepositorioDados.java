@@ -1,20 +1,21 @@
 package com.puzzledu.dao;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
+@PersistenceCapable(detachable="false")
 public class RepositorioDados implements IsSerializable {
-
-	@PrimaryKey @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	private int id;	
 	
+	@PrimaryKey @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)	
+	private Long id;	
+	
+	@Persistent 
 	private ColecaoClasse colecaoClasse;
+	
 	private ColecaoInterface colecaoInterface;
 
 	/* Repositório responsável por persistir os dados do projeto, e não os projetos. 
@@ -50,15 +51,15 @@ public class RepositorioDados implements IsSerializable {
 		this.colecaoInterface = colecaoInterface;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public RepositorioDados(int id, ColecaoClasse colecaoClasse,
+	public RepositorioDados(Long id, ColecaoClasse colecaoClasse,
 			ColecaoInterface colecaoInterface) {
 		super();
 		this.id = id;

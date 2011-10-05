@@ -2,18 +2,42 @@ package com.puzzledu.basica;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+
 import com.google.gwt.user.client.rpc.IsSerializable;
 
+@PersistenceCapable(detachable="false")
 public class Classe implements IsSerializable {
 
-	private long id;
+	@PrimaryKey @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+	private Long id;
+	
+	@Persistent	
 	private String nome;
+	
+	@Persistent 
 	private List<Classe> filhas;
+	
+	@Persistent 
 	private List<Interface> interfaces;
+	
+	@Persistent 
 	private List<Metodo> metodos;
+	
+	@Persistent 
 	private List<Variavel> variaveis;
+	
+	@Persistent 
 	private boolean abstrata;
+	
+	@Persistent 
 	private Classe parent;
+	
+	@Persistent 
 	private String comentario;
 	
 	public Classe() {
@@ -24,6 +48,26 @@ public class Classe implements IsSerializable {
 		variaveis = new ArrayList<Variavel>();
 	}
 	
+	public Classe(Long id, String nome, List<Classe> filhas,
+			List<Interface> interfaces, List<Metodo> metodos,
+			List<Variavel> variaveis, boolean abstrata, Classe parent,
+			String comentario) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.filhas = filhas;
+		this.interfaces = interfaces;
+		this.metodos = metodos;
+		this.variaveis = variaveis;
+		this.abstrata = abstrata;
+		this.parent = parent;
+		this.comentario = comentario;
+	}
+	
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public Classe(String filha) {
 
 		setNome(filha);

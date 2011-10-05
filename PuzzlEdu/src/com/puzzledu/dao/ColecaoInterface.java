@@ -9,7 +9,10 @@ import com.puzzledu.basica.Metodo;
 import com.puzzledu.basica.Parametro;
 import com.puzzledu.basica.Variavel;
 
+
 public class ColecaoInterface implements IsSerializable {
+
+	private Long id;	
 
 	private List<Interface> listaInterfaces;
 	
@@ -18,6 +21,20 @@ public class ColecaoInterface implements IsSerializable {
 		cadastrarInterfacesPadrao();
 	}
 	
+	public ColecaoInterface(Long id, List<Interface> listaInterfaces) {
+		super();
+		this.id = id;
+		this.listaInterfaces = listaInterfaces;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	private void cadastrarInterfacesPadrao() {
 
 		listaInterfaces = new ArrayList<Interface>();
