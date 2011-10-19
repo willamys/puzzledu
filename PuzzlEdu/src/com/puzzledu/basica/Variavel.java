@@ -1,29 +1,13 @@
 package com.puzzledu.basica;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Variavel implements IsSerializable {
 
-	@PrimaryKey @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Long id;
-	
-	@Persistent		
 	private String acesso;
-	
-	@Persistent	
 	private String nome;
-	
-	@Persistent	
 	private String tipo;
-	
-	@Persistent	
 	private String valorPadrao;
 	
 	public Variavel() {

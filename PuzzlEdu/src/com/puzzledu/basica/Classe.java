@@ -3,42 +3,18 @@ package com.puzzledu.basica;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Classe implements IsSerializable {
 
-	@PrimaryKey @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Long id;
-	
-	@Persistent	
 	private String nome;
-	
-	@Persistent 
 	private List<Classe> filhas;
-	
-	@Persistent 
 	private List<Interface> interfaces;
-	
-	@Persistent 
 	private List<Metodo> metodos;
-	
-	@Persistent 
 	private List<Variavel> variaveis;
-	
-	@Persistent 
 	private boolean abstrata;
-	
-	@Persistent 
 	private Classe parent;
-	
-	@Persistent 
 	private String comentario;
 	
 	public Classe() {
@@ -74,12 +50,8 @@ public class Classe implements IsSerializable {
 		setNome(filha);
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
 	}
 
 	public String getNome() {

@@ -22,7 +22,7 @@ public class RepositorioDados implements IsSerializable {
 	public RepositorioDados() {
 		
 		colecaoInterface = new ColecaoInterface();
-		colecaoClasse   = new ColecaoClasse();
+		colecaoClasse = new ColecaoClasse();
 	}
 
 	public RepositorioDados(ColecaoClasse colecaoClasse,
