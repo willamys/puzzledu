@@ -3,39 +3,17 @@ package com.puzzledu.basica;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Metodo implements IsSerializable {
 
-	@PrimaryKey @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Long id;
-	
-	@Persistent		
 	private String nome;
-	
-	@Persistent
 	private String retorno;
-	
-	@Persistent
 	private List<Parametro> parametros;
-	
-	@Persistent
 	private String acesso;
-	
-	@Persistent
 	private boolean isAbstract;
-	
-	@Persistent
 	private boolean isFinal;
-	
-	@Persistent
 	private boolean sync;
 	
 	public Metodo() {

@@ -412,7 +412,7 @@ public class PuzzlEdu implements EntryPoint {
     	toolStrip2.setLeft(15);
     	toolStrip2.setAlign(Alignment.LEFT);
          
-    	//leftPanel.addMember(toolStrip2);
+    	leftPanel.addMember(toolStrip2);
     	leftPanel.addMember(classesGUI.createArvoreClasses());    	
     	leftPanel.addMember(propriedadesGUI.createPainelPropriedades());
     	
