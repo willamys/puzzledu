@@ -21,6 +21,7 @@ import com.smartgwt.client.types.Overflow;
 import com.smartgwt.client.types.Side;
 import com.smartgwt.client.types.TreeModelType;
 import com.smartgwt.client.types.VerticalAlignment;
+import com.smartgwt.client.widgets.Button;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.HTMLPane;
 import com.smartgwt.client.widgets.Img;
@@ -411,6 +412,29 @@ public class PuzzlEdu implements EntryPoint {
     	toolStrip2.setTop(28);
     	toolStrip2.setLeft(15);
     	toolStrip2.setAlign(Alignment.LEFT);
+    	
+    	Button botaoClasse = new Button("");
+    	botaoClasse.setIcon("/icons/puzzle_green.png");
+    	botaoClasse.setIconSize(20);
+    	botaoClasse.setWidth(27);
+    	
+    	Button botaoInterface = new Button("");
+    	botaoInterface.setIcon("/icons/puzzle_blue.png");
+    	botaoInterface.setIconSize(20);
+    	botaoInterface.setWidth(27);
+    	
+    	toolStrip2.addMember(botaoClasse);
+    	toolStrip2.addMember(botaoInterface);
+    	
+    	botaoClasse.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+			
+				ClassesGUI.setClasseSelecionada(gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz());
+				classesGUI.getJanelaCriarClasse();   		
+			}
+		});
          
     	leftPanel.addMember(toolStrip2);
     	leftPanel.addMember(classesGUI.createArvoreClasses());    	

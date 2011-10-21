@@ -13,7 +13,6 @@ import com.puzzledu.basica.Variavel;
 public class ColecaoInterface implements IsSerializable {
 
 	private Long id;	
-
 	private List<Interface> listaInterfaces;
 	
 	public ColecaoInterface() {
