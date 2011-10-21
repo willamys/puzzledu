@@ -86,6 +86,14 @@ public class ClassesGUI {
 		this.labelHelp = help;
 	}
 
+	public static Classe getClasseSelecionada() {
+		return classeSelecionada;
+	}
+
+	public static void setClasseSelecionada(Classe classeSelecionada) {
+		ClassesGUI.classeSelecionada = classeSelecionada;
+	}
+
 	public TreeGrid createArvoreClasses() {
 		
 		TreeNode[] root = getRootClasses();
@@ -103,7 +111,7 @@ public class ClassesGUI {
         treeGrid.setData(tree);            
         treeGrid.getData().openAll();
         treeGrid.setWidth100();
-        treeGrid.setHeight(310);
+        treeGrid.setHeight(290);
         treeGrid.setShowResizeBar(true);
         treeGrid.setAppImgDir("/icons/");
         
@@ -264,6 +272,336 @@ public class ClassesGUI {
             fillTree(c, node);
     	}    	
     }
+    
+    public void getJanelaCriarClasse() {
+    	
+		final Window winModal = new Window();  
+        winModal.setWidth(360);  
+        winModal.setHeight(220);  
+        winModal.setTitle("Digite os dados da classe");  
+        winModal.setShowMinimizeButton(false);  
+        winModal.setIsModal(true);  
+        winModal.centerInPage();
+
+        winModal.addShowContextMenuHandler(new ShowContextMenuHandler() {
+            public void onShowContextMenu(ShowContextMenuEvent event) {
+                event.cancel();
+            }
+        });
+        
+        DynamicForm form = new DynamicForm();
+        form.setAutoFocus(true);
+        form.setNumCols(3);
+        form.setHeight("90%");  
+        form.setWidth100();  
+        form.setPadding(10);  
+        form.setLayoutAlign(VerticalAlignment.CENTER);  
+        form.setAlign(Alignment.CENTER);
+        
+        final TextItem textItem = new TextItem();
+        textItem.setWidth(200);
+        textItem.setTop(20);
+        textItem.setTitle("Nome");                
+        textItem.setWrapTitle(true);
+
+        final TextItem textSuperClass = new TextItem();
+        textSuperClass.setWidth(220);
+        textSuperClass.setTop(20);
+        textSuperClass.setTitle("Super Classe");                
+        textSuperClass.setWrapTitle(true);
+        textSuperClass.setIconHeight(16);
+        textSuperClass.setIconWidth(16);
+        textSuperClass.setAttribute("readOnly", true); 
+        textSuperClass.setValue(classeSelecionada.getNome());
+        
+        FormItemIcon iconSearch = new FormItemIcon();  
+        iconSearch.setSrc("/icons/search.png"); 
+        
+        textSuperClass.setIcons(iconSearch);
+        
+        final CheckboxItem checkAbstract = new CheckboxItem();
+        checkAbstract.setTitle("Abstract");
+        
+        FormItemIcon iconAdd = new FormItemIcon();  
+        iconAdd.setSrc("/icons/add.png");
+        
+        FormItemIcon iconDel = new FormItemIcon();  
+        iconDel.setSrc("/icons/del.png");
+        
+        final SelectItem listaInterfaces = new SelectItem();  
+        listaInterfaces.setTitle("Interfaces");  
+        listaInterfaces.setMultiple(true);
+        listaInterfaces.setWidth(238);
+        listaInterfaces.setHeight(60);
+        listaInterfaces.setIconHeight(16);
+        listaInterfaces.setIconWidth(16);
+        final LinkedHashMap<String, String> interfaces = new LinkedHashMap<String, String>();
+
+        for (Interface i : classeSelecionada.getInterfaces())
+        	interfaces.put(i.getNome(), i.getNome());
+        
+        listaInterfaces.setValueMap(interfaces);
+        
+        listaInterfaces.setIcons(iconAdd, iconDel);
+      
+        ButtonItem btnAdicionar = new ButtonItem(); 
+        btnAdicionar.setTitle("Criar Classe");
+
+        textSuperClass.addIconClickHandler(new IconClickHandler() {  
+            public void onIconClick(IconClickEvent event) {  
+            	
+            	final Window winModal = new Window();  
+                winModal.setWidth(300);  
+                winModal.setHeight(300);  
+                winModal.setTitle("Selecione a Super Classe");  
+                winModal.setShowMinimizeButton(false);  
+                winModal.setIsModal(true);  
+                winModal.centerInPage();
+                
+                winModal.addShowContextMenuHandler(new ShowContextMenuHandler() {
+                    public void onShowContextMenu(ShowContextMenuEvent event) {
+                        event.cancel();
+                    }
+                });
+                
+                ListGrid lista = new ListGrid();
+                lista.setCellHeight(24);
+                lista.setImageSize(16);
+                lista.setWidth100();
+                lista.setHeight100();
+                lista.setTop(20);
+                lista.setBorder("0px");
+        		lista.setBodyStyleName("normal");
+        		lista.setAlternateRecordStyles(true);
+        		lista.setShowHeader(false);
+
+        		ListGridField imageField = new ListGridField("icon", 24);
+        		imageField.setType(ListGridFieldType.IMAGE);
+        		imageField.setImgDir("/icons/");
+
+        		ListGridField nameField = new ListGridField("Name");
+
+        		lista.setFields(imageField, nameField);
+        		
+        		lista.addCellClickHandler(new CellClickHandler() {
+        			
+        			public void onCellClick(CellClickEvent event) {
+
+        				textSuperClass.setValue(event.getRecord().getAttribute("Name").toString());
+        				
+        				interfaces.clear();
+        				
+        				for (Interface i : gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz(), event.getRecord().getAttribute("Name").toString()).getInterfaces())
+                        	interfaces.put(i.getNome(), i.getNome());
+                        
+                        listaInterfaces.setValueMap(interfaces);
+        				
+        				winModal.destroy();
+						winModal.redraw();	
+        			}
+        		});
+        		
+        		lista.setData(getTodasClasses());
+
+
+                winModal.addChild(lista);
+                
+                winModal.show();
+            }  
+        });
+        
+        
+        iconDel.addFormItemClickHandler(new FormItemClickHandler() {
+			
+			@Override
+			public void onFormItemClick(FormItemIconClickEvent event) {
+				
+				if (listaInterfaces.getValue() != null) {
+					
+					String nome = listaInterfaces.getValue().toString();
+					
+					Classe c = gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz(), textSuperClass.getValue().toString());
+					
+					if (c != null) {
+						
+						String superClass = c.implementaInterface(c, gerenciador.getProjetoAtual().getRepositorioDados().getColecaoInterface().procurarInterface(nome));
+						
+						if (superClass.equals("")) {
+							
+							interfaces.remove(nome);
+					
+							listaInterfaces.setValueMap(interfaces);
+							
+						} else
+							SC.say("Aten&ccedil;&atilde;o", "Esta interface é implementada na Super Classe: <b>" + superClass + "</b>");
+					}
+					
+				} else  {
+					
+					SC.say("Aten&ccedil;&atilde;o", "Selecione uma interface");
+					return;
+				}
+				
+			}
+		});
+        
+        iconAdd.addFormItemClickHandler(new FormItemClickHandler() {
+			
+			public void onFormItemClick(FormItemIconClickEvent event) {
+				
+				final Window winModal = new Window();  
+                winModal.setWidth(396);  
+                winModal.setHeight(436);  
+                winModal.setTitle("Selecione a Interface");  
+                winModal.setShowMinimizeButton(false);  
+                winModal.setIsModal(true);  
+                winModal.centerInPage(); 
+                winModal.setAlign(Alignment.CENTER);
+                
+                winModal.addShowContextMenuHandler(new ShowContextMenuHandler() {
+                    public void onShowContextMenu(ShowContextMenuEvent event) {
+                        event.cancel();
+                    }
+                });                
+                
+                Tree treeInter = new Tree();  
+                treeInter.setModelType(TreeModelType.PARENT);  
+                treeInter.setShowRoot(false);
+                treeInter.setNameProperty("Name");  
+                treeInter.setIdField("Id");
+                treeInter.setParentIdField("ParentId"); 
+                treeInter.setData(getInterfaces());
+                          
+                final TreeGrid treeGrid = new TreeGrid();  
+                treeGrid.setFields(new TreeGridField("Name", "Interfaces"));  
+                treeGrid.setData(treeInter);            
+                treeGrid.getData().openAll();
+                treeGrid.setWidth100();
+                treeGrid.setHeight(360);
+                treeGrid.setShowResizeBar(false);
+                treeGrid.setShowHeader(false);
+                treeGrid.setAppImgDir("/icons/");              
+        		                
+                DynamicForm form = new DynamicForm();
+                form.setAutoFocus(true);
+                form.setNumCols(1);
+ 
+                form.setWidth100();
+                form.setPadding(10);
+                form.setLayoutAlign(Alignment.CENTER);  
+                
+                ButtonItem btnImplementar = new ButtonItem();
+                btnImplementar.setWidth("150px");
+                btnImplementar.setHeight("25px");
+                btnImplementar.setTitle("Implementar Interface");
+                                     					
+                form.setFields(btnImplementar);
+                
+                winModal.addItem(treeGrid);
+                winModal.addItem(form);
+                winModal.setAlign(Alignment.CENTER);
+                
+                btnImplementar.addClickHandler(new com.smartgwt.client.widgets.form.fields.events.ClickHandler() {
+					
+					public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
+													
+						String nomeInterface = treeGrid.getSelectedRecord().getAttribute("ParentId");
+						
+						if (nomeInterface == null)
+							nomeInterface = treeGrid.getSelectedRecord().getAttribute("Name");
+						
+						Interface i = gerenciador.getProjetoAtual().getRepositorioDados().getColecaoInterface().procurarInterface(nomeInterface);
+						
+						if (i == null) {
+							
+							SC.say("Aten&ccedil;&atilde;o", "Interface N&atilde;o Encontrada!");
+							
+							return;
+						}
+
+						if (interfaces.containsKey(nomeInterface)) {
+							
+							SC.say("Aten&ccedil;&atilde;o", "Esta interface j&aacute; foi implementada");
+							return;
+						}
+							
+						interfaces.put(nomeInterface, nomeInterface);
+						
+						listaInterfaces.setValueMap(interfaces);
+							
+						winModal.destroy();
+						winModal.redraw();					
+					}
+				});
+
+                winModal.show();                
+			}
+		});
+                        
+        btnAdicionar.addClickHandler(new com.smartgwt.client.widgets.form.fields.events.ClickHandler() {
+			
+			public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
+
+				try {
+					
+					if (LanguageUtils.getInstance().isValidClass(textItem.getValue().toString())){
+						
+						if (gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz(), textItem.getValue().toString()) != null) {
+							
+							SC.say("Aten&ccedil;&atilde;o", "J&aacute; existe uma classe com este nome!");
+							textItem.focusInItem();
+							return;
+						}
+						
+						Classe classeFilha = new Classe();
+						classeFilha.setNome(textItem.getValue().toString());
+						
+						for (String i : interfaces.keySet())								
+							classeFilha.addInterface(gerenciador.getProjetoAtual().getRepositorioDados().getColecaoInterface().procurarInterface(i));
+						
+						if (checkAbstract.getValue() != null)
+							classeFilha.setAbstrata(true);
+						else
+							classeFilha.setAbstrata(false);
+						
+						System.out.println(textSuperClass.getValue());
+						
+						System.out.println(gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz());
+						Classe classePai = gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz(), textSuperClass.getValue().toString());
+						
+						for (Variavel v : classePai.getVariaveis()) {
+							
+							Variavel v1 = new Variavel(v.getNome(), v.getTipo(), v.getValorPadrao());
+							classeFilha.addVariavel(v1);
+						}
+						
+						//gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().addClasseFilha(classeFilha, textSuperClass.getValue().toString());
+						
+						classeFilha.setParent(classePai);
+						classePai.addClasseFilha(classeFilha);
+														
+						ClasseTreeNode node = new ClasseTreeNode(classeFilha.getNome(), classeFilha.getNome(), classePai.getNome(), classeFilha.isAbstrata());
+						
+						tree.add(node, tree.findById(classePai.getNome()));								
+						//tree.openAll(raiz);
+						tree.openAll(tree.findById(gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz().getNome()));
+						
+						
+						winModal.destroy();
+						winModal.redraw();						
+						
+					}
+				} catch (Exception e) {
+					SC.say("Aten&ccedil;&atilde;o", e.getMessage());
+				}
+			}
+		});
+
+        form.setFields(textItem, checkAbstract, textSuperClass, listaInterfaces, btnAdicionar);
+        winModal.addItem(form);  
+        winModal.show();                
+    	
+    }
                     
     private Menu createMenuClasses(final ClasseTreeNode raiz) {
 		
@@ -279,327 +617,9 @@ public class ClassesGUI {
 			
 			public void onClick(MenuItemClickEvent event) {
 				
-				final Window winModal = new Window();  
-                winModal.setWidth(360);  
-                winModal.setHeight(220);  
-                winModal.setTitle("Digite os dados da classe");  
-                winModal.setShowMinimizeButton(false);  
-                winModal.setIsModal(true);  
-                winModal.centerInPage();
-                
-                winModal.addShowContextMenuHandler(new ShowContextMenuHandler() {
-                    public void onShowContextMenu(ShowContextMenuEvent event) {
-                        event.cancel();
-                    }
-                });
-                
-                DynamicForm form = new DynamicForm();
-                form.setAutoFocus(true);
-                form.setNumCols(3);
-                form.setHeight("90%");  
-                form.setWidth100();  
-                form.setPadding(10);  
-                form.setLayoutAlign(VerticalAlignment.CENTER);  
-                form.setAlign(Alignment.CENTER);
-                
-                final TextItem textItem = new TextItem();
-                textItem.setWidth(200);
-                textItem.setTop(20);
-                textItem.setTitle("Nome");                
-                textItem.setWrapTitle(true);
-                
-                final TextItem textSuperClass = new TextItem();
-                textSuperClass.setWidth(220);
-                textSuperClass.setTop(20);
-                textSuperClass.setTitle("Super Classe");                
-                textSuperClass.setWrapTitle(true);
-                textSuperClass.setIconHeight(16);
-                textSuperClass.setIconWidth(16);
-                textSuperClass.setAttribute("readOnly", true); 
-                textSuperClass.setValue(classeSelecionada.getNome());
-                
-                FormItemIcon iconSearch = new FormItemIcon();  
-                iconSearch.setSrc("/icons/search.png"); 
-                
-                textSuperClass.setIcons(iconSearch);
-                
-                final CheckboxItem checkAbstract = new CheckboxItem();
-                checkAbstract.setTitle("Abstract");
-                
-                FormItemIcon iconAdd = new FormItemIcon();  
-                iconAdd.setSrc("/icons/add.png");
-                
-                FormItemIcon iconDel = new FormItemIcon();  
-                iconDel.setSrc("/icons/del.png");
-                
-                final SelectItem listaInterfaces = new SelectItem();  
-                listaInterfaces.setTitle("Interfaces");  
-                listaInterfaces.setMultiple(true);
-                listaInterfaces.setWidth(238);
-                listaInterfaces.setHeight(60);
-                listaInterfaces.setIconHeight(16);
-                listaInterfaces.setIconWidth(16);
-                final LinkedHashMap<String, String> interfaces = new LinkedHashMap<String, String>();
-                
-                for (Interface i : classeSelecionada.getInterfaces())
-                	interfaces.put(i.getNome(), i.getNome());
-                
-                listaInterfaces.setValueMap(interfaces);
-                
-                listaInterfaces.setIcons(iconAdd, iconDel);
-              
-                ButtonItem btnAdicionar = new ButtonItem(); 
-                btnAdicionar.setTitle("Criar Classe");
-                
-                textSuperClass.addIconClickHandler(new IconClickHandler() {  
-                    public void onIconClick(IconClickEvent event) {  
-                    	
-                    	final Window winModal = new Window();  
-                        winModal.setWidth(300);  
-                        winModal.setHeight(300);  
-                        winModal.setTitle("Selecione a Super Classe");  
-                        winModal.setShowMinimizeButton(false);  
-                        winModal.setIsModal(true);  
-                        winModal.centerInPage();
-                        
-                        winModal.addShowContextMenuHandler(new ShowContextMenuHandler() {
-                            public void onShowContextMenu(ShowContextMenuEvent event) {
-                                event.cancel();
-                            }
-                        });
-                        
-                        ListGrid lista = new ListGrid();
-                        lista.setCellHeight(24);
-                        lista.setImageSize(16);
-                        lista.setWidth100();
-                        lista.setHeight100();
-                        lista.setTop(20);
-                        lista.setBorder("0px");
-                		lista.setBodyStyleName("normal");
-                		lista.setAlternateRecordStyles(true);
-                		lista.setShowHeader(false);
-
-                		ListGridField imageField = new ListGridField("icon", 24);
-                		imageField.setType(ListGridFieldType.IMAGE);
-                		imageField.setImgDir("/icons/");
-
-                		ListGridField nameField = new ListGridField("Name");
-
-                		lista.setFields(imageField, nameField);
-                		
-                		lista.addCellClickHandler(new CellClickHandler() {
-                			
-                			public void onCellClick(CellClickEvent event) {
-
-                				textSuperClass.setValue(event.getRecord().getAttribute("Name").toString());
-                				
-                				interfaces.clear();
-                				
-                				for (Interface i : gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz(), event.getRecord().getAttribute("Name").toString()).getInterfaces())
-                                	interfaces.put(i.getNome(), i.getNome());
-                                
-                                listaInterfaces.setValueMap(interfaces);
-                				
-                				winModal.destroy();
-								winModal.redraw();	
-                			}
-                		});
-                		
-                		lista.setData(getTodasClasses());
-
-
-                        winModal.addChild(lista);
-                        
-                        winModal.show();
-                    }  
-                });
-                
-                
-                iconDel.addFormItemClickHandler(new FormItemClickHandler() {
-					
-					@Override
-					public void onFormItemClick(FormItemIconClickEvent event) {
-						
-						if (listaInterfaces.getValue() != null) {
-							
-							String nome = listaInterfaces.getValue().toString();
-							
-							Classe c = gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz(), textSuperClass.getValue().toString());
-							
-							if (c != null) {
-								
-								String superClass = c.implementaInterface(c, gerenciador.getProjetoAtual().getRepositorioDados().getColecaoInterface().procurarInterface(nome));
-								
-								if (superClass.equals("")) {
-									
-									interfaces.remove(nome);
-							
-									listaInterfaces.setValueMap(interfaces);
-									
-								} else
-									SC.say("Aten&ccedil;&atilde;o", "Esta interface é implementada na Super Classe: <b>" + superClass + "</b>");
-							}
-							
-						} else  {
-							
-							SC.say("Aten&ccedil;&atilde;o", "Selecione uma interface");
-							return;
-						}
-						
-					}
-				});
-                
-                iconAdd.addFormItemClickHandler(new FormItemClickHandler() {
-					
-					public void onFormItemClick(FormItemIconClickEvent event) {
-						
-						final Window winModal = new Window();  
-		                winModal.setWidth(396);  
-		                winModal.setHeight(436);  
-		                winModal.setTitle("Selecione a Interface");  
-		                winModal.setShowMinimizeButton(false);  
-		                winModal.setIsModal(true);  
-		                winModal.centerInPage(); 
-		                winModal.setAlign(Alignment.CENTER);
-		                
-		                winModal.addShowContextMenuHandler(new ShowContextMenuHandler() {
-		                    public void onShowContextMenu(ShowContextMenuEvent event) {
-		                        event.cancel();
-		                    }
-		                });                
-		                
-		                Tree treeInter = new Tree();  
-		                treeInter.setModelType(TreeModelType.PARENT);  
-		                treeInter.setShowRoot(false);
-		                treeInter.setNameProperty("Name");  
-		                treeInter.setIdField("Id");
-		                treeInter.setParentIdField("ParentId"); 
-		                treeInter.setData(getInterfaces());
-		                          
-		                final TreeGrid treeGrid = new TreeGrid();  
-		                treeGrid.setFields(new TreeGridField("Name", "Interfaces"));  
-		                treeGrid.setData(treeInter);            
-		                treeGrid.getData().openAll();
-		                treeGrid.setWidth100();
-		                treeGrid.setHeight(360);
-		                treeGrid.setShowResizeBar(false);
-		                treeGrid.setShowHeader(false);
-		                treeGrid.setAppImgDir("/icons/");              
-		        		                
-		                DynamicForm form = new DynamicForm();
-		                form.setAutoFocus(true);
-		                form.setNumCols(1);
-		 
-		                form.setWidth100();
-		                form.setPadding(10);
-		                form.setLayoutAlign(Alignment.CENTER);  
-		                
-		                ButtonItem btnImplementar = new ButtonItem();
-		                btnImplementar.setWidth("150px");
-		                btnImplementar.setHeight("25px");
-		                btnImplementar.setTitle("Implementar Interface");
-		                                     					
-		                form.setFields(btnImplementar);
-		                
-		                winModal.addItem(treeGrid);
-		                winModal.addItem(form);
-		                winModal.setAlign(Alignment.CENTER);
-		                
-		                btnImplementar.addClickHandler(new com.smartgwt.client.widgets.form.fields.events.ClickHandler() {
-							
-							public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
-															
-								String nomeInterface = treeGrid.getSelectedRecord().getAttribute("ParentId");
-								
-								if (nomeInterface == null)
-									nomeInterface = treeGrid.getSelectedRecord().getAttribute("Name");
-								
-								Interface i = gerenciador.getProjetoAtual().getRepositorioDados().getColecaoInterface().procurarInterface(nomeInterface);
-								
-								if (i == null) {
-									
-									SC.say("Aten&ccedil;&atilde;o", "Interface N&atilde;o Encontrada!");
-									
-									return;
-								}
-
-								if (interfaces.containsKey(nomeInterface)) {
-									
-									SC.say("Aten&ccedil;&atilde;o", "Esta interface j&aacute; foi implementada");
-									return;
-								}
-									
-								interfaces.put(nomeInterface, nomeInterface);
-								
-								listaInterfaces.setValueMap(interfaces);
-									
-								winModal.destroy();
-								winModal.redraw();					
-							}
-						});
-
-		                winModal.show();                
-					}
-				});
-                                
-                btnAdicionar.addClickHandler(new com.smartgwt.client.widgets.form.fields.events.ClickHandler() {
-					
-					public void onClick(com.smartgwt.client.widgets.form.fields.events.ClickEvent event) {
-
-						try {
-							
-							if (LanguageUtils.getInstance().isValidClass(textItem.getValue().toString())){
-								
-								if (gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz(), textItem.getValue().toString()) != null) {
-									
-									SC.say("Aten&ccedil;&atilde;o", "J&aacute; existe uma classe com este nome!");
-									textItem.focusInItem();
-									return;
-								}
-								
-								Classe classeFilha = new Classe();
-								classeFilha.setNome(textItem.getValue().toString());
-								
-								for (String i : interfaces.keySet())								
-									classeFilha.addInterface(gerenciador.getProjetoAtual().getRepositorioDados().getColecaoInterface().procurarInterface(i));
-								
-								if (checkAbstract.getValue() != null)
-									classeFilha.setAbstrata(true);
-								else
-									classeFilha.setAbstrata(false);
-								
-								Classe classePai = gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().procurarClasse(gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().getRaiz(), textSuperClass.getValue().toString());
-								
-								for (Variavel v : classePai.getVariaveis()) {
-									
-									Variavel v1 = new Variavel(v.getNome(), v.getTipo(), v.getValorPadrao());
-									classeFilha.addVariavel(v1);
-								}
-								
-								//gerenciador.getProjetoAtual().getRepositorioDados().getColecaoClasse().addClasseFilha(classeFilha, textSuperClass.getValue().toString());
-								
-								classeFilha.setParent(classePai);
-								classePai.addClasseFilha(classeFilha);
-																
-								ClasseTreeNode node = new ClasseTreeNode(classeFilha.getNome(), classeFilha.getNome(), classePai.getNome(), classeFilha.isAbstrata());
-								
-								tree.add(node, tree.findById(classePai.getNome()));								
-								tree.openAll(raiz);
-								
-								winModal.destroy();
-								winModal.redraw();						
-								
-							}
-						} catch (Exception e) {
-							SC.say("Aten&ccedil;&atilde;o", e.getMessage());
-						}
-					}
-				});
-
-                form.setFields(textItem, checkAbstract, textSuperClass, listaInterfaces, btnAdicionar);
-                winModal.addItem(form);  
-                winModal.show();                
+				getJanelaCriarClasse();
 			}
+
 		});
     	
     	MenuItem itemAlterarClasse = new MenuItem("Alterar Classe", "/icons/plugin_edit.png");
